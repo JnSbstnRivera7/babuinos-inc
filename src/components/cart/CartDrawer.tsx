@@ -11,15 +11,23 @@ export function CartDrawer() {
   const { lines, isOpen, close, remove, changeQty } = useCart();
   const showToast = useToast((s) => s.show);
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [note, setNote] = useState("");
 
   async function checkout() {
     if (!lines.length) return;
+    if (!name.trim()) {
+      showToast("⚠️ Escribe tu nombre para el pedido");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lines }),
+        body: JSON.stringify({ lines, name, phone, city, note }),
       });
       const data = (await res.json()) as { url?: string };
       if (data.url) {
@@ -117,7 +125,43 @@ export function CartDrawer() {
             </div>
 
             <footer className="border-t-2 border-ink/10 bg-white px-6 py-5">
-              <p className="mb-4 text-center text-[0.8rem] text-ink/55">
+              {lines.length > 0 && (
+                <div className="mb-3">
+                  <p className="font-mono mb-2 text-[0.6rem] font-bold tracking-[0.12em] text-ink/50 uppercase">
+                    Tus datos
+                  </p>
+                  <div className="grid gap-2">
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Nombre y apellido *"
+                      className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        inputMode="tel"
+                        placeholder="Teléfono"
+                        className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
+                      />
+                      <input
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="Ciudad"
+                        className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
+                      />
+                    </div>
+                    <input
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                      placeholder="Nota (opcional): color, dirección, etc."
+                      className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+              <p className="mb-3 text-center text-[0.78rem] text-ink/55">
                 Precio, pago y envío se coordinan por WhatsApp.
               </p>
               <button
@@ -126,7 +170,7 @@ export function CartDrawer() {
                 className="font-mono flex w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 py-4 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase shadow-[0_4px_18px_rgba(37,211,102,.35)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink/40 disabled:shadow-none"
               >
                 <IconWhatsApp className="h-5 w-5" />
-                {loading ? "Preparando..." : "Pedir por WhatsApp"}
+                {loading ? "Preparando..." : "Enviar pedido por WhatsApp"}
               </button>
             </footer>
           </motion.aside>

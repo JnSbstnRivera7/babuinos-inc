@@ -32,6 +32,8 @@ export async function POST(request: Request) {
       const supabase = createClient(sbUrl, sbKey);
       await supabase.from("orders").insert({
         customer_name: payload.name ?? null,
+        phone: payload.phone ?? null,
+        city: payload.city ?? null,
         note: payload.note ?? null,
         items: payload.lines,
       });
