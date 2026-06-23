@@ -1,0 +1,58 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { buildOrderMessage, buildWaLink, type OrderPayload } from "@/lib/whatsapp";
+
+/**
+ * POST /api/checkout
+ * Body: OrderPayload  →  { url } (wa.me deep link)
+ * Optionally persists the order to Supabase and fires a webhook,
+ * but always returns a working WhatsApp link even with no backend.
+ */
+export async function POST(request: Request) {
+  let payload: OrderPayload;
+  try {
+    payload = (await request.json()) as OrderPayload;
+  } catch {
+    return NextResponse.json({ error: "Cuerpo inválido" }, { status: 400 });
+  }
+
+  if (!payload.lines?.length) {
+    return NextResponse.json({ error: "El carrito está vacío" }, { status: 400 });
+  }
+
+  const message = buildOrderMessage(payload);
+  const number = process.env.WHATSAPP_NUMBER ?? process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
+  const url = number ? buildWaLink(number, message) : "";
+
+  // Best-effort: persist to Supabase (orders table) if configured.
+  try {
+    const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (sbUrl && sbKey) {
+      const supabase = createClient(sbUrl, sbKey);
+      await supabase.from("orders").insert({
+        customer_name: payload.name ?? null,
+        note: payload.note ?? null,
+        items: payload.lines,
+      });
+    }
+  } catch {
+    // swallow — never block the sale on backend issues
+  }
+
+  // Best-effort: fire an outbound webhook (n8n, Make, etc.).
+  try {
+    const hook = process.env.WHATSAPP_WEBHOOK_URL;
+    if (hook) {
+      await fetch(hook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, ...payload }),
+      });
+    }
+  } catch {
+    // swallow
+  }
+
+  return NextResponse.json({ url, message, configured: Boolean(number) });
+}

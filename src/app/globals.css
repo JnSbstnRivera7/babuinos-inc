@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+/* ════════════════════════════════════════════════════════════
+   BABUINOS INC — Street Adventure Heritage · Design System
+   ════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ─── Brand palette ─── */
+  --color-cream: #f3e9e2;
+  --color-cream-2: #e9ddd2;
+  --color-teal: #00736c;
+  --color-teal-light: #1a9990;
+  --color-gold: #cda214;
+  --color-gold-dark: #a88210;
+  --color-umber: #654321;
+  --color-ink: #1e2021;
+  --color-ink-soft: #2a2c2d;
+
+  /* edition accents */
+  --color-olive: #4a5c2a;
+  --color-navy: #1b2f5c;
+  --color-burgundy: #6b1c2f;
+
+  /* ─── Fonts (wired from next/font in layout) ─── */
+  --font-display: var(--font-inter), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), monospace;
+
+  /* ─── Radii ─── */
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+
+  /* ─── Easing ─── */
+  --ease-jungle: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* ─── Base reset ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Live-themeable accent (set by the colorway selector in the nav). */
+:root {
+  --accent: #cda214;
+  --accent-ink: #1e2021;
+}
+
+body {
+  margin: 0;
+  background: #0a0f0d;
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* ─── Global jungle texture + scanlines ─── */
+.fx-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(30, 32, 33, 0.016) 3px,
+      rgba(30, 32, 33, 0.016) 4px
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* ─── Typography helpers ─── */
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+/* Big brutalist/editorial condensed headlines */
+.font-condensed {
+  font-family: var(--font-anton), "Arial Narrow", Impact, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  line-height: 0.92;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ─── Surfaces & effects ─── */
+/* Jungle backdrop (CSS-only, no external image) */
+.jungle-bg {
+  background:
+    radial-gradient(120% 90% at 15% 0%, rgba(0, 115, 108, 0.35), transparent 55%),
+    radial-gradient(100% 80% at 90% 20%, rgba(74, 92, 42, 0.4), transparent 60%),
+    radial-gradient(120% 120% at 50% 120%, rgba(0, 0, 0, 0.6), transparent 60%),
+    linear-gradient(160deg, #06302d 0%, #0a1a17 60%, #050b0a 100%);
+}
+/* Glassmorphism panel over jungle */
+.glass {
+  background: rgba(20, 26, 23, 0.55);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(243, 233, 226, 0.14);
+}
+
+/* CSS brick texture — "selva de cemento" */
+.brick-pattern {
+  background-color: #211f1c;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0 2px, transparent 2px 40px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0 2px, transparent 2px 92px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 2px 38px, transparent 38px 40px);
+  background-position: 0 0, 0 0, 46px 20px;
+}
+
+/* CSS liana hanging edge (decorative top border) */
+.liana-edge {
+  position: relative;
+}
+.liana-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 46px;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='46'%3E%3Cpath d='M0 1 Q35 1 35 16 Q35 30 55 30 Q75 30 75 12 Q75 1 110 1 Q120 1 140 1' fill='none' stroke='%2300736c' stroke-width='2.5'/%3E%3Cellipse cx='35' cy='22' rx='7' ry='4' fill='%234a5c2a' transform='rotate(30 35 22)'/%3E%3Cellipse cx='75' cy='20' rx='7' ry='4' fill='%2300736c' transform='rotate(-30 75 20)'/%3E%3Cellipse cx='110' cy='12' rx='6' ry='3.5' fill='%23cda214' transform='rotate(20 110 12)'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 140px 46px;
+  opacity: 0.55;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+.anim-pulse { animation: pulse-soft 3.5s ease-in-out infinite; }
+/* Embroidered patch lift */
+.emboss {
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+/* Logo recolor on dark surfaces (black art -> cream) */
+.logo-cream {
+  filter: brightness(0) saturate(100%) invert(95%) sepia(8%) saturate(420%) hue-rotate(318deg) brightness(99%) contrast(94%);
+}
+
+/* ════════════════════════════════════════════════════════════
+   KEYFRAMES — jungle motion
+   ════════════════════════════════════════════════════════════ */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(1deg); }
+}
+@keyframes leaf-fall {
+  0% { transform: translateY(-10%) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  100% { transform: translateY(115vh) translateX(40px) rotate(320deg); opacity: 0.9; }
+}
+@keyframes leaf-sway {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.02); }
+}
+@keyframes liana-swing {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+/* softer, slower vine sway */
+@keyframes liana-sway {
+  0%, 100% { transform: rotate(-2.2deg); }
+  50% { transform: rotate(2.2deg); }
+}
+@keyframes shimmer {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+/* Gold foil shine sweep across text (brillo, not glow) */
+@keyframes shine-slide {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ─── Animation utility classes ─── */
+.anim-float { animation: float 5s ease-in-out infinite; }
+.anim-leaf { animation: leaf-sway 6s ease-in-out infinite; }
+.anim-liana { animation: liana-swing 7s ease-in-out infinite; transform-origin: top center; }
+
+/* Gold metallic shine text — color + brillo, no glow */
+.shine-gold {
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-dark) 20%,
+    #f6e7a8 45%,
+    var(--color-gold) 55%,
+    var(--color-gold-dark) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine-slide 6s linear infinite;
+}
+
+/* Shimmer sweep (announce bar) */
+.shimmer-sweep { position: relative; overflow: hidden; }
+.shimmer-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  animation: shimmer 4.5s infinite;
+}
+
+/* Hide scrollbars on horizontal scrollers */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
