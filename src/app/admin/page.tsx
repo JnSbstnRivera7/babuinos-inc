@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import { Logo } from "@/components/ui/Logo";
 import { AdminLogin } from "@/components/admin/AdminLogin";
+import { AdminCharts } from "@/components/admin/AdminCharts";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Panel — Babuinos Inc", robots: { index: false } };
@@ -38,7 +39,7 @@ function fmt(d: string) {
 
 export default async function AdminPage() {
   const store = await cookies();
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "babuinos2026";
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "1234*";
   const authed = store.get("b_admin")?.value === ADMIN_PASSWORD;
 
   if (!authed) return <AdminLogin />;
@@ -62,6 +63,41 @@ export default async function AdminPage() {
   } else {
     dbError = "Supabase no configurado (faltan variables de entorno).";
   }
+
+  // ── aggregations for charts ──
+  const dayCount: Record<string, number> = {};
+  for (const o of orders) {
+    const d = (o.created_at || "").slice(0, 10);
+    if (d) dayCount[d] = (dayCount[d] || 0) + 1;
+  }
+  const byDay: { date: string; pedidos: number }[] = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i--) {
+    const dt = new Date(today);
+    dt.setDate(today.getDate() - i);
+    const key = dt.toISOString().slice(0, 10);
+    byDay.push({ date: key.slice(5), pedidos: dayCount[key] || 0 });
+  }
+
+  const prodCount: Record<string, number> = {};
+  for (const o of orders) for (const it of o.items ?? []) {
+    const n = it.name || "?";
+    prodCount[n] = (prodCount[n] || 0) + (it.qty || 1);
+  }
+  const topProducts = Object.entries(prodCount)
+    .map(([name, cantidad]) => ({ name, cantidad }))
+    .sort((a, b) => b.cantidad - a.cantidad)
+    .slice(0, 6);
+
+  const cityCount: Record<string, number> = {};
+  for (const o of orders) {
+    const c = (o.city || "").trim();
+    if (c) cityCount[c] = (cityCount[c] || 0) + 1;
+  }
+  const byCity = Object.entries(cityCount)
+    .map(([city, pedidos]) => ({ city, pedidos }))
+    .sort((a, b) => b.pedidos - a.pedidos)
+    .slice(0, 6);
 
   return (
     <main className="jungle-bg min-h-[100svh] px-5 py-8 md:px-10">
@@ -100,6 +136,9 @@ export default async function AdminPage() {
             </div>
           </div>
         </div>
+
+        {/* charts */}
+        <AdminCharts byDay={byDay} topProducts={topProducts} byCity={byCity} />
 
         {/* orders */}
         <h2 className="font-condensed mb-3 text-2xl text-cream">Pedidos</h2>
