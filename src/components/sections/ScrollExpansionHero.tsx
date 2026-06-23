@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { LeafCanvas } from "@/components/fx/LeafCanvas";
@@ -28,9 +28,13 @@ export function ScrollExpansionHero() {
   const h = useTransform(scrollYProgress, [0, 0.62], ["56vh", "100svh"]);
   const radius = useTransform(scrollYProgress, [0, 0.62], [26, 0]);
 
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.36], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.36], [0, -50]);
-  const subY = useTransform(scrollYProgress, [0, 0.36], [0, 50]);
+  // title grows + distorts (blur) until it disappears
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.42], [1, 0]);
+  const titleScale = useTransform(scrollYProgress, [0, 0.42], [1, 2.7]);
+  const titleBlur = useTransform(scrollYProgress, [0, 0.42], [0, 20]);
+  const titleSkew = useTransform(scrollYProgress, [0, 0.42], [0, -6]);
+  const titleFilter = useMotionTemplate`blur(${titleBlur}px)`;
+  const subOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
 
   const contentOpacity = useTransform(scrollYProgress, [0.5, 0.86], [0, 1]);
   const contentY = useTransform(scrollYProgress, [0.5, 0.86], [40, 0]);
@@ -56,15 +60,15 @@ export function ScrollExpansionHero() {
         <CssLeaves />
         <LeafCanvas density={0.6} />
 
-        {/* split title (on top, fades out as the window opens) */}
+        {/* split title — grows + distorts (blur/skew) until it vanishes */}
         <motion.h1
-          style={{ opacity: titleOpacity, y: titleY }}
+          style={{ opacity: titleOpacity, scale: titleScale, skewX: titleSkew, filter: titleFilter }}
           className="font-condensed pointer-events-none absolute z-20 text-center text-[clamp(2.4rem,9vw,5.5rem)] leading-none text-cream drop-shadow-[0_6px_30px_rgba(0,0,0,.7)]"
         >
           Babuinos
         </motion.h1>
         <motion.p
-          style={{ opacity: titleOpacity, y: subY }}
+          style={{ opacity: subOpacity }}
           className="font-mono pointer-events-none absolute bottom-[18%] z-20 text-center text-[0.7rem] tracking-[0.35em] text-[var(--accent)] uppercase"
         >
           Street Adventure Heritage
@@ -75,7 +79,7 @@ export function ScrollExpansionHero() {
           style={{ opacity: contentOpacity, y: contentY }}
           className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
         >
-          <Logo tone="cream" priority className="w-[min(80vw,460px)] drop-shadow-[0_10px_40px_rgba(0,0,0,.7)]" />
+          <Logo tone="cream" priority className="h-auto w-[min(80vw,440px)] drop-shadow-[0_10px_40px_rgba(0,0,0,.7)]" />
           <p className="mt-6 max-w-md text-[1.02rem] leading-relaxed text-cream/80">
             Streetwear oversize con identidad. Selva de cemento, actitud de explorador.
           </p>

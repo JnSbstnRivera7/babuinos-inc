@@ -20,7 +20,7 @@ export function ComingSoon({ category }: { category: string }) {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="relative z-10 flex flex-col items-center"
       >
-        <Logo tone="cream" priority className="w-[min(70vw,360px)]" />
+        <Logo tone="cream" priority className="h-auto w-[min(70vw,360px)]" />
         <p className="font-mono mt-8 text-[0.65rem] tracking-[0.3em] text-[var(--accent)] uppercase">
           {category}
         </p>

@@ -24,7 +24,7 @@ export function Logo({
       width={1536}
       height={1024}
       priority={priority}
-      className={cn("h-auto w-auto object-contain", className)}
+      className={cn("max-w-full object-contain", className)}
     />
   );
 }
