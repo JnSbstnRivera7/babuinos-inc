@@ -19,16 +19,19 @@ Estado del proyecto y lo que falta para lanzar y escalar. Marca: ✅ hecho · �
 - [x] Páginas "Muy pronto" para Sacos / Medias / Accesorios.
 - [x] Íconos SVG propios + botones IG / WhatsApp / Facebook.
 - [x] Logo real nítido (negro/crema/oro transparente), mobile-first.
-- [x] Repo en GitHub (público).
+- [x] Repo en GitHub (público) + conectado a Vercel (auto-deploy).
+- [x] **Reproductor "Babuinos Radio"** (autoplay aleatorio al primer click).
+- [x] **Deploy en Vercel** → https://babuinos-inc.vercel.app
+- [x] **Supabase** (tablas `orders` + `waitlist`) + env vars en Vercel.
+- [x] **Favicon** del babuino.
+- [x] **Panel `/admin`** con login temático + dashboard de gráficas (pedidos por día, top productos, por ciudad) y tablas.
 
-## 🔜 Fase 1 — Lanzamiento mínimo (lo que sigue ya)
+## 🔜 Fase 1 — Pulido de lanzamiento (lo que sigue)
 
-- [ ] **Deploy a Vercel** (conectar repo + env vars).
-- [ ] **Supabase real:** crear tablas `orders` y `waitlist`; setear `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` en Vercel.
 - [ ] **Links reales de redes** (Instagram, Facebook, WhatsApp) — hoy son placeholder.
 - [ ] **Fotos de producto definitivas** (las actuales son flat-lays de referencia; reemplazar por las reales de Babuinos).
-- [ ] **Favicon / OG image** con el babuino (para compartir en redes).
-- [ ] **Rotar credenciales** compartidas en chat (GitHub PAT, Vercel token, Supabase service key).
+- [ ] **OG image** con el babuino (para compartir en redes).
+- [ ] **Cambiar `ADMIN_PASSWORD`** y **rotar credenciales** compartidas en chat (GitHub PAT, Vercel token, Supabase service key).
 - [ ] Optimizar el wallpaper (`concrete-jungle.png` ~2.8 MB → WebP/comprimido).
 
 ## 🧭 Fase 2 — Tienda real

@@ -3,85 +3,77 @@
 > _Selva de cemento, actitud de explorador._
 > Tienda y landing **inmersiva** de Babuinos Inc — streetwear oversize desde Bogotá. Colección Fundadores 2026.
 
-**Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
+- 🌐 **En vivo:** https://babuinos-inc.vercel.app
+- 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
+- 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
 
 ---
 
 ## ✨ Concepto
 
-Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": la jungla tomándose la ciudad. La página traduce eso en una experiencia inmersiva — la selva se revela con el scroll y queda como fondo vivo de toda la tienda — manteniendo un look editorial/streetwear muy comercial.
+Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": la jungla tomándose la ciudad. La página traduce eso en una experiencia inmersiva — la selva se **revela con el scroll** y queda como **fondo fijo** de toda la tienda — con un look editorial/streetwear muy comercial.
 
 ## 🧩 Características
 
-- **Intro cinematográfica con scroll-reveal:** una ventana crece al hacer scroll y revela el wallpaper fijo de "selva de cemento". El título crece y se distorsiona hasta desvanecerse; al final aparece el logo + CTA.
-- **Wallpaper fijo** detrás de toda la página (hasta el footer) para sensación inmersiva.
-- **Efectos de selva:** lianas colgantes con hojas reales (CSS), hojas cayendo (CSS + Canvas), trama de ladrillo y borde de lianas en CSS, brillo dorado (shine) sin glow.
-- **Catálogo** con fotos reales de las camisas, descripción, selector de talla y "agregar a la mochila" (**sin precios** por ahora).
-- **Lookbook** de las prendas en loop infinito (image auto-slider).
-- **Menú "Tienda"** desplegable: Camisas (catálogo), Sacos / Medias / Accesorios (páginas "Muy pronto").
-- **Selector de colorway** que recolorea el acento del sitio en vivo (solo paleta de marca, sin rojo).
-- **Carrito** persistente (localStorage) con **formulario de datos del cliente** (nombre, teléfono, ciudad, nota).
-- **Checkout por WhatsApp:** arma el resumen del pedido + datos del cliente y abre WhatsApp listo para enviar.
-- **Club / waitlist** (newsletter) conectable a Supabase.
-- **Íconos SVG propios** (incl. el babuino recoloreable) + botones Instagram / WhatsApp / Facebook.
-- **Mobile-first**, accesible, con `prefers-reduced-motion` respetado.
+- **Intro con scroll-reveal:** una ventana crece al hacer scroll y descubre el wallpaper fijo de selva de cemento; el **logo crece y se distorsiona** hasta desaparecer.
+- **Wallpaper fijo** detrás de toda la página (hasta el footer).
+- **Reproductor "Babuinos Radio" 🎶:** al primer click suena un tema aleatorio; play/pausa, siguiente y auto-avance. Estilo selvático con ecualizador.
+- **Catálogo** con fotos reales, selector de talla y "agregar a la mochila" (sin precios por ahora) + selectores Camisas/Sacos/Medias/Accesorios.
+- **Lookbook** de prendas en loop infinito.
+- **Carrito** persistente con **formulario del cliente** (nombre, teléfono, ciudad, nota) → **checkout por WhatsApp** (resumen del pedido) + guardado en Supabase.
+- **Selector de colorway** que recolorea el acento del sitio en vivo (solo paleta de marca).
+- **Menú "Tienda"** + páginas **"Muy pronto"** (Sacos / Medias / Accesorios).
+- **Club / waitlist** (newsletter) en Supabase.
+- **Panel `/admin`** protegido con login temático Babuinos + **dashboard con gráficas** (pedidos por día, top productos, por ciudad) y tablas de pedidos y suscriptores.
+- **Efectos:** lianas con hojas (CSS), hojas cayendo (CSS + Canvas), trama de ladrillo y bordes de liana en CSS, shine dorado. Íconos SVG propios (incl. el babuino recoloreable) + IG / WhatsApp / Facebook. Favicon del babuino.
+- **Mobile-first**, accesible, con `prefers-reduced-motion`.
 
 ## 🛠️ Stack
 
 - **Next.js 16** (App Router, Turbopack) · **React 19** · **TypeScript**
-- **Tailwind CSS v4** (tokens de marca en `globals.css`)
-- **Framer Motion** (scroll/gestos) · **GSAP** (timelines)
-- **Lenis** (scroll suave) · **Embla** (carrusel) · **Zustand** (carrito + tema)
-- **Supabase** (`orders` + `waitlist`, opcional)
+- **Tailwind CSS v4** · **Framer Motion** · **GSAP** · **Lenis** · **Embla** · **Zustand** · **Recharts** · **Supabase**
 
 ## 🚀 Desarrollo
 
 ```bash
 npm install
 npm run dev      # http://localhost:3020 (ver .claude/launch.json) o :3000
-npm run build    # build de producción
-npm start        # servir el build
+npm run build
+npm start
 ```
 
 ## 🔐 Variables de entorno
 
-Copia `.env.example` → `.env.local` (este archivo **no** se sube a git):
+Copia `.env.example` → `.env.local` (no se sube a git):
 
 | Variable | Uso |
 | --- | --- |
-| `WHATSAPP_NUMBER` / `NEXT_PUBLIC_WHATSAPP_NUMBER` | Número de la tienda (solo dígitos, con indicativo país). Ej: `573504444668` |
-| `WHATSAPP_WEBHOOK_URL` | Webhook opcional (n8n/Make) que recibe el pedido |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto Supabase |
-| `SUPABASE_SERVICE_ROLE_KEY` | Inserciones server-side (orders/waitlist) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Cliente Supabase (opcional) |
+| `WHATSAPP_NUMBER` / `NEXT_PUBLIC_WHATSAPP_NUMBER` | Número de la tienda (con indicativo). Ej: `573504444668` |
+| `WHATSAPP_WEBHOOK_URL` | Webhook opcional (n8n/Make) |
+| `NEXT_PUBLIC_SUPABASE_URL` · `SUPABASE_SERVICE_ROLE_KEY` | Supabase (pedidos + waitlist) |
+| `ADMIN_USER` · `ADMIN_PASSWORD` | Acceso al panel `/admin` |
 
-> La app corre **sin** ninguna variable: catálogo y carrito son locales; el checkout avisa si falta el número de WhatsApp.
+## 🔐 Panel de administración
+
+`/admin` — login con usuario y clave (env `ADMIN_USER` / `ADMIN_PASSWORD`). Muestra:
+- **Gráficas:** pedidos por día (14 días), productos más pedidos, pedidos por ciudad.
+- **Tablas:** pedidos (cliente, teléfono → WhatsApp, ciudad, productos, nota) y Club (correos).
+- No indexable (`robots: noindex`). Cambia la clave en las env vars.
 
 ## 🛒 Flujo de compra (WhatsApp)
 
-1. El cliente agrega prendas (talla + cantidad) a la mochila.
-2. Llena sus **datos** (nombre obligatorio, teléfono, ciudad, nota).
-3. Al **"Enviar pedido por WhatsApp"**, `POST /api/checkout`:
-   - arma el mensaje (productos + tallas + datos del cliente, sin precios),
-   - lo guarda en Supabase (`orders`) si está configurado,
-   - dispara un webhook si `WHATSAPP_WEBHOOK_URL` existe,
-   - devuelve un enlace `wa.me` que abre WhatsApp con el pedido listo.
+1. El cliente agrega prendas (talla + cantidad).
+2. Llena sus datos (nombre obligatorio, teléfono, ciudad, nota).
+3. `POST /api/checkout` arma el resumen, lo guarda en `orders` (Supabase), dispara webhook opcional y devuelve un enlace `wa.me` que abre WhatsApp con el pedido listo.
 
-## 🗄️ Supabase (esquema sugerido)
+## 🗄️ Supabase
 
 ```sql
--- Pedidos
 create table public.orders (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz default now(),
-  customer_name text,
-  phone text,
-  city text,
-  note text,
-  items jsonb
+  customer_name text, phone text, city text, note text, items jsonb
 );
-
--- Lista del Club
 create table public.waitlist (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz default now(),
@@ -91,35 +83,34 @@ create table public.waitlist (
 
 ## ☁️ Deploy (Vercel)
 
-1. Importa el repo en Vercel.
-2. Configura las env vars (WhatsApp + Supabase).
-3. Deploy. Build command `next build`, output automático.
+Desplegado en https://babuinos-inc.vercel.app (repo conectado → auto-deploy en cada push). Env vars configuradas en el proyecto. Framework: Next.js.
 
 ## 🎨 Marca
 
 - **Paleta:** Papiro `#F3E9E2` · Teal `#00736C` · Ocre `#CDA214` · Pardo `#654321` · Tinta `#1E2021`
-- **Tipografía:** Anton (titulares condensados oversize) · Inter (cuerpo) · Space Mono (labels)
-- **Assets fuente** (logos, fotos, wallpaper) en `MATERIAL/` — fuera del repo; los procesados viven en `/public/brand`.
+- **Tipografía:** Anton (titulares) · Inter (cuerpo) · Space Mono (labels)
+- Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand` y música en `/public/music`.
 
 ## 📁 Estructura
 
 ```
 src/
-  app/            layout, page, sacos/ medias/ accesorios/ (Muy pronto), api/{checkout,waitlist}
+  app/         layout, page, admin/, sacos|medias|accesorios/ (Muy pronto),
+               api/{checkout,waitlist,admin/login,admin/logout}, icon.png
   components/
-    sections/     ScrollExpansionHero, FeaturesStrip, Lookbook, Catalog, Story, Newsletter
-    layout/       AnnounceBar, Navbar (Tienda + colorway), Footer
-    cart/         CartDrawer (form + checkout WhatsApp)
-    fx/           FixedWallpaper, Lianas, CssLeaves, LeafCanvas, BaboonStrip, Reveal, SmoothScroll
-    ui/           Logo, BaboonMark, ImageAutoSlider, Icons, SocialButtons, Toast
-  lib/            products, store (carrito), theme (colorway), whatsapp, supabase, toast, utils
-public/brand/     logos, patches, products, jungle (wallpaper)
+    sections/  ScrollExpansionHero, FeaturesStrip, Lookbook, Catalog, Story, Newsletter
+    layout/    AnnounceBar, Navbar, Footer
+    cart/      CartDrawer        admin/  AdminLogin, AdminCharts
+    fx/        FixedWallpaper, Lianas, CssLeaves, LeafCanvas, BaboonStrip, MusicPlayer, ...
+    ui/        Logo, BaboonMark, ImageAutoSlider, Icons, SocialButtons, Toast
+  lib/         products, store, theme, whatsapp, supabase, toast, utils
+public/        brand/ (logos, patches, products, jungle), music/
 ```
 
 ## 🗺️ Roadmap
 
-Ver **[ROADMAP.md](ROADMAP.md)** para lo que falta y las próximas fases.
+Ver **[ROADMAP.md](ROADMAP.md)**.
 
 ---
 
-© 2026 Babuinos Inc. — Bogotá, Colombia. _Streetwear Cult._
+© 2026 Babuinos Inc. — Bogotá, Colombia. _Streetwear Cult._ 🦍
