@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { PRODUCTS, CATEGORIES, getEdition, type Product, type Category } from "@/lib/products";
 import { BaboonMark } from "@/components/ui/BaboonMark";
@@ -133,7 +134,38 @@ export function Catalog() {
           </p>
         </Reveal>
 
-        <div className="mt-8 flex flex-wrap gap-2">
+        {/* category navigation (shop menu) */}
+        <div className="mt-7 flex flex-wrap gap-2.5">
+          {[
+            { label: "Camisas", href: "/#catalogo", soon: false, color: "#00897f", active: true },
+            { label: "Sacos", href: "/sacos", soon: true, color: "#cda214" },
+            { label: "Medias", href: "/medias", soon: true, color: "#6b8035" },
+            { label: "Accesorios", href: "/accesorios", soon: true, color: "#8a6a3a" },
+          ].map((c) =>
+            c.active ? (
+              <span
+                key={c.label}
+                className="font-mono inline-flex items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-[0.72rem] font-bold tracking-[0.1em] text-ink uppercase"
+              >
+                <BaboonMark color={c.color} className="h-4 w-5" />
+                {c.label}
+              </span>
+            ) : (
+              <Link
+                key={c.label}
+                href={c.href}
+                className="font-mono inline-flex items-center gap-2 rounded-full border border-cream/25 px-5 py-2.5 text-[0.72rem] font-bold tracking-[0.1em] text-cream/75 uppercase transition hover:border-cream/60 hover:text-cream"
+              >
+                <BaboonMark color={c.color} className="h-4 w-5" />
+                {c.label}
+                {c.soon && <span className="text-[0.5rem] text-[var(--accent)]">• pronto</span>}
+              </Link>
+            ),
+          )}
+        </div>
+
+        {/* sub-filters for shirts */}
+        <div className="mt-4 flex flex-wrap gap-2">
           {CATEGORIES.map((c) => (
             <button
               key={c.key}

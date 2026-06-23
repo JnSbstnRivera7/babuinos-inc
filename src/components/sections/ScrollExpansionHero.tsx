@@ -60,16 +60,16 @@ export function ScrollExpansionHero() {
         <CssLeaves />
         <LeafCanvas density={0.6} />
 
-        {/* split title — grows + distorts (blur/skew) until it vanishes */}
-        <motion.h1
+        {/* logo — grows + distorts (blur/skew) until it vanishes */}
+        <motion.div
           style={{ opacity: titleOpacity, scale: titleScale, skewX: titleSkew, filter: titleFilter }}
-          className="font-condensed pointer-events-none absolute z-20 text-center text-[clamp(2.4rem,9vw,5.5rem)] leading-none text-cream drop-shadow-[0_6px_30px_rgba(0,0,0,.7)]"
+          className="pointer-events-none absolute z-20 flex justify-center"
         >
-          Babuinos
-        </motion.h1>
+          <Logo tone="cream" priority className="h-auto w-[min(74vw,460px)] drop-shadow-[0_8px_40px_rgba(0,0,0,.7)]" />
+        </motion.div>
         <motion.p
           style={{ opacity: subOpacity }}
-          className="font-mono pointer-events-none absolute bottom-[18%] z-20 text-center text-[0.7rem] tracking-[0.35em] text-[var(--accent)] uppercase"
+          className="font-mono pointer-events-none absolute bottom-[16%] z-20 text-center text-[0.7rem] tracking-[0.35em] text-[var(--accent)] uppercase"
         >
           Street Adventure Heritage
         </motion.p>
@@ -79,8 +79,10 @@ export function ScrollExpansionHero() {
           style={{ opacity: contentOpacity, y: contentY }}
           className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
         >
-          <Logo tone="cream" priority className="h-auto w-[min(80vw,440px)] drop-shadow-[0_10px_40px_rgba(0,0,0,.7)]" />
-          <p className="mt-6 max-w-md text-[1.02rem] leading-relaxed text-cream/80">
+          <h2 className="font-condensed text-[clamp(2.2rem,7vw,4.5rem)] leading-[0.95] text-cream drop-shadow-[0_6px_30px_rgba(0,0,0,.6)]">
+            No sigas <span className="shine-gold">la manada.</span>
+          </h2>
+          <p className="mt-5 max-w-md text-[1.02rem] leading-relaxed text-cream/80">
             Streetwear oversize con identidad. Selva de cemento, actitud de explorador.
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
