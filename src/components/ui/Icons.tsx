@@ -137,3 +137,31 @@ export const IconChevronDown = (p: P) => (
     <path d="M6 9l6 6 6-6" />
   </svg>
 );
+
+export const IconPlay = (p: P) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
+    <path d="M8 5.5v13l11-6.5z" />
+  </svg>
+);
+
+export const IconPause = (p: P) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
+    <rect x="6" y="5" width="4" height="14" rx="1" />
+    <rect x="14" y="5" width="4" height="14" rx="1" />
+  </svg>
+);
+
+export const IconSkip = (p: P) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
+    <path d="M6 5.5v13l9-6.5z" />
+    <rect x="16" y="5" width="2.6" height="14" rx="1" />
+  </svg>
+);
+
+export const IconMusic = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M9 18V6l11-2v12" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="17" cy="16" r="3" />
+  </svg>
+);

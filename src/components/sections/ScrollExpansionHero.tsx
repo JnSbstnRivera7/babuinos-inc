@@ -3,17 +3,9 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
-import { SocialButtons } from "@/components/ui/SocialButtons";
 import { LeafCanvas } from "@/components/fx/LeafCanvas";
 import { Lianas } from "@/components/fx/Lianas";
 import { CssLeaves } from "@/components/fx/CssLeaves";
-import { IconArrowRight } from "@/components/ui/Icons";
-
-const STATS = [
-  { num: "100%", label: "Cotton Oversize" },
-  { num: "5", label: "Colorways" },
-  { num: "∞", label: "Actitud" },
-];
 
 /**
  * Immersive intro: a window grows on scroll, revealing the FIXED concrete-jungle
@@ -35,9 +27,6 @@ export function ScrollExpansionHero() {
   const titleSkew = useTransform(scrollYProgress, [0, 0.42], [0, -6]);
   const titleFilter = useMotionTemplate`blur(${titleBlur}px)`;
   const subOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
-
-  const contentOpacity = useTransform(scrollYProgress, [0.5, 0.86], [0, 1]);
-  const contentY = useTransform(scrollYProgress, [0.5, 0.86], [40, 0]);
   const cueOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
 
   return (
@@ -73,45 +62,6 @@ export function ScrollExpansionHero() {
         >
           Street Adventure Heritage
         </motion.p>
-
-        {/* brand content, revealed once the jungle fills the screen */}
-        <motion.div
-          style={{ opacity: contentOpacity, y: contentY }}
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
-        >
-          <h2 className="font-condensed text-[clamp(2.2rem,7vw,4.5rem)] leading-[0.95] text-cream drop-shadow-[0_6px_30px_rgba(0,0,0,.6)]">
-            No sigas <span className="shine-gold">la manada.</span>
-          </h2>
-          <p className="mt-5 max-w-md text-[1.02rem] leading-relaxed text-cream/80">
-            Streetwear oversize con identidad. Selva de cemento, actitud de explorador.
-          </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <a
-              href="#catalogo"
-              className="font-mono inline-flex items-center gap-2 rounded-full px-8 py-4 text-[0.78rem] font-bold tracking-[0.1em] uppercase transition hover:-translate-y-0.5"
-              style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
-            >
-              Ver colección <IconArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="#nosotros"
-              className="font-mono inline-flex items-center rounded-full border border-cream/40 px-7 py-4 text-[0.78rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:bg-cream/10"
-            >
-              Manifiesto
-            </a>
-          </div>
-          <SocialButtons variant="ghost" className="mt-5 justify-center" />
-          <div className="mt-9 flex justify-center gap-10">
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <div className="font-condensed text-3xl text-[var(--accent)]">{s.num}</div>
-                <div className="font-mono mt-1 text-[0.55rem] tracking-[0.14em] text-cream/55 uppercase">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
 
         {/* scroll cue */}
         <motion.div

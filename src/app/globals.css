@@ -171,6 +171,13 @@ img {
   50% { transform: scale(1.06); opacity: 1; }
 }
 .anim-pulse { animation: pulse-soft 3.5s ease-in-out infinite; }
+
+/* music equalizer bars */
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+.eq-bar { transform-origin: bottom; animation: eq 0.9s ease-in-out infinite; }
 /* Embroidered patch lift */
 .emboss {
   filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));

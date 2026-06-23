@@ -13,6 +13,7 @@ import { Catalog } from "@/components/sections/Catalog";
 import { Story } from "@/components/sections/Story";
 import { Newsletter } from "@/components/sections/Newsletter";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { MusicPlayer } from "@/components/fx/MusicPlayer";
 import { Toast } from "@/components/ui/Toast";
 
 export function Experience() {
@@ -37,6 +38,7 @@ export function Experience() {
       </div>
 
       <CartDrawer />
+      <MusicPlayer />
       <Toast />
     </>
   );
