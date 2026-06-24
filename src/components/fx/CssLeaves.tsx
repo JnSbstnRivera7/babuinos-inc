@@ -19,6 +19,7 @@ export function CssLeaves() {
         <svg
           key={i}
           viewBox="0 0 40 24"
+          className={i % 2 === 1 ? "hidden sm:block" : ""}
           style={{
             position: "absolute",
             top: "-6%",

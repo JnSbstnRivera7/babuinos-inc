@@ -8,7 +8,7 @@ export function FixedWallpaper() {
   return (
     <div className="fixed inset-0 -z-10" aria-hidden>
       <Image
-        src="/brand/jungle/concrete-jungle.png"
+        src="/brand/jungle/concrete-jungle.webp"
         alt=""
         fill
         priority

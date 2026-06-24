@@ -101,7 +101,11 @@ export function Lianas({ className }: { className?: string }) {
       aria-hidden
     >
       {vines.map((v, i) => (
-        <div key={i} className="absolute top-0" style={{ left: v.left, opacity: 0.7 }}>
+        <div
+          key={i}
+          className={`absolute top-0 ${i % 2 === 1 ? "hidden sm:block" : ""}`}
+          style={{ left: v.left, opacity: 0.7 }}
+        >
           <Vine height={v.height} delay={v.delay} dur={v.dur} seed={v.seed} />
         </div>
       ))}

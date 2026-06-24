@@ -22,7 +22,9 @@ export function Lookbook() {
 
       <div className="flex flex-col gap-5">
         <ImageAutoSlider images={ROW_A} fit="contain" speed={42} />
-        <ImageAutoSlider images={ROW_B} fit="contain" speed={52} reverse />
+        <div className="hidden sm:block">
+          <ImageAutoSlider images={ROW_B} fit="contain" speed={52} reverse />
+        </div>
       </div>
     </section>
   );

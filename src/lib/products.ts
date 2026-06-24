@@ -47,7 +47,7 @@ export const PRODUCTS: Product[] = [
     category: "esencial",
     edition: "original",
     desc: "Algodón pesado en lila polvo con el lettering Babuinos a la espalda. La pieza que abrió la manada.",
-    image: "/brand/products/lilac.png",
+    image: "/brand/products/lilac.webp",
     colorway: "Lila Polvo",
     sizes: ["S", "M", "L", "XL"],
     badge: "new",

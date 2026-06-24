@@ -29,6 +29,8 @@ export function LeafCanvas({ density = 1 }: { density?: number }) {
     const canvas = ref.current;
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Skip the canvas particle loop on phones for smoother performance.
+    if (window.innerWidth < 700) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
