@@ -56,18 +56,19 @@ export function MusicPlayer() {
 
   useEffect(() => {
     if (started) return;
+    // First user gesture (incl. the first scroll: wheel/touch) → start a random track.
+    const events = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"];
+    let done = false;
     const onFirst = () => {
-      if (started) return;
+      if (done) return;
+      done = true;
+      events.forEach((e) => window.removeEventListener(e, onFirst));
       setStarted(true);
       playTrack(Math.floor(Math.random() * TRACKS.length));
     };
-    const opts = { once: true } as AddEventListenerOptions;
-    window.addEventListener("pointerdown", onFirst, opts);
-    window.addEventListener("keydown", onFirst, opts);
-    return () => {
-      window.removeEventListener("pointerdown", onFirst);
-      window.removeEventListener("keydown", onFirst);
-    };
+    const opts = { passive: true } as AddEventListenerOptions;
+    events.forEach((e) => window.addEventListener(e, onFirst, opts));
+    return () => events.forEach((e) => window.removeEventListener(e, onFirst));
   }, [started, playTrack]);
 
   const toggle = () => {
