@@ -2,6 +2,7 @@
 
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
 import { FixedWallpaper } from "@/components/fx/FixedWallpaper";
+import { PageVines } from "@/components/fx/PageVines";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollExpansionHero } from "@/components/sections/ScrollExpansionHero";
@@ -19,6 +20,7 @@ export function Experience() {
   return (
     <>
       <FixedWallpaper />
+      <PageVines />
       <SmoothScroll />
 
       <div className="relative z-[2]">

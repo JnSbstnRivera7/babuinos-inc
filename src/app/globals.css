@@ -220,6 +220,11 @@ img {
   0%, 100% { transform: rotate(-2.2deg); }
   50% { transform: rotate(2.2deg); }
 }
+/* very gentle sway for full-height hanging vines (long lever → small angle) */
+@keyframes vine-tall {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
 @keyframes shimmer {
   0% { transform: translateX(-120%); }
   100% { transform: translateX(220%); }

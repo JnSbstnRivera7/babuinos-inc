@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { LeafCanvas } from "@/components/fx/LeafCanvas";
-import { Lianas } from "@/components/fx/Lianas";
 import { CssLeaves } from "@/components/fx/CssLeaves";
 
 /**
@@ -45,7 +44,6 @@ export function ScrollExpansionHero() {
         />
 
         {/* jungle ambiance over the reveal */}
-        <Lianas />
         <CssLeaves />
         <LeafCanvas density={0.6} />
 
