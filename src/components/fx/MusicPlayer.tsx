@@ -14,7 +14,19 @@ const TRACKS: Track[] = [
   { src: "/music/50cent-in-da-club.mp3", title: "50 Cent — In Da Club" },
   { src: "/music/house-of-pain-back-from-the-dead.mp3", title: "House of Pain — Back From the Dead" },
   { src: "/music/six-days-remix.mp3", title: "Six Days (Remix)" },
+  { src: "/music/vico-c-desahogo.mp3", title: "Vico C — Desahogo" },
+  { src: "/music/shaggy-luv-me-up.mp3", title: "Shaggy — Luv Me Up" },
 ];
+
+/** Small leaf used to decorate the player. */
+function Leaf({ className, hue = "#2b8f57" }: { className?: string; hue?: string }) {
+  return (
+    <svg viewBox="0 0 40 24" className={className} aria-hidden>
+      <path d="M2 12 C14 1 30 1 38 12 C30 23 14 23 2 12Z" fill={hue} />
+      <path d="M2 12 H38" stroke="rgba(0,0,0,.25)" strokeWidth="1" />
+    </svg>
+  );
+}
 
 /**
  * Jungle-styled floating music player. On the user's first interaction
@@ -42,7 +54,6 @@ export function MusicPlayer() {
     return n;
   }, []);
 
-  // first interaction → start a random track
   useEffect(() => {
     if (started) return;
     const onFirst = () => {
@@ -84,51 +95,61 @@ export function MusicPlayer() {
     <>
       <audio ref={audioRef} onEnded={next} preload="none" />
       <div className="fixed bottom-4 left-4 z-[80] max-w-[calc(100vw-2rem)]">
-        <div className="flex items-center gap-2.5 rounded-full border border-[var(--accent)]/45 bg-ink/85 py-2 pl-2 pr-3 shadow-[0_8px_30px_rgba(0,0,0,.45)] backdrop-blur-md">
-          {/* leafy accent */}
-          <BaboonMark color="var(--accent)" className="h-5 w-6 shrink-0" />
+        <div className="relative">
+          {/* hanging vine + leaves on top */}
+          <svg className="anim-leaf pointer-events-none absolute -top-4 left-6 z-10 h-6 w-8" viewBox="0 0 32 24" aria-hidden>
+            <path d="M16 24 C10 16 10 8 16 0" stroke="#1b5e3f" strokeWidth="2" fill="none" />
+            <path d="M16 6 C22 3 28 6 30 12 C24 13 18 11 16 6Z" fill="#2b8f57" />
+          </svg>
+          <Leaf className="anim-leaf pointer-events-none absolute -top-3 right-7 z-10 h-3.5 w-5 -rotate-12" hue="#3d7a2f" />
 
-          <button
-            onClick={toggle}
-            aria-label={playing ? "Pausar música" : "Reproducir música"}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full transition hover:brightness-95"
-            style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
-          >
-            {playing ? <IconPause className="h-4 w-4" /> : <IconPlay className="h-4 w-4" />}
-          </button>
+          <div className="relative flex items-center gap-2.5 overflow-hidden rounded-full border border-[var(--accent)]/45 bg-ink/85 py-2 pl-2 pr-3 shadow-[0_8px_30px_rgba(0,0,0,.45)] backdrop-blur-md">
+            {/* leafy texture sheen */}
+            <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0c5a54]/25 via-transparent to-[#4a5c2a]/25" />
 
-          {/* equalizer */}
-          <div className="flex h-5 w-5 shrink-0 items-end justify-center gap-[2px]">
-            {[0, 1, 2, 3].map((b) => (
-              <span
-                key={b}
-                className="eq-bar w-[3px] rounded-sm bg-[var(--accent)]"
-                style={{
-                  height: "100%",
-                  animationDelay: `${b * 0.15}s`,
-                  animationPlayState: playing ? "running" : "paused",
-                  opacity: playing ? 1 : 0.4,
-                }}
-              />
-            ))}
-          </div>
+            <BaboonMark color="var(--accent)" className="relative h-5 w-6 shrink-0" />
 
-          <div className="min-w-0 max-w-[40vw] sm:max-w-[200px]">
-            <div className="font-mono truncate text-[0.62rem] font-bold tracking-[0.06em] text-cream">
-              {started && index >= 0 ? TRACKS[index].title : "Pon la selva 🌿"}
+            <button
+              onClick={toggle}
+              aria-label={playing ? "Pausar música" : "Reproducir música"}
+              className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full transition hover:brightness-95"
+              style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
+            >
+              {playing ? <IconPause className="h-4 w-4" /> : <IconPlay className="h-4 w-4" />}
+            </button>
+
+            <div className="relative flex h-5 w-5 shrink-0 items-end justify-center gap-[2px]">
+              {[0, 1, 2, 3].map((b) => (
+                <span
+                  key={b}
+                  className="eq-bar w-[3px] rounded-sm bg-[var(--accent)]"
+                  style={{
+                    height: "100%",
+                    animationDelay: `${b * 0.15}s`,
+                    animationPlayState: playing ? "running" : "paused",
+                    opacity: playing ? 1 : 0.4,
+                  }}
+                />
+              ))}
             </div>
-            <div className="font-mono text-[0.5rem] tracking-[0.12em] text-cream/45 uppercase">
-              Babuinos Radio
-            </div>
-          </div>
 
-          <button
-            onClick={next}
-            aria-label="Siguiente canción"
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-cream/70 transition hover:bg-cream/10 hover:text-cream"
-          >
-            <IconSkip className="h-4 w-4" />
-          </button>
+            <div className="relative min-w-0 max-w-[40vw] sm:max-w-[200px]">
+              <div className="font-mono truncate text-[0.62rem] font-bold tracking-[0.06em] text-cream">
+                {started && index >= 0 ? TRACKS[index].title : "Pon la selva 🌿"}
+              </div>
+              <div className="font-mono flex items-center gap-1 text-[0.5rem] tracking-[0.12em] text-cream/45 uppercase">
+                <Leaf className="h-2 w-3" hue="#2b8f57" /> Babuinos Radio
+              </div>
+            </div>
+
+            <button
+              onClick={next}
+              aria-label="Siguiente canción"
+              className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full text-cream/70 transition hover:bg-cream/10 hover:text-cream"
+            >
+              <IconSkip className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </>

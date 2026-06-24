@@ -2,7 +2,6 @@
 
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
 import { FixedWallpaper } from "@/components/fx/FixedWallpaper";
-import { AnnounceBar } from "@/components/layout/AnnounceBar";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollExpansionHero } from "@/components/sections/ScrollExpansionHero";
@@ -23,7 +22,6 @@ export function Experience() {
       <SmoothScroll />
 
       <div className="relative z-[2]">
-        <AnnounceBar />
         <Navbar />
         <main>
           <ScrollExpansionHero />
