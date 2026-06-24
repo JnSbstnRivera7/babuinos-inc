@@ -1,48 +1,47 @@
 # 🗺️ Roadmap — Babuinos Inc
 
 Estado del proyecto y lo que falta para lanzar y escalar. Marca: ✅ hecho · 🔜 siguiente · 🧭 futuro.
+Checklist accionable de próximos cambios en **[PENDIENTES.md](PENDIENTES.md)**.
 
 ---
 
 ## ✅ Fase 0 — Base (hecho)
 
-- [x] Proyecto Next.js 16 + TS + Tailwind v4 + Framer Motion + GSAP + Lenis.
-- [x] Intro inmersiva: scroll-reveal que descubre el wallpaper fijo de selva de cemento.
-- [x] Título con crecimiento + distorsión (blur/skew) hasta desaparecer.
+- [x] Proyecto Next.js 16 + TS + Tailwind v4 + Framer Motion + Lenis.
+- [x] Intro inmersiva: scroll-reveal que descubre el wallpaper fijo de selva de cemento; el **logo** crece + se distorsiona hasta desaparecer.
 - [x] Wallpaper fijo para toda la página; tema oscuro coherente.
-- [x] Efectos de selva: lianas con hojas (CSS), hojas cayendo (CSS + Canvas), ladrillo y borde de lianas en CSS, shine dorado.
-- [x] Catálogo con fotos reales, tallas y "agregar a la mochila" (sin precios).
+- [x] Efectos de selva: **lianas realistas drapeadas desde las esquinas/lados con hojas colgantes y balanceo**, hojas cayendo (CSS + Canvas), ladrillo y bordes de liana en CSS, shine dorado.
+- [x] Catálogo con tallas, selectores de categoría y "agregar a la mochila" (sin precios).
 - [x] Lookbook en loop (image auto-slider).
 - [x] Menú "Tienda" + selector de colorway (recolorea acento, solo paleta).
-- [x] Carrito persistente + **formulario de datos del cliente** (nombre, teléfono, ciudad, nota).
+- [x] Carrito persistente + **formulario del cliente** (nombre, teléfono, ciudad, nota).
 - [x] Checkout por WhatsApp (resumen + datos → `wa.me`), número `573504444668`.
 - [x] Páginas "Muy pronto" para Sacos / Medias / Accesorios.
 - [x] Íconos SVG propios + botones IG / WhatsApp / Facebook.
-- [x] Logo real nítido (negro/crema/oro transparente), mobile-first.
-- [x] Repo en GitHub (público) + conectado a Vercel (auto-deploy).
-- [x] **Reproductor "Babuinos Radio"** (autoplay aleatorio al primer click).
-- [x] **Deploy en Vercel** → https://babuinos-inc.vercel.app
-- [x] **Supabase** (tablas `orders` + `waitlist`) + env vars en Vercel.
-- [x] **Favicon** del babuino.
+- [x] Logo real nítido (negro/crema/oro transparente) + favicon del babuino.
+- [x] **Reproductor "Babuinos Radio"**: autoplay aleatorio al primer click/scroll, 6 temas.
 - [x] **Panel `/admin`** con login temático + dashboard de gráficas (pedidos por día, top productos, por ciudad) y tablas.
+- [x] **Optimización móvil**: imágenes a WebP, música a 128 kbps, animaciones livianas en celular, limpieza de assets.
+- [x] Repo en GitHub (público) + conectado a Vercel · **Deploy** → https://babuinos-inc.vercel.app · **Supabase** (`orders` + `waitlist`).
 
 ## 🔜 Fase 1 — Pulido de lanzamiento (lo que sigue)
 
-- [ ] **Links reales de redes** (Instagram, Facebook, WhatsApp) — hoy son placeholder.
-- [ ] **Fotos de producto definitivas** (las actuales son flat-lays de referencia; reemplazar por las reales de Babuinos).
+> Detalle accionable en **[PENDIENTES.md](PENDIENTES.md)**.
+
+- [ ] **Fotos de producto definitivas** (las actuales son flat-lays de referencia con texto de otras marcas).
+- [ ] **Links reales de redes** (Instagram, Facebook, WhatsApp).
 - [ ] **OG image** con el babuino (para compartir en redes).
-- [ ] **Cambiar `ADMIN_PASSWORD`** y **rotar credenciales** compartidas en chat (GitHub PAT, Vercel token, Supabase service key).
-- [ ] Optimizar el wallpaper (`concrete-jungle.png` ~2.8 MB → WebP/comprimido).
+- [ ] **Cambiar `ADMIN_PASSWORD`** y **rotar credenciales** del desarrollo.
+- [ ] **Música con licencia** (libre de regalías).
 
 ## 🧭 Fase 2 — Tienda real
 
 - [ ] **Precios** reales por producto y por talla.
-- [ ] **Pasarela de pago** (Wompi / Mercado Pago / Bold) o mantener pedido por WhatsApp con cotización.
-- [ ] **Catálogo desde Supabase** (CMS): productos, tallas, stock e imágenes administrables sin tocar código.
-- [ ] **Guía de tallas, Envíos, Cambios, FAQ** (hoy son enlaces en el footer sin página).
+- [ ] **Pasarela de pago** (Wompi / Mercado Pago / Bold) o mantener pedido por WhatsApp.
+- [ ] **Catálogo desde Supabase** (CMS): productos, tallas, stock e imágenes sin tocar código.
+- [ ] **Guía de tallas, Envíos, Cambios, FAQ** (hoy enlaces del footer sin página).
 - [ ] **Inventario / stock** y estados de "agotado".
-- [ ] Lanzar **Sacos / Medias / Accesorios** cuando estén listos (reemplazar "Muy pronto").
-- [ ] **Panel admin** para ver pedidos (`orders`) y la lista del Club (`waitlist`).
+- [ ] Lanzar **Sacos / Medias / Accesorios** (reemplazar "Muy pronto").
 
 ## 🧭 Fase 3 — Crecimiento
 
