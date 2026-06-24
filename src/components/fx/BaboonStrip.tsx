@@ -16,8 +16,8 @@ export function BaboonStrip({ tone = "dark" }: { tone?: "dark" | "light" }) {
   const items = [...COLORS, ...COLORS, ...COLORS];
   return (
     <div
-      className={`relative overflow-hidden border-y py-6 backdrop-blur-sm ${
-        tone === "dark" ? "border-cream/10 bg-ink/40" : "border-ink/10 bg-cream-2"
+      className={`relative overflow-hidden border-y py-6 sm:backdrop-blur-sm ${
+        tone === "dark" ? "border-cream/10 bg-ink/55 sm:bg-ink/40" : "border-ink/10 bg-cream-2"
       }`}
     >
       <div

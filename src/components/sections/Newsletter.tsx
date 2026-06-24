@@ -31,7 +31,7 @@ export function Newsletter() {
   }
 
   return (
-    <section id="club" className="liana-edge border-y border-cream/10 bg-ink/45 backdrop-blur-sm">
+    <section id="club" className="cv-auto liana-edge border-y border-cream/10 bg-ink/60 sm:bg-ink/45 sm:backdrop-blur-sm">
       <div className="mx-auto max-w-2xl px-5 py-16 text-center md:px-8">
         <p className="eyebrow mb-3 text-[var(--accent)]">Club Babuinos</p>
         <h2 className="font-condensed text-[clamp(2.2rem,6vw,3.6rem)] text-cream">

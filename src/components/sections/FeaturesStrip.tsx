@@ -9,7 +9,7 @@ const FEATURES = [
 
 export function FeaturesStrip() {
   return (
-    <div className="liana-edge border-y border-cream/10 bg-ink/55 backdrop-blur-sm">
+    <div className="liana-edge border-y border-cream/10 bg-ink/70 sm:bg-ink/55 sm:backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl flex-wrap justify-around gap-6 px-5 py-8 md:px-8">
         {FEATURES.map(({ Icon, title, sub }) => (
           <div key={title} className="flex items-center gap-3 text-cream">

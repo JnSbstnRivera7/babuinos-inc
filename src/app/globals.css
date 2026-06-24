@@ -271,6 +271,12 @@ img {
   animation: shimmer 4.5s infinite;
 }
 
+/* Skip rendering offscreen sections (big mobile paint/CPU win on long pages) */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
 /* Hide scrollbars on horizontal scrollers */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

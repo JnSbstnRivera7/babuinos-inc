@@ -13,7 +13,7 @@ const PILLARS = [
 
 export function Story() {
   return (
-    <section id="nosotros" className="relative overflow-hidden">
+    <section id="nosotros" className="cv-auto relative overflow-hidden">
       <div className="relative mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
         <div className="grid items-center gap-12 md:grid-cols-2">
           <div>

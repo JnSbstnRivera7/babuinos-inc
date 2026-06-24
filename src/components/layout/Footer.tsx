@@ -9,7 +9,7 @@ const COLS = [
 
 export function Footer() {
   return (
-    <footer className="brick-pattern liana-edge relative px-5 pt-10 pb-6 md:px-8">
+    <footer className="brick-pattern liana-edge cv-auto relative px-5 pt-10 pb-6 md:px-8">
       <div className="mx-auto grid max-w-6xl gap-8 border-b border-cream/10 pb-7 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <Logo tone="cream" className="h-9 w-auto" />
