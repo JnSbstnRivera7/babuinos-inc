@@ -10,7 +10,7 @@ Checklist accionable de próximos cambios en **[PENDIENTES.md](PENDIENTES.md)**.
 - [x] Proyecto Next.js 16 + TS + Tailwind v4 + Framer Motion + Lenis.
 - [x] Intro inmersiva: scroll-reveal que descubre el wallpaper fijo de selva de cemento; el **logo** crece + se distorsiona hasta desaparecer.
 - [x] Wallpaper fijo para toda la página; tema oscuro coherente.
-- [x] Efectos de selva: **lianas realistas drapeadas desde las esquinas/lados con hojas colgantes y balanceo**, hojas cayendo (CSS + Canvas), ladrillo y bordes de liana en CSS, shine dorado.
+- [x] Efectos de selva: **lianas que cuelgan del techo al suelo por los lados de toda la página** (capa fija, largas oscuras + cortas verde claro, disparejas), hojas cayendo (CSS + Canvas), ladrillo y bordes de liana en CSS, shine dorado.
 - [x] Catálogo con tallas, selectores de categoría y "agregar a la mochila" (sin precios).
 - [x] Lookbook en loop (image auto-slider).
 - [x] Menú "Tienda" + selector de colorway (recolorea acento, solo paleta).
@@ -21,7 +21,7 @@ Checklist accionable de próximos cambios en **[PENDIENTES.md](PENDIENTES.md)**.
 - [x] Logo real nítido (negro/crema/oro transparente) + favicon del babuino.
 - [x] **Reproductor "Babuinos Radio"**: autoplay aleatorio al primer click/scroll, 6 temas.
 - [x] **Panel `/admin`** con login temático + dashboard de gráficas (pedidos por día, top productos, por ciudad) y tablas.
-- [x] **Optimización móvil**: imágenes a WebP, música a 128 kbps, animaciones livianas en celular, limpieza de assets.
+- [x] **Optimización móvil**: imágenes a WebP, música a 128 kbps, animaciones livianas en celular, limpieza de assets, `content-visibility:auto` en secciones, lazy-load (Lookbook/Catálogo) y sin `backdrop-blur` en móvil.
 - [x] Repo en GitHub (público) + conectado a Vercel · **Deploy** → https://babuinos-inc.vercel.app · **Supabase** (`orders` + `waitlist`).
 
 ## 🔜 Fase 1 — Pulido de lanzamiento (lo que sigue)

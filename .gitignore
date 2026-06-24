@@ -33,6 +33,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# local-only credentials (NEVER commit)
+*.local.md
+CREDENCIALES.local.md
+
 # brand source assets (kept out of the repo — processed assets live in /public)
 /MATERIAL
 

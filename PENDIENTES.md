@@ -4,6 +4,10 @@ Próximos cambios para llevar la tienda de "lista y en línea" a "vendiendo de v
 Estado actual: desplegada en https://babuinos-inc.vercel.app (ver [README](README.md)).
 Visión por fases en [ROADMAP.md](ROADMAP.md).
 
+> **Para continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key,
+> admin, WhatsApp) y cheat-sheet de push/deploy en **`CREDENCIALES.local.md`** (archivo local,
+> no se sube). Las del app también en `.env.local`.
+
 ---
 
 ## 🔴 Crítico (para vender en serio)
@@ -43,10 +47,16 @@ Visión por fases en [ROADMAP.md](ROADMAP.md).
 
 ---
 
-## ⚙️ Deuda técnica menor
+## ⚙️ Optimización móvil
 
-- [ ] Optimizar más la música si pesa (hoy ~22 MB, carga 1 tema a la vez al primer gesto).
-- [ ] Afinar `sizes` de `next/image` en el wallpaper (warning de performance, no crítico).
-- [ ] Convertir `baboon.png` (máscara) a un formato más liviano si se nota.
+Hecho: imágenes a WebP · música 128 kbps · sin canvas/menos animaciones en móvil ·
+`content-visibility:auto` en secciones de abajo · lazy-load (Lookbook/Catálogo) ·
+sin `backdrop-blur` en móvil.
+
+Queda (opcional):
+- [ ] Simplificar la intro scroll-expansion en móvil (fade en vez de recalcular transforms).
+- [ ] Música a 96 kbps o arrancar muteada con control de volumen.
+- [ ] Correr Lighthouse/PageSpeed móvil y atacar lo que marque.
+- [ ] Afinar `sizes` de `next/image` en el wallpaper (warning menor).
 
 _Última actualización: 2026-06-23._
