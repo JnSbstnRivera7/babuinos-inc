@@ -18,7 +18,6 @@ const TRACKS: Track[] = [
   { src: "/music/shaggy-luv-me-up.mp3", title: "Shaggy — Luv Me Up" },
 ];
 
-/** Small leaf used to decorate the player. */
 function Leaf({ className, hue = "#2b8f57" }: { className?: string; hue?: string }) {
   return (
     <svg viewBox="0 0 40 24" className={className} aria-hidden>
@@ -29,8 +28,11 @@ function Leaf({ className, hue = "#2b8f57" }: { className?: string; hue?: string
 }
 
 /**
- * Jungle-styled floating music player. On the user's first interaction
- * (click/tap/key) it auto-plays a random track. Auto-advances on end.
+ * Jungle-styled floating music player. Tries to start a random track on the
+ * user's first interaction (tap/click/key, the touch used to scroll on mobile,
+ * and the wheel where the browser allows it). If the browser blocks the play
+ * (e.g. a desktop wheel-scroll, which is not a valid autoplay gesture), it
+ * keeps listening and starts on the next gesture instead of staying silent.
  */
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -38,13 +40,14 @@ export function MusicPlayer() {
   const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
 
+  /** Sets src + plays a track synchronously (to preserve the user gesture). */
   const playTrack = useCallback((i: number) => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio) return Promise.reject(new Error("no audio"));
     audio.src = TRACKS[i].src;
     audio.volume = 0.55;
     setIndex(i);
-    audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    return audio.play().then(() => setPlaying(true));
   }, []);
 
   const randomOther = useCallback((cur: number) => {
@@ -54,21 +57,27 @@ export function MusicPlayer() {
     return n;
   }, []);
 
+  // First-interaction autostart (re-arms if the browser blocks the gesture).
   useEffect(() => {
     if (started) return;
-    // First user gesture (incl. the first scroll: wheel/touch) → start a random track.
-    const events = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"];
+    const events = ["pointerdown", "click", "touchend", "keydown", "wheel", "touchstart", "scroll"];
     let done = false;
-    const onFirst = () => {
+    const cleanup = () => events.forEach((e) => window.removeEventListener(e, onFirst));
+    function onFirst() {
       if (done) return;
-      done = true;
-      events.forEach((e) => window.removeEventListener(e, onFirst));
-      setStarted(true);
-      playTrack(Math.floor(Math.random() * TRACKS.length));
-    };
+      playTrack(Math.floor(Math.random() * TRACKS.length))
+        .then(() => {
+          done = true;
+          setStarted(true);
+          cleanup();
+        })
+        .catch(() => {
+          /* blocked by autoplay policy → wait for the next gesture */
+        });
+    }
     const opts = { passive: true } as AddEventListenerOptions;
     events.forEach((e) => window.addEventListener(e, onFirst, opts));
-    return () => events.forEach((e) => window.removeEventListener(e, onFirst));
+    return cleanup;
   }, [started, playTrack]);
 
   const toggle = () => {
@@ -76,7 +85,7 @@ export function MusicPlayer() {
     if (!audio) return;
     if (!started) {
       setStarted(true);
-      playTrack(index < 0 ? Math.floor(Math.random() * TRACKS.length) : index);
+      playTrack(index < 0 ? Math.floor(Math.random() * TRACKS.length) : index).catch(() => {});
       return;
     }
     if (playing) {
@@ -89,7 +98,7 @@ export function MusicPlayer() {
 
   const next = () => {
     setStarted(true);
-    playTrack(randomOther(index));
+    playTrack(randomOther(index)).catch(() => {});
   };
 
   return (
@@ -97,7 +106,6 @@ export function MusicPlayer() {
       <audio ref={audioRef} onEnded={next} preload="none" />
       <div className="fixed bottom-4 left-4 z-[80] max-w-[calc(100vw-2rem)]">
         <div className="relative">
-          {/* hanging vine + leaves on top */}
           <svg className="anim-leaf pointer-events-none absolute -top-4 left-6 z-10 h-6 w-8" viewBox="0 0 32 24" aria-hidden>
             <path d="M16 24 C10 16 10 8 16 0" stroke="#1b5e3f" strokeWidth="2" fill="none" />
             <path d="M16 6 C22 3 28 6 30 12 C24 13 18 11 16 6Z" fill="#2b8f57" />
@@ -105,7 +113,6 @@ export function MusicPlayer() {
           <Leaf className="anim-leaf pointer-events-none absolute -top-3 right-7 z-10 h-3.5 w-5 -rotate-12" hue="#3d7a2f" />
 
           <div className="relative flex items-center gap-2.5 overflow-hidden rounded-full border border-[var(--accent)]/45 bg-ink/85 py-2 pl-2 pr-3 shadow-[0_8px_30px_rgba(0,0,0,.45)] backdrop-blur-md">
-            {/* leafy texture sheen */}
             <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0c5a54]/25 via-transparent to-[#4a5c2a]/25" />
 
             <BaboonMark color="var(--accent)" className="relative h-5 w-6 shrink-0" />
@@ -113,7 +120,9 @@ export function MusicPlayer() {
             <button
               onClick={toggle}
               aria-label={playing ? "Pausar música" : "Reproducir música"}
-              className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full transition hover:brightness-95"
+              className={`relative grid h-9 w-9 shrink-0 place-items-center rounded-full transition hover:brightness-95 ${
+                started ? "" : "anim-pulse"
+              }`}
               style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
             >
               {playing ? <IconPause className="h-4 w-4" /> : <IconPlay className="h-4 w-4" />}
@@ -136,7 +145,7 @@ export function MusicPlayer() {
 
             <div className="relative min-w-0 max-w-[40vw] sm:max-w-[200px]">
               <div className="font-mono truncate text-[0.62rem] font-bold tracking-[0.06em] text-cream">
-                {started && index >= 0 ? TRACKS[index].title : "Pon la selva 🌿"}
+                {started && index >= 0 ? TRACKS[index].title : "Toca para la selva 🌿"}
               </div>
               <div className="font-mono flex items-center gap-1 text-[0.5rem] tracking-[0.12em] text-cream/45 uppercase">
                 <Leaf className="h-2 w-3" hue="#2b8f57" /> Babuinos Radio
