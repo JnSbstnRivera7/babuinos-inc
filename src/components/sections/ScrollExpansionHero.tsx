@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { LeafCanvas } from "@/components/fx/LeafCanvas";
@@ -13,6 +13,16 @@ import { CssLeaves } from "@/components/fx/CssLeaves";
  */
 export function ScrollExpansionHero() {
   const ref = useRef<HTMLDivElement>(null);
+  // Animating filter: blur() per scroll frame is GPU-expensive on phones, so we
+  // drop just the blur on small screens (opacity/scale stay — they're cheap).
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 700px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const w = useTransform(scrollYProgress, [0, 0.62], ["66vw", "100vw"]);
@@ -49,7 +59,12 @@ export function ScrollExpansionHero() {
 
         {/* logo — grows + distorts (blur/skew) until it vanishes */}
         <motion.div
-          style={{ opacity: titleOpacity, scale: titleScale, skewX: titleSkew, filter: titleFilter }}
+          style={{
+            opacity: titleOpacity,
+            scale: titleScale,
+            skewX: titleSkew,
+            filter: isMobile ? undefined : titleFilter,
+          }}
           className="pointer-events-none absolute z-20 flex justify-center"
         >
           <Logo tone="cream" priority className="h-auto w-[min(74vw,460px)] drop-shadow-[0_8px_40px_rgba(0,0,0,.7)]" />

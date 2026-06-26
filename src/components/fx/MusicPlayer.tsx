@@ -44,7 +44,11 @@ export function MusicPlayer() {
   const playTrack = useCallback((i: number) => {
     const audio = audioRef.current;
     if (!audio) return Promise.reject(new Error("no audio"));
-    audio.src = TRACKS[i].src;
+    // Only reset the source when switching tracks — avoids re-buffering (and a
+    // silent restart on iOS) when we just want to resume the current one.
+    if (audio.src === "" || !audio.src.endsWith(TRACKS[i].src)) {
+      audio.src = TRACKS[i].src;
+    }
     audio.volume = 0.55;
     setIndex(i);
     return audio.play().then(() => setPlaying(true));
@@ -60,7 +64,10 @@ export function MusicPlayer() {
   // First-interaction autostart (re-arms if the browser blocks the gesture).
   useEffect(() => {
     if (started) return;
-    const events = ["pointerdown", "click", "touchend", "keydown", "wheel", "touchstart", "scroll"];
+    // Gestures iOS/Android accept as valid audio activation come first
+    // (touchend / pointerup / click); the rest are best-effort and simply
+    // re-arm if the browser rejects them.
+    const events = ["touchend", "pointerup", "click", "keydown", "pointerdown", "touchstart", "wheel", "scroll"];
     let done = false;
     const cleanup = () => events.forEach((e) => window.removeEventListener(e, onFirst));
     function onFirst() {
@@ -103,7 +110,7 @@ export function MusicPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} onEnded={next} preload="none" />
+      <audio ref={audioRef} onEnded={next} preload="metadata" playsInline />
       <div className="fixed bottom-4 left-4 z-[80] max-w-[calc(100vw-2rem)]">
         <div className="relative">
           <svg className="anim-leaf pointer-events-none absolute -top-4 left-6 z-10 h-6 w-8" viewBox="0 0 32 24" aria-hidden>
