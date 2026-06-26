@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Mono, Anton } from "next/font/google";
 import "./globals.css";
+import { InstallPrompt } from "@/components/fx/InstallPrompt";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -25,6 +26,12 @@ export const metadata: Metadata = {
   title: "Babuinos Inc — Streetwear Cult",
   description:
     "Streetwear oversize para los que no siguen la manada. Selva de cemento, actitud de explorador. Colección Fundadores 2026 desde Bogotá.",
+  applicationName: "Babuinos",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Babuinos",
+  },
   keywords: ["streetwear", "oversize", "Babuinos", "Bogotá", "ropa urbana", "Colombia"],
   openGraph: {
     title: "Babuinos Inc — Streetwear Cult",
@@ -47,7 +54,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       data-scroll-behavior="smooth"
       className={`${inter.variable} ${spaceMono.variable} ${anton.variable}`}
     >
-      <body className="fx-grain">{children}</body>
+      <body className="fx-grain">
+        {children}
+        <InstallPrompt />
+      </body>
     </html>
   );
 }
