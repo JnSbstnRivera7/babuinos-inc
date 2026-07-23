@@ -99,6 +99,12 @@ export const IconCompass = (p: P) => (
   </svg>
 );
 
+export const IconHeart = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 20s-7-4.3-9.3-8.2C1.3 9 2.3 5.4 5.8 5.4c2 0 3.3 1.3 4.2 2.5.9-1.2 2.2-2.5 4.2-2.5 3.5 0 4.5 3.6 3.1 6.4C19 15.7 12 20 12 20Z" />
+  </svg>
+);
+
 export const IconFilter = (p: P) => (
   <svg {...base(p)}>
     <path d="M3 5h18M6 12h12M10 19h4" />

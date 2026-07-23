@@ -1,5 +1,5 @@
 /* Babuinos Inc — service worker (PWA installability + light offline). */
-const CACHE = "babuinos-v1";
+const CACHE = "babuinos-v2";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.

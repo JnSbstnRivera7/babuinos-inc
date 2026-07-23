@@ -12,10 +12,11 @@ import {
 import { ProductCard } from "@/components/producto/ProductCard";
 import { BaboonMark } from "@/components/ui/BaboonMark";
 import { useCart } from "@/lib/store";
+import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
 import { buildProductMessage, buildWaLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
-import { IconWhatsApp, IconPlus, IconLeaf } from "@/components/ui/Icons";
+import { IconWhatsApp, IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 
 const SIZE_GUIDE = [
@@ -31,6 +32,8 @@ export function ProductDetail({ product }: { product: Product }) {
   const add = useCart((s) => s.add);
   const openCart = useCart((s) => s.open);
   const showToast = useToast((s) => s.show);
+  const saved = useWishlist((s) => s.ids.includes(product.slug));
+  const toggleWish = useWishlist((s) => s.toggle);
   const [size, setSize] = useState("");
   const [active, setActive] = useState(0);
   const [guide, setGuide] = useState(false);
@@ -200,13 +203,30 @@ export function ProductDetail({ product }: { product: Product }) {
             >
               <IconWhatsApp className="h-5 w-5" /> Comprar por WhatsApp
             </button>
-            <button
-              onClick={addToBag}
-              disabled={!available}
-              className="font-mono flex w-full items-center justify-center gap-2 rounded-md border border-cream/25 px-6 py-4 text-[0.8rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:border-cream hover:bg-cream/5 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <IconPlus className="h-4 w-4" /> Agregar a la mochila
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={addToBag}
+                disabled={!available}
+                className="font-mono flex flex-1 items-center justify-center gap-2 rounded-md border border-cream/25 px-6 py-4 text-[0.8rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:border-cream hover:bg-cream/5 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <IconPlus className="h-4 w-4" /> Agregar a la mochila
+              </button>
+              <button
+                onClick={() => toggleWish(product.slug)}
+                aria-label={saved ? "Quitar de favoritos" : "Guardar en favoritos"}
+                aria-pressed={saved}
+                className={cn(
+                  "grid w-14 shrink-0 place-items-center rounded-md border transition",
+                  saved ? "border-[#c0392b] bg-[#c0392b]/15" : "border-cream/25 text-cream hover:border-cream hover:bg-cream/5",
+                )}
+              >
+                <IconHeart
+                  className="h-5 w-5"
+                  style={{ color: saved ? "#e05a48" : undefined }}
+                  fill={saved ? "currentColor" : "none"}
+                />
+              </button>
+            </div>
           </div>
 
           <div className="mt-5 flex items-center gap-2 text-cream/55">

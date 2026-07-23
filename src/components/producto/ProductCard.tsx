@@ -6,9 +6,10 @@ import Link from "next/link";
 import { getEdition, inStock, type Product } from "@/lib/products";
 import { BaboonMark } from "@/components/ui/BaboonMark";
 import { useCart } from "@/lib/store";
+import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
-import { IconPlus, IconLeaf } from "@/components/ui/Icons";
+import { IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
 
 const BADGES: Record<string, { label: string; cls: string }> = {
   new: { label: "Nuevo", cls: "bg-teal text-white" },
@@ -20,6 +21,8 @@ export function ProductCard({ product }: { product: Product }) {
   const add = useCart((s) => s.add);
   const openCart = useCart((s) => s.open);
   const showToast = useToast((s) => s.show);
+  const saved = useWishlist((s) => s.ids.includes(product.slug));
+  const toggleWish = useWishlist((s) => s.toggle);
   const [size, setSize] = useState("");
 
   const available = inStock(product);
@@ -38,7 +41,20 @@ export function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-md)] bg-white shadow-[0_8px_40px_rgba(30,32,33,.12)]">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-md)] bg-white shadow-[0_8px_40px_rgba(30,32,33,.12)]">
+      <button
+        type="button"
+        onClick={() => toggleWish(product.slug)}
+        aria-label={saved ? "Quitar de favoritos" : "Guardar en favoritos"}
+        aria-pressed={saved}
+        className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/90 shadow-[0_2px_10px_rgba(30,32,33,.18)] transition hover:scale-110"
+      >
+        <IconHeart
+          className="h-[18px] w-[18px]"
+          style={{ color: saved ? "#c0392b" : "#1e2021" }}
+          fill={saved ? "currentColor" : "none"}
+        />
+      </button>
       <Link
         href={href}
         aria-label={`Ver ${product.name}`}

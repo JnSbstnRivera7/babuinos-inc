@@ -77,8 +77,8 @@ export function InstallPrompt() {
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-[79] max-w-[calc(100vw-2rem)]"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="fixed left-1/2 top-2 z-[95] -translate-x-1/2 max-w-[calc(100vw-1rem)]"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
       <div className="flex items-center gap-2 rounded-full border border-[var(--accent)]/45 bg-ink/85 py-1.5 pl-2 pr-1.5 shadow-[0_8px_30px_rgba(0,0,0,.45)] backdrop-blur-md">
         <BaboonMark color="var(--accent)" className="h-4 w-5 shrink-0" />

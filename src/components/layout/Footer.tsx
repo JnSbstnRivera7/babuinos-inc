@@ -1,5 +1,12 @@
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
+import { IconTruck, IconRefresh, IconCheck } from "@/components/ui/Icons";
+
+const TRUST = [
+  { Icon: IconTruck, text: "Envío 24h Bogotá · 3-5 días Colombia" },
+  { Icon: IconRefresh, text: "Cambios en 15 días" },
+  { Icon: IconCheck, text: "Pago seguro por WhatsApp" },
+];
 
 const COLS = [
   { title: "Tienda", links: ["Camisas Oversize", "Ediciones Patch", "Drops Exclusivos", "Guía de Tallas"] },
@@ -10,6 +17,16 @@ const COLS = [
 export function Footer() {
   return (
     <footer className="brick-pattern liana-edge cv-auto relative px-5 pt-10 pb-6 md:px-8">
+      {/* barra de confianza */}
+      <div className="mx-auto mb-9 flex max-w-6xl flex-col gap-3 border-b border-cream/10 pb-8 sm:flex-row sm:items-center sm:justify-center sm:gap-10">
+        {TRUST.map(({ Icon, text }) => (
+          <div key={text} className="flex items-center justify-center gap-2.5 text-cream/80">
+            <Icon className="h-5 w-5 shrink-0 text-[var(--accent)]" />
+            <span className="font-mono text-[0.66rem] font-bold tracking-[0.08em] uppercase">{text}</span>
+          </div>
+        ))}
+      </div>
+
       <div className="mx-auto grid max-w-6xl gap-8 border-b border-cream/10 pb-7 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <Logo tone="cream" className="h-9 w-auto" />

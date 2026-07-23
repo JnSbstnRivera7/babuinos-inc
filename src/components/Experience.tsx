@@ -8,7 +8,6 @@ import { Footer } from "@/components/layout/Footer";
 import { ScrollExpansionHero } from "@/components/sections/ScrollExpansionHero";
 import { GeneroSplit } from "@/components/sections/GeneroSplit";
 import { CartDrawer } from "@/components/cart/CartDrawer";
-import { MusicPlayer } from "@/components/fx/MusicPlayer";
 import { Toast } from "@/components/ui/Toast";
 
 /**
@@ -32,7 +31,6 @@ export function Experience() {
       </div>
 
       <CartDrawer />
-      <MusicPlayer />
       <Toast />
     </>
   );

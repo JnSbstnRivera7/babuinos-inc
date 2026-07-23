@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { BaboonMark } from "@/components/ui/BaboonMark";
-import { IconBag, IconMenu, IconClose, IconChevronDown } from "@/components/ui/Icons";
+import { IconBag, IconMenu, IconClose, IconChevronDown, IconHeart } from "@/components/ui/Icons";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 import { useCart } from "@/lib/store";
+import { useWishlist } from "@/lib/wishlist";
 import { useTheme, COLORWAYS } from "@/lib/theme";
 import { TOP_CATEGORIES, GENEROS, type Genero } from "@/lib/products";
 import { cn } from "@/lib/utils";
@@ -55,6 +56,7 @@ function Swatches({ onPick }: { onPick?: () => void }) {
 export function Navbar() {
   const count = useCart((s) => s.count());
   const open = useCart((s) => s.open);
+  const wishCount = useWishlist((s) => s.ids.length);
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   const [shop, setShop] = useState(false);
@@ -179,6 +181,19 @@ export function Navbar() {
           </div>
 
           <SocialButtons variant="icon" className="hidden lg:flex" />
+
+          <Link
+            href="/favoritos"
+            aria-label="Favoritos"
+            className="relative grid h-10 w-10 place-items-center rounded-md text-cream/80 transition hover:text-cream"
+          >
+            <IconHeart className="h-[20px] w-[20px]" />
+            {wishCount > 0 && (
+              <span className="font-mono absolute right-0.5 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--accent)] px-1 text-[0.55rem] font-bold text-[var(--accent-ink)]">
+                {wishCount}
+              </span>
+            )}
+          </Link>
 
           <button
             onClick={open}
