@@ -7,6 +7,9 @@ import Lenis from "lenis";
 export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // En táctil el scroll nativo ya es fluido; evitamos el RAF perpetuo de Lenis
+    // que bloquea el hilo y hace que los taps no registren en celular.
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const lenis = new Lenis({
       duration: 1.15,

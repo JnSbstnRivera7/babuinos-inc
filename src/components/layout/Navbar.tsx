@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { BaboonMark } from "@/components/ui/BaboonMark";
-import { IconBag, IconMenu, IconClose, IconChevronDown, IconCap, IconBow } from "@/components/ui/Icons";
+import { IconBag, IconMenu, IconClose, IconChevronDown } from "@/components/ui/Icons";
+import { GeneroMark } from "@/components/ui/GeneroMark";
 import { useCart } from "@/lib/store";
 import { useTheme, COLORWAYS } from "@/lib/theme";
 import { TOP_CATEGORIES, GENEROS, type Genero } from "@/lib/products";
@@ -24,9 +25,7 @@ const GENERO_COLOR: Record<Genero, string> = {
 };
 
 function GeneroGlyph({ genero, color }: { genero: Genero; color: string }) {
-  if (genero === "hombre") return <IconCap className="h-4 w-5 shrink-0" style={{ color }} />;
-  if (genero === "mujer") return <IconBow className="h-4 w-5 shrink-0" style={{ color }} />;
-  return <BaboonMark color={color} className="h-4 w-5 shrink-0" />;
+  return <GeneroMark genero={genero} color={color} className="h-6 w-8 shrink-0" />;
 }
 
 function Swatches({ onPick }: { onPick?: () => void }) {

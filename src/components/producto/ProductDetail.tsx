@@ -15,7 +15,8 @@ import { useCart } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { buildProductMessage, buildWaLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
-import { IconWhatsApp, IconPlus, IconLeaf, IconCap, IconBow } from "@/components/ui/Icons";
+import { IconWhatsApp, IconPlus, IconLeaf } from "@/components/ui/Icons";
+import { GeneroMark } from "@/components/ui/GeneroMark";
 
 const SIZE_GUIDE = [
   { size: "S", pecho: 56, largo: 70, hombro: 52 },
@@ -120,8 +121,7 @@ export function ProductDetail({ product }: { product: Product }) {
               {product.tag}
             </span>
             <span className="inline-flex items-center gap-1.5 font-mono text-[0.58rem] font-bold tracking-[0.12em] text-cream/55 uppercase">
-              {product.genero === "hombre" && <IconCap className="h-3.5 w-4" />}
-              {product.genero === "mujer" && <IconBow className="h-3.5 w-4" />}
+              <GeneroMark genero={product.genero} color="currentColor" className="h-4 w-5" />
               {product.genero}
             </span>
           </div>

@@ -39,7 +39,7 @@ export function ScrollExpansionHero() {
   const cueOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
 
   return (
-    <section id="top" ref={ref} className="relative h-[200vh]">
+    <section id="top" ref={ref} className="relative h-[135vh] md:h-[200vh]">
       {/* transparent pin: the FIXED wallpaper shows through the growing window */}
       <div className="sticky top-0 flex h-[100svh] items-center justify-center overflow-hidden">
         {/* growing window — dark box-shadow masks the rest, revealing the fixed bg inside */}

@@ -72,6 +72,15 @@ button {
   font-family: inherit;
   cursor: pointer;
 }
+/* Taps fiables y sin retardo en móvil (quita el delay de 300ms y el doble-tap-zoom) */
+a,
+button,
+[role="button"],
+input,
+select,
+label {
+  touch-action: manipulation;
+}
 img {
   display: block;
   max-width: 100%;

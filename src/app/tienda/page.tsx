@@ -20,7 +20,8 @@ export default async function TiendaPage({
 
   return (
     <Shell>
-      <TiendaClient initialGenero={initial} />
+      {/* key remonta al cambiar ?genero= para que el filtro siga a la URL */}
+      <TiendaClient key={initial} initialGenero={initial} />
     </Shell>
   );
 }
