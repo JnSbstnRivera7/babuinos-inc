@@ -16,6 +16,8 @@ export function SmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
+    // Exponer para scrollToTop() (lib/scroll.ts): window.scrollTo lo ignora bajo Lenis.
+    (window as unknown as { __lenis?: unknown }).__lenis = lenis;
 
     let raf = 0;
     const loop = (time: number) => {
@@ -27,6 +29,7 @@ export function SmoothScroll() {
     return () => {
       cancelAnimationFrame(raf);
       lenis.destroy();
+      (window as unknown as { __lenis?: unknown }).__lenis = undefined;
     };
   }, []);
 

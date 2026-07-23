@@ -15,6 +15,7 @@ import {
   type EditionKey,
 } from "@/lib/products";
 import { cn } from "@/lib/utils";
+import { scrollToTop } from "@/lib/scroll";
 
 // El género es CONTEXTO (ya entraste por una puerta), no una fila de filtros.
 const GENERO_SEG: { key: Genero | "all"; label: string }[] = [
@@ -49,6 +50,16 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // Al entrar a la tienda (o cambiar de género vía URL → remonta por key) arranca desde arriba.
+  useEffect(() => {
+    scrollToTop(false);
+  }, []);
+
+  const pickGenero = (k: Genero | "all") => {
+    setGenero(k);
+    scrollToTop();
+  };
+
   const clearAll = () => {
     setCategory("all");
     setTerritorio("all");
@@ -67,7 +78,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
           {GENERO_SEG.map((g) => (
             <button
               key={g.key}
-              onClick={() => setGenero(g.key)}
+              onClick={() => pickGenero(g.key)}
               className={cn(
                 "font-mono inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.64rem] font-bold tracking-[0.06em] uppercase transition sm:px-3",
                 genero === g.key ? "bg-cream text-ink" : "text-cream/60 hover:text-cream",
@@ -161,7 +172,10 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
                         Limpiar
                       </button>
                       <button
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                          setOpen(false);
+                          scrollToTop();
+                        }}
                         className="font-mono rounded-full px-5 py-2.5 text-[0.66rem] font-bold tracking-[0.1em] uppercase transition hover:brightness-95"
                         style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
                       >
