@@ -1,13 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ProductCard } from "@/components/producto/ProductCard";
+import { GeneroMark } from "@/components/ui/GeneroMark";
+import { IconFilter, IconClose } from "@/components/ui/Icons";
 import {
   PRODUCTS,
   CATEGORIES,
   EDITIONS,
-  GENEROS,
-  TOP_CATEGORIES,
   matchesGenero,
   type Category,
   type Genero,
@@ -15,15 +16,18 @@ import {
 } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
-const GENERO_TABS: { key: Genero | "all"; label: string }[] = [
-  { key: "all", label: "Todo" },
-  ...GENEROS.map((g) => ({ key: g.key, label: g.label })),
+// El género es CONTEXTO (ya entraste por una puerta), no una fila de filtros.
+const GENERO_SEG: { key: Genero | "all"; label: string }[] = [
+  { key: "all", label: "Todos" },
+  { key: "hombre", label: "Hombre" },
+  { key: "mujer", label: "Mujer" },
 ];
 
 export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero | "all" }) {
   const [genero, setGenero] = useState<Genero | "all">(initialGenero);
   const [category, setCategory] = useState<Category | "all">("all");
   const [territorio, setTerritorio] = useState<EditionKey | "all">("all");
+  const [open, setOpen] = useState(false);
 
   const list = useMemo(
     () =>
@@ -36,76 +40,167 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
     [genero, category, territorio],
   );
 
+  const activeCount = (category !== "all" ? 1 : 0) + (territorio !== "all" ? 1 : 0);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const clearAll = () => {
+    setCategory("all");
+    setTerritorio("all");
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-10 md:px-8 md:pt-16">
       <p className="eyebrow mb-2 text-[var(--accent)]">Tienda · Fundadores 2026</p>
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h1 className="font-condensed text-[clamp(2.2rem,6vw,4rem)] text-cream">
-          La <span className="shine-gold">manada</span>
-        </h1>
-        <span className="font-mono pb-2 text-[0.72rem] font-bold tracking-[0.1em] text-cream/50 uppercase">
-          {list.length} {list.length === 1 ? "pieza" : "piezas"}
-        </span>
-      </div>
+      <h1 className="font-condensed text-[clamp(2.2rem,6vw,4rem)] text-cream">
+        La <span className="shine-gold">manada</span>
+      </h1>
 
-      {/* categorías top-level (camisas activa · resto pronto) */}
-      <div className="mt-7 flex flex-wrap gap-2.5">
-        {TOP_CATEGORIES.map((c) =>
-          c.soon ? (
-            <span
-              key={c.key}
-              className="font-mono inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-cream/15 px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.1em] text-cream/40 uppercase"
+      {/* barra slim: género (contexto) + conteo + botón Filtros */}
+      <div className="sticky top-14 z-[80] mt-5 flex items-center justify-between gap-3 border-y border-cream/10 bg-ink/90 py-3 sm:bg-ink/55 sm:backdrop-blur-md">
+        <div className="flex items-center gap-1 rounded-full border border-cream/15 p-1">
+          {GENERO_SEG.map((g) => (
+            <button
+              key={g.key}
+              onClick={() => setGenero(g.key)}
+              className={cn(
+                "font-mono inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.64rem] font-bold tracking-[0.06em] uppercase transition sm:px-3",
+                genero === g.key ? "bg-cream text-ink" : "text-cream/60 hover:text-cream",
+              )}
             >
-              {c.label}
-              <span className="text-[0.5rem] text-[var(--accent)]">• pronto</span>
-            </span>
-          ) : (
-            <span
-              key={c.key}
-              className="font-mono inline-flex items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.1em] text-ink uppercase"
-            >
-              {c.label}
-            </span>
-          ),
-        )}
-      </div>
-
-      {/* filtros */}
-      <div className="mt-6 flex flex-col gap-3 border-y border-cream/10 py-5">
-        <FilterRow label="Línea">
-          {GENERO_TABS.map((g) => (
-            <Chip key={g.key} active={genero === g.key} onClick={() => setGenero(g.key)}>
+              {(g.key === "hombre" || g.key === "mujer") && (
+                <GeneroMark genero={g.key} color="currentColor" className="hidden h-3.5 w-4 sm:inline-block" />
+              )}
               {g.label}
-            </Chip>
+            </button>
           ))}
-        </FilterRow>
-        <FilterRow label="Tipo">
-          {CATEGORIES.map((c) => (
-            <Chip key={c.key} active={category === c.key} onClick={() => setCategory(c.key)}>
-              {c.label}
-            </Chip>
-          ))}
-        </FilterRow>
-        <FilterRow label="Territorio">
-          <Chip active={territorio === "all"} onClick={() => setTerritorio("all")}>
-            Todos
-          </Chip>
-          {EDITIONS.map((e) => (
-            <Chip
-              key={e.key}
-              active={territorio === e.key}
-              onClick={() => setTerritorio(e.key)}
-              dot={e.accent}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <span className="font-mono hidden text-[0.7rem] font-bold tracking-[0.1em] text-cream/50 uppercase sm:block">
+            {list.length} {list.length === 1 ? "pieza" : "piezas"}
+          </span>
+          <div className="relative">
+            <button
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              className={cn(
+                "font-mono inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[0.66rem] font-bold tracking-[0.1em] uppercase transition",
+                activeCount
+                  ? "border-[var(--accent)] text-[var(--accent)]"
+                  : "border-cream/25 text-cream/80 hover:border-cream",
+              )}
             >
-              {e.name}
-            </Chip>
-          ))}
-        </FilterRow>
+              <IconFilter className="h-4 w-4" /> Filtros
+              {activeCount > 0 && (
+                <span className="grid h-4 min-w-4 place-items-center rounded-full bg-[var(--accent)] px-1 text-[0.58rem] font-bold text-[var(--accent-ink)]">
+                  {activeCount}
+                </span>
+              )}
+            </button>
+
+            {/* panel de filtros — transparente (glass): dropdown en PC, bottom-sheet en móvil */}
+            <AnimatePresence>
+              {open && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setOpen(false)}
+                    className="fixed inset-0 z-[100] bg-ink/60 sm:bg-transparent"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 28 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 28 }}
+                    transition={{ type: "tween", duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+                    className="glass fixed inset-x-0 bottom-0 z-[101] max-h-[82svh] overflow-y-auto rounded-t-3xl p-6 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-80 sm:rounded-2xl sm:p-5"
+                  >
+                    <div className="mb-4 flex items-center justify-between sm:hidden">
+                      <span className="font-condensed text-2xl text-cream">Filtros</span>
+                      <button onClick={() => setOpen(false)} aria-label="Cerrar filtros" className="text-cream/60">
+                        <IconClose className="h-6 w-6" />
+                      </button>
+                    </div>
+
+                    <FilterGroup label="Tipo">
+                      {CATEGORIES.map((c) => (
+                        <Chip key={c.key} active={category === c.key} onClick={() => setCategory(c.key)}>
+                          {c.label}
+                        </Chip>
+                      ))}
+                    </FilterGroup>
+
+                    <FilterGroup label="Territorio">
+                      <Chip active={territorio === "all"} onClick={() => setTerritorio("all")}>
+                        Todos
+                      </Chip>
+                      {EDITIONS.map((e) => (
+                        <Chip
+                          key={e.key}
+                          active={territorio === e.key}
+                          onClick={() => setTerritorio(e.key)}
+                          dot={e.accent}
+                        >
+                          {e.name}
+                        </Chip>
+                      ))}
+                    </FilterGroup>
+
+                    <div className="mt-5 flex items-center justify-between gap-3 border-t border-cream/10 pt-4">
+                      <button
+                        onClick={clearAll}
+                        className="font-mono text-[0.66rem] font-bold tracking-[0.1em] text-cream/60 uppercase transition hover:text-cream"
+                      >
+                        Limpiar
+                      </button>
+                      <button
+                        onClick={() => setOpen(false)}
+                        className="font-mono rounded-full px-5 py-2.5 text-[0.66rem] font-bold tracking-[0.1em] uppercase transition hover:brightness-95"
+                        style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
+                      >
+                        Ver {list.length} {list.length === 1 ? "pieza" : "piezas"}
+                      </button>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
-      {/* grid */}
+      {/* chips de filtros activos */}
+      {activeCount > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          {category !== "all" && (
+            <ActiveChip onRemove={() => setCategory("all")}>
+              {CATEGORIES.find((c) => c.key === category)?.label}
+            </ActiveChip>
+          )}
+          {territorio !== "all" && (
+            <ActiveChip onRemove={() => setTerritorio("all")}>
+              {EDITIONS.find((e) => e.key === territorio)?.name}
+            </ActiveChip>
+          )}
+          <button
+            onClick={clearAll}
+            className="font-mono text-[0.62rem] font-bold tracking-[0.1em] text-cream/45 uppercase transition hover:text-cream"
+          >
+            Limpiar todo
+          </button>
+        </div>
+      )}
+
+      {/* grid — la ropa aparece de inmediato */}
       {list.length > 0 ? (
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -119,8 +214,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
           <button
             onClick={() => {
               setGenero("all");
-              setCategory("all");
-              setTerritorio("all");
+              clearAll();
             }}
             className="font-mono mt-6 inline-flex rounded-full border border-cream/30 px-6 py-3 text-[0.7rem] font-bold tracking-[0.12em] text-cream uppercase transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
@@ -132,13 +226,13 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
   );
 }
 
-function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
+function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="font-mono w-20 shrink-0 text-[0.58rem] font-bold tracking-[0.14em] text-cream/40 uppercase">
+    <div className="mb-5 last:mb-0">
+      <p className="font-mono mb-2.5 text-[0.58rem] font-bold tracking-[0.16em] text-cream/45 uppercase">
         {label}
-      </span>
-      {children}
+      </p>
+      <div className="flex flex-wrap gap-2">{children}</div>
     </div>
   );
 }
@@ -158,14 +252,23 @@ function Chip({
     <button
       onClick={onClick}
       className={cn(
-        "font-mono inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[0.66rem] font-bold tracking-[0.08em] uppercase transition",
-        active
-          ? "border-cream bg-cream text-ink"
-          : "border-cream/20 text-cream/70 hover:border-cream/60",
+        "font-mono inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[0.64rem] font-bold tracking-[0.06em] uppercase transition",
+        active ? "border-cream bg-cream text-ink" : "border-cream/20 text-cream/70 hover:border-cream/60",
       )}
     >
       {dot && <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: dot }} />}
       {children}
     </button>
+  );
+}
+
+function ActiveChip({ children, onRemove }: { children: React.ReactNode; onRemove: () => void }) {
+  return (
+    <span className="font-mono inline-flex items-center gap-1.5 rounded-full bg-cream/10 px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-cream uppercase">
+      {children}
+      <button onClick={onRemove} aria-label="Quitar filtro" className="grid h-4 w-4 place-items-center rounded-full bg-cream/15 hover:bg-cream/30">
+        <IconClose className="h-3 w-3" />
+      </button>
+    </span>
   );
 }

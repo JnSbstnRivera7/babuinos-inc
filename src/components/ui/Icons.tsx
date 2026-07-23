@@ -99,6 +99,12 @@ export const IconCompass = (p: P) => (
   </svg>
 );
 
+export const IconFilter = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M3 5h18M6 12h12M10 19h4" />
+  </svg>
+);
+
 /* Género glyphs — placeholder hasta tener los íconos reales del babuino con gorra/moño */
 export const IconCap = (p: P) => (
   <svg {...base(p)}>
