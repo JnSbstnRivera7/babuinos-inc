@@ -33,14 +33,14 @@ export function ComingSoon({ category }: { category: string }) {
         </p>
         <div className="mt-8 flex flex-col items-center gap-5">
           <Link
-            href="/#club"
+            href="/club"
             className="font-mono inline-flex items-center rounded-full bg-cream px-8 py-4 text-[0.78rem] font-bold tracking-[0.1em] text-ink uppercase transition hover:-translate-y-0.5"
             style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
           >
             Unirme al Club
           </Link>
           <Link
-            href="/"
+            href="/tienda"
             className="font-mono inline-flex items-center gap-2 text-[0.72rem] font-bold tracking-[0.1em] text-cream/70 uppercase transition hover:text-cream"
           >
             <IconArrowLeft className="h-4 w-4" /> Volver a la tienda

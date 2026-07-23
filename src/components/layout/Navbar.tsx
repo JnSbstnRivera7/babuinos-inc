@@ -6,21 +6,28 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { BaboonMark } from "@/components/ui/BaboonMark";
-import { IconBag, IconMenu, IconClose, IconChevronDown } from "@/components/ui/Icons";
+import { IconBag, IconMenu, IconClose, IconChevronDown, IconCap, IconBow } from "@/components/ui/Icons";
 import { useCart } from "@/lib/store";
 import { useTheme, COLORWAYS } from "@/lib/theme";
+import { TOP_CATEGORIES, GENEROS, type Genero } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
-const TIENDA = [
-  { label: "Camisas", href: "/#catalogo", soon: false, color: "#00897f" },
-  { label: "Sacos", href: "/sacos", soon: true, color: "#cda214" },
-  { label: "Medias", href: "/medias", soon: true, color: "#6b8035" },
-  { label: "Accesorios", href: "/accesorios", soon: true, color: "#8a6a3a" },
-];
 const LINKS = [
-  { href: "/#nosotros", label: "Nosotros" },
-  { href: "/#club", label: "Club" },
+  { href: "/nosotros", label: "Nosotros" },
+  { href: "/club", label: "Club" },
 ];
+
+const GENERO_COLOR: Record<Genero, string> = {
+  hombre: "#00897f",
+  mujer: "#cda214",
+  unisex: "#e7d8c5",
+};
+
+function GeneroGlyph({ genero, color }: { genero: Genero; color: string }) {
+  if (genero === "hombre") return <IconCap className="h-4 w-5 shrink-0" style={{ color }} />;
+  if (genero === "mujer") return <IconBow className="h-4 w-5 shrink-0" style={{ color }} />;
+  return <BaboonMark color={color} className="h-4 w-5 shrink-0" />;
+}
 
 function Swatches({ onPick }: { onPick?: () => void }) {
   const { key, setTheme } = useTheme();
@@ -77,24 +84,44 @@ export function Navbar() {
 
         {/* desktop nav */}
         <ul className="hidden items-center gap-7 md:flex">
-          <li className="relative">
-            <button
-              onClick={() => setShop((s) => !s)}
+          <li className="relative" onMouseLeave={() => setShop(false)}>
+            <Link
+              href="/tienda"
+              onClick={() => setShop(false)}
+              onMouseEnter={() => setShop(true)}
               className="font-mono flex items-center gap-1 text-[0.72rem] font-bold tracking-[0.12em] text-cream/80 uppercase transition hover:text-[var(--accent)]"
             >
               Tienda <IconChevronDown className={cn("h-3.5 w-3.5 transition", shop && "rotate-180")} />
-            </button>
+            </Link>
             <AnimatePresence>
               {shop && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
-                  className="absolute left-0 top-9 w-52 overflow-hidden rounded-xl border border-cream/10 bg-ink-soft p-1.5 shadow-2xl"
+                  className="absolute left-0 top-9 w-60 overflow-hidden rounded-xl border border-cream/10 bg-ink-soft p-1.5 shadow-2xl"
                 >
-                  {TIENDA.map((t) => (
+                  <p className="font-mono px-3 pb-1 pt-2 text-[0.5rem] tracking-[0.18em] text-cream/40 uppercase">
+                    Líneas
+                  </p>
+                  {GENEROS.map((g) => (
                     <Link
-                      key={t.label}
+                      key={g.key}
+                      href={g.key === "unisex" ? "/tienda" : `/tienda?genero=${g.key}`}
+                      onClick={() => setShop(false)}
+                      className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-[0.82rem] font-semibold text-cream transition hover:bg-cream/10"
+                    >
+                      <GeneroGlyph genero={g.key} color={GENERO_COLOR[g.key]} />
+                      <span className="flex-1">{g.label}</span>
+                    </Link>
+                  ))}
+                  <div className="my-1.5 border-t border-cream/10" />
+                  <p className="font-mono px-3 pb-1 pt-1 text-[0.5rem] tracking-[0.18em] text-cream/40 uppercase">
+                    Categorías
+                  </p>
+                  {TOP_CATEGORIES.map((t) => (
+                    <Link
+                      key={t.key}
                       href={t.href}
                       onClick={() => setShop(false)}
                       className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-[0.82rem] font-semibold text-cream transition hover:bg-cream/10"
@@ -102,7 +129,10 @@ export function Navbar() {
                       <BaboonMark color={t.color} className="h-5 w-6 shrink-0" />
                       <span className="flex-1">{t.label}</span>
                       {t.soon && (
-                        <span className="font-mono rounded-full px-2 py-0.5 text-[0.5rem] tracking-[0.1em] uppercase" style={{ backgroundColor: t.color + "33", color: t.color }}>
+                        <span
+                          className="font-mono rounded-full px-2 py-0.5 text-[0.5rem] tracking-[0.1em] uppercase"
+                          style={{ backgroundColor: t.color + "33", color: t.color }}
+                        >
                           Pronto
                         </span>
                       )}
@@ -125,7 +155,6 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
-          {/* colorway theme */}
           <div className="relative hidden sm:block">
             <button
               onClick={() => setThemeOpen((t) => !t)}
@@ -185,11 +214,28 @@ export function Navbar() {
           >
             <div className="px-6 py-4">
               <p className="font-mono mb-2 text-[0.55rem] tracking-[0.16em] text-[var(--accent)] uppercase">
-                Tienda
+                Líneas
               </p>
               <ul className="mb-4">
-                {TIENDA.map((t) => (
-                  <li key={t.label}>
+                {GENEROS.map((g) => (
+                  <li key={g.key}>
+                    <Link
+                      href={g.key === "unisex" ? "/tienda" : `/tienda?genero=${g.key}`}
+                      onClick={() => setMenu(false)}
+                      className="flex items-center gap-3 py-2.5 text-[0.95rem] font-semibold text-cream"
+                    >
+                      <GeneroGlyph genero={g.key} color={GENERO_COLOR[g.key]} />
+                      <span className="flex-1">{g.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="font-mono mb-2 text-[0.55rem] tracking-[0.16em] text-cream/50 uppercase">
+                Categorías
+              </p>
+              <ul className="mb-4">
+                {TOP_CATEGORIES.map((t) => (
+                  <li key={t.key}>
                     <Link
                       href={t.href}
                       onClick={() => setMenu(false)}

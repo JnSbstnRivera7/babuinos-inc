@@ -99,6 +99,22 @@ export const IconCompass = (p: P) => (
   </svg>
 );
 
+/* Género glyphs — placeholder hasta tener los íconos reales del babuino con gorra/moño */
+export const IconCap = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4.5 14.5h13" />
+    <path d="M6 14.5a6 6 0 0 1 12 0" />
+    <path d="M17.5 14.5H21" />
+  </svg>
+);
+
+export const IconBow = (p: P) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
+    <path d="M10.6 12 4 8v8l6.6-4Zm2.8 0L20 8v8l-6.6-4Z" />
+    <circle cx="12" cy="12" r="1.7" />
+  </svg>
+);
+
 /* Brand icons (filled, official-ish glyphs) */
 export const IconInstagram = (p: P) => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden {...p}>

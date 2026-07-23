@@ -1,0 +1,135 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { getEdition, inStock, type Product } from "@/lib/products";
+import { BaboonMark } from "@/components/ui/BaboonMark";
+import { useCart } from "@/lib/store";
+import { useToast } from "@/lib/toast";
+import { cn } from "@/lib/utils";
+import { IconPlus, IconLeaf } from "@/components/ui/Icons";
+
+const BADGES: Record<string, { label: string; cls: string }> = {
+  new: { label: "Nuevo", cls: "bg-teal text-white" },
+  hot: { label: "Hot", cls: "bg-gold text-ink" },
+  last: { label: "Últimas", cls: "bg-burgundy text-white" },
+};
+
+export function ProductCard({ product }: { product: Product }) {
+  const add = useCart((s) => s.add);
+  const openCart = useCart((s) => s.open);
+  const showToast = useToast((s) => s.show);
+  const [size, setSize] = useState("");
+
+  const available = inStock(product);
+  const href = `/producto/${product.slug}`;
+  const badge = product.badge ? BADGES[product.badge] : null;
+
+  function handleAdd() {
+    if (!available) return;
+    if (!size) {
+      showToast("Elige una talla primero");
+      return;
+    }
+    add(product, size);
+    showToast(`${product.name} · ${size} a la mochila`);
+    openCart();
+  }
+
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-md)] bg-white shadow-[0_8px_40px_rgba(30,32,33,.12)]">
+      <Link
+        href={href}
+        aria-label={`Ver ${product.name}`}
+        className="relative block h-[clamp(210px,28vw,320px)] w-full shrink-0 overflow-hidden bg-[#eceae6]"
+      >
+        <Image
+          src={product.image}
+          alt={`${product.name} — ${product.colorway}`}
+          fill
+          sizes="(max-width:640px) 88vw, (max-width:1024px) 45vw, 30vw"
+          className="object-contain p-2 transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+        {badge && (
+          <span
+            className={cn(
+              "font-mono absolute left-4 top-4 rounded-full px-3 py-1 text-[0.58rem] font-bold tracking-[0.12em] uppercase",
+              badge.cls,
+            )}
+          >
+            {badge.label}
+          </span>
+        )}
+        <span className="absolute bottom-3 right-3 grid h-11 w-11 place-items-center rounded-full bg-cream shadow-[0_4px_14px_rgba(30,32,33,.18)]">
+          <BaboonMark color={getEdition(product.edition).accent} className="w-6" />
+        </span>
+        {!available && (
+          <span className="absolute inset-0 grid place-items-center bg-ink/45">
+            <span className="font-mono rounded-full bg-ink px-4 py-1.5 text-[0.62rem] font-bold tracking-[0.16em] text-cream uppercase">
+              Agotado
+            </span>
+          </span>
+        )}
+      </Link>
+
+      <div className="flex flex-1 flex-col p-5">
+        <Link href={href} className="block">
+          <div className="font-mono text-[0.6rem] font-bold tracking-[0.16em] text-teal uppercase">
+            {product.tag}
+          </div>
+          <h3 className="font-display mt-1.5 text-lg font-black leading-tight text-ink transition group-hover:text-teal">
+            {product.name}
+          </h3>
+        </Link>
+        <p className="mt-1.5 line-clamp-2 text-[0.82rem] leading-relaxed text-ink/55">
+          {product.desc}
+        </p>
+
+        <div className="mt-4 flex items-center justify-between">
+          <span className="font-mono text-[0.6rem] font-bold tracking-[0.12em] text-ink/45 uppercase">
+            {product.colorway}
+          </span>
+          <span className="font-mono inline-flex items-center gap-1.5 rounded-full bg-teal/10 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.1em] text-teal uppercase">
+            <IconLeaf className="h-3 w-3" /> Sostenible
+          </span>
+        </div>
+
+        {/* size pills */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {product.sizes.map((s) => {
+            const soldOut = s.stock === 0;
+            return (
+              <button
+                key={s.size}
+                type="button"
+                disabled={soldOut}
+                onClick={() => setSize(s.size)}
+                aria-pressed={size === s.size}
+                className={cn(
+                  "font-mono grid h-8 min-w-8 place-items-center rounded-md border px-2 text-[0.7rem] font-bold transition",
+                  soldOut
+                    ? "cursor-not-allowed border-ink/10 text-ink/25 line-through"
+                    : size === s.size
+                      ? "border-ink bg-ink text-cream"
+                      : "border-ink/20 text-ink/70 hover:border-ink",
+                )}
+              >
+                {s.size}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={!available}
+          className="font-mono mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-ink px-5 py-3 text-[0.7rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:-translate-y-0.5 hover:bg-teal active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink/40 disabled:hover:translate-y-0"
+        >
+          <IconPlus className="h-4 w-4" /> {available ? "A la mochila" : "Agotado"}
+        </button>
+      </div>
+    </article>
+  );
+}

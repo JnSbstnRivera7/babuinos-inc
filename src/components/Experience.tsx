@@ -6,21 +6,15 @@ import { PageVines } from "@/components/fx/PageVines";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollExpansionHero } from "@/components/sections/ScrollExpansionHero";
-import { FeaturesStrip } from "@/components/sections/FeaturesStrip";
-import dynamic from "next/dynamic";
-import { BaboonStrip } from "@/components/fx/BaboonStrip";
-import { Story } from "@/components/sections/Story";
-import { Newsletter } from "@/components/sections/Newsletter";
+import { GeneroSplit } from "@/components/sections/GeneroSplit";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { MusicPlayer } from "@/components/fx/MusicPlayer";
 import { Toast } from "@/components/ui/Toast";
 
-// Lazy-loaded below-the-fold sections (split their JS off the initial bundle).
-const Lookbook = dynamic(() => import("@/components/sections/Lookbook").then((m) => m.Lookbook), {
-  ssr: false,
-});
-const Catalog = dynamic(() => import("@/components/sections/Catalog").then((m) => m.Catalog));
-
+/**
+ * Home = SOLO la entrada. Intro de marca + "elige tu territorio" (las dos puertas).
+ * Todo lo demás vive en su propia sección/página: /tienda, /nosotros, /club.
+ */
 export function Experience() {
   return (
     <>
@@ -32,12 +26,7 @@ export function Experience() {
         <Navbar />
         <main>
           <ScrollExpansionHero />
-          <FeaturesStrip />
-          <Lookbook />
-          <BaboonStrip />
-          <Catalog />
-          <Story />
-          <Newsletter />
+          <GeneroSplit />
         </main>
         <Footer />
       </div>

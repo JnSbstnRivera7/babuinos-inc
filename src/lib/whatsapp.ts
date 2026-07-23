@@ -28,6 +28,14 @@ export function buildOrderMessage({ lines, name, phone, city, note }: OrderPaylo
   return `${header}\n${items}${datosBlock}${footer}`;
 }
 
+/** Builds a single-product WhatsApp message, pre-filled from the PDP selection. */
+export function buildProductMessage(name: string, colorway: string, size?: string): string {
+  const header = "🦍 *BABUINOS INC*\n_Colección Fundadores 2026_\n";
+  const item = `Quiero esta pieza:\n*${name}* — ${colorway}${size ? `\nTalla ${size}` : ""}`;
+  const footer = "\n\n_¿Me ayudas a coordinar precio, pago y envío? ¡Listo para la manada!_ 🌿";
+  return `${header}\n${item}${footer}`;
+}
+
 /** Normalizes a phone number to digits only (wa.me format, no +). */
 export function normalizeNumber(raw: string): string {
   return raw.replace(/[^0-9]/g, "");
