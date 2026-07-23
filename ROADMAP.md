@@ -1,67 +1,59 @@
 # 🗺️ Roadmap — Babuinos Inc
 
-Estado del proyecto y lo que falta para lanzar y escalar. Marca: ✅ hecho · 🔜 siguiente · 🧭 futuro.
-Checklist accionable de próximos cambios en **[PENDIENTES.md](PENDIENTES.md)**.
+Estado del proyecto y lo que falta para vender y escalar. ✅ hecho · 🔜 siguiente · 🧭 futuro.
+Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)**.
 
 ---
 
-## ✅ Fase 0 — Base (hecho)
+## ✅ Fase 0 — Base inmersiva (hecho)
 
-- [x] Proyecto Next.js 16 + TS + Tailwind v4 + Framer Motion + Lenis.
-- [x] Intro inmersiva: scroll-reveal que descubre el wallpaper fijo de selva de cemento; el **logo** crece + se distorsiona hasta desaparecer.
-- [x] Wallpaper fijo para toda la página; tema oscuro coherente.
-- [x] Efectos de selva: **lianas que cuelgan del techo al suelo por los lados de toda la página** (capa fija, largas oscuras + cortas verde claro, disparejas), hojas cayendo (CSS + Canvas), ladrillo y bordes de liana en CSS, shine dorado.
-- [x] Catálogo con tallas, selectores de categoría y "agregar a la mochila" (sin precios).
-- [x] Lookbook en loop (image auto-slider).
-- [x] Menú "Tienda" + selector de colorway (recolorea acento, solo paleta).
-- [x] Carrito persistente + **formulario del cliente** (nombre, teléfono, ciudad, nota).
-- [x] Checkout por WhatsApp (resumen + datos → `wa.me`), número `573504444668`.
-- [x] Páginas "Muy pronto" para Sacos / Medias / Accesorios.
-- [x] Íconos SVG propios + botones IG / WhatsApp / Facebook.
-- [x] Logo real nítido (negro/crema/oro transparente) + favicon del babuino.
-- [x] **Reproductor "Babuinos Radio"**: autoplay aleatorio al primer click/scroll, 6 temas.
-- [x] **Panel `/admin`** con login temático + dashboard de gráficas (pedidos por día, top productos, por ciudad) y tablas.
-- [x] **Optimización móvil**: imágenes a WebP, música a 128 kbps, animaciones livianas en celular, limpieza de assets, `content-visibility:auto` en secciones, lazy-load (Lookbook/Catálogo) y sin `backdrop-blur` en móvil.
-- [x] Repo en GitHub (público) + conectado a Vercel · **Deploy** → https://babuinos-inc.vercel.app · **Supabase** (`orders` + `waitlist`).
+- [x] Next.js 16 + TS + Tailwind v4 + Framer Motion + Lenis + Zustand + Supabase.
+- [x] Intro scroll-reveal (el logo crece/distorsiona y descubre el wallpaper fijo de selva de cemento) + tema oscuro coherente.
+- [x] Carrito persistente + formulario de cliente + **checkout por WhatsApp** (resumen a `wa.me`) + guardado en Supabase (`orders`).
+- [x] **Club / waitlist** (Supabase `waitlist`), **selector de colorway**, **Panel `/admin`** con login + gráficas.
+- [x] **PWA instalable** (manifest + service worker) + optimización móvil base (WebP, música 128k, etc.).
+- [x] Repo en GitHub (`JnSbstnRivera7/babuinos-inc`) + Vercel auto-deploy → https://babuinos-inc.vercel.app
 
-## 🔜 Fase 1 — Pulido de lanzamiento (lo que sigue)
+## ✅ Fase 1 — De landing a tienda por secciones (hecho · 2026-07-23)
 
-> Detalle accionable en **[PENDIENTES.md](PENDIENTES.md)**.
+- [x] **Arquitectura real:** Home = entrada · **`/tienda`** (PLP) · **`/producto/[slug]`** (PDP, no existía) · **`/nosotros`** · **`/club`** · **`/favoritos`**.
+- [x] **Modelo de producto ampliado** (fuente única): género, galería `images[]`, stock por talla, fit, composición, colección, badge.
+- [x] **"Elige tu territorio"** en el home: puertas Hombre/Mujer con **logos reales SVG** (gorra / gorra+moño) + entrada Unisex. Sello de género en cada tarjeta.
+- [x] **PLP con filtros en panel transparente (glass)** — dropdown en PC / bottom-sheet en móvil; barra slim con segmentado Todos/Hombre/Mujer + chips de filtros activos. La ropa aparece de inmediato.
+- [x] **PDP:** galería, tallas con "agotado", guía de tallas, **"Comprar por WhatsApp" pre-llenado**, "combina con".
+- [x] **Favoritos / wishlist** (corazón en tarjetas y PDP, contador en nav, página `/favoritos`, persistido).
+- [x] **Globales en toda la página:** música (reproductor mini que abre al clic), WhatsApp flotante, botón "Instalar app" arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
+- [x] **OG image** para compartir (logo sobre selva) + twitter card.
+- [x] **Fixes móvil:** Lenis apagado en táctil, `touch-action`, intro más corto, navegación Hombre/Mujer arreglada, **siempre arranca desde arriba** al cambiar de vista, service worker v2 (auto-reemplazo de caché).
+- [x] **Drop con cuenta regresiva + lista de espera** (enganchada al Club) en el home.
 
-- [ ] **Fotos de producto definitivas** (las actuales son flat-lays de referencia con texto de otras marcas).
-- [ ] **Links reales de redes** (Instagram, Facebook, WhatsApp).
-- [ ] **OG image** con el babuino (para compartir en redes).
-- [ ] **Cambiar `ADMIN_PASSWORD`** y **rotar credenciales** del desarrollo.
+## 🔜 Fase 2 — Contenido para vender (lo que sigue)
+
+> El diseño ya está listo; falta el material real. Detalle en **[PENDIENTES.md](PENDIENTES.md)**.
+
+- [ ] **Fotos reales por producto** (galería de 4-6: frente, espalda, detalle, lifestyle). Hoy hay 1 por pieza.
+- [ ] **Medidas reales de tallas** en la guía (hoy son valores de ejemplo).
+- [ ] **Links reales** de Instagram / Facebook / WhatsApp.
+- [ ] **Editar el Drop** (nombre + fecha reales en `DropCountdown.tsx`).
+- [ ] **Rotar credenciales** de desarrollo (GitHub PAT, token Vercel, service key Supabase) y cambiar `ADMIN_PASSWORD`.
 - [ ] **Música con licencia** (libre de regalías).
 
-## 🧭 Fase 2 — Tienda real
+## 🧭 Fase 3 — Tienda real / backend
 
-- [ ] **Precios** reales por producto y por talla.
-- [ ] **Pasarela de pago** (Wompi / Mercado Pago / Bold) o mantener pedido por WhatsApp.
-- [ ] **Catálogo desde Supabase** (CMS): productos, tallas, stock e imágenes sin tocar código.
-- [ ] **Guía de tallas, Envíos, Cambios, FAQ** (hoy enlaces del footer sin página).
-- [ ] **Inventario / stock** y estados de "agotado".
-- [ ] Lanzar **Sacos / Medias / Accesorios** (reemplazar "Muy pronto").
+- [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.
+- [ ] **Catálogo desde Supabase** (editar productos/stock sin tocar código).
+- [ ] **Reseñas / estrellas** (con reseñas reales o captura por WhatsApp tras la compra).
+- [ ] **Analítica "lo más visto"** (tracking de vistas en Supabase + vista en `/admin`).
+- [ ] Lanzar **Sacos / Medias / Accesorios** (quitar "Muy pronto").
+- [ ] Páginas reales de **Envíos / Cambios / FAQ**.
 
-## 🧭 Fase 3 — Crecimiento
+## 🧭 Fase 4 — Crecimiento
 
-- [ ] **Dominio propio** (babuinos.co / .com) + correo de marca.
-- [ ] **Analítica** (Vercel Analytics / GA4) y píxel de Meta para campañas.
-- [ ] **SEO** completo: metadatos por página, sitemap, datos estructurados de producto.
-- [ ] **Email marketing** del Club (drops, preventas) — integrar la waitlist con un proveedor.
-- [ ] **Drops / preventas** con cuenta regresiva y stock limitado.
-- [ ] **i18n** (ES/EN) si se exporta fuera de Colombia.
-- [ ] **Tests** (unit + e2e) y auditoría de accesibilidad (WCAG AA).
-- [ ] **Programa de referidos / "manada"** y descuentos.
+- [ ] **Dominio propio** + correo de marca.
+- [ ] **Email del Club** conectado a un proveedor (drops, preventas) — hoy la waitlist solo guarda en Supabase.
+- [ ] **SEO** por página, sitemap, datos estructurados de producto · **Analítica** (Vercel/GA4 + píxel Meta).
+- [ ] **i18n** (ES/EN), **programa de referidos** ("la manada"), tests + auditoría de accesibilidad.
 
 ---
 
-## ⚠️ Pendientes técnicos / deuda
-
-- Reemplazar fotos flat-lay de referencia por producto real propio (evitar texto de marcas ajenas en estampados).
-- Comprimir imágenes pesadas; revisar `sizes` de `next/image` en el wallpaper.
-- Definir política de datos del cliente (privacidad) al guardar pedidos.
-
----
-
-_Última actualización: 2026-06-23._
+_Última actualización: 2026-07-23._

@@ -39,8 +39,8 @@ export interface GeneroDef {
 }
 
 export const GENEROS: GeneroDef[] = [
-  { key: "hombre", label: "Hombre", icon: "cap", blurb: "El explorador de cemento." },
-  { key: "mujer", label: "Mujer", icon: "bow", blurb: "La que marca su territorio." },
+  { key: "hombre", label: "Hombre", icon: "cap", blurb: "Quien marca su territorio." },
+  { key: "mujer", label: "Mujer", icon: "bow", blurb: "Quien lo domina." },
   { key: "unisex", label: "Unisex", icon: "none", blurb: "Sin etiquetas. Para toda la manada." },
 ];
 

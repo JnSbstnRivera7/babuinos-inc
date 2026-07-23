@@ -13,25 +13,29 @@
 
 Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": la jungla tomándose la ciudad. La página traduce eso en una experiencia inmersiva — la selva se **revela con el scroll** y queda como **fondo fijo** de toda la tienda — con un look editorial/streetwear muy comercial.
 
-## 🧩 Características
+## 🧩 Arquitectura y características
 
-- **Intro con scroll-reveal:** una ventana crece al hacer scroll y descubre el wallpaper fijo de selva de cemento; el **logo crece y se distorsiona** hasta desaparecer.
-- **Wallpaper fijo** detrás de toda la página (hasta el footer).
-- **Reproductor "Babuinos Radio" 🎶:** al primer click suena un tema aleatorio; play/pausa, siguiente y auto-avance. Estilo selvático con ecualizador.
-- **Catálogo** con fotos reales, selector de talla y "agregar a la mochila" (sin precios por ahora) + selectores Camisas/Sacos/Medias/Accesorios.
-- **Lookbook** de prendas en loop infinito.
-- **Carrito** persistente con **formulario del cliente** (nombre, teléfono, ciudad, nota) → **checkout por WhatsApp** (resumen del pedido) + guardado en Supabase.
-- **Selector de colorway** que recolorea el acento del sitio en vivo (solo paleta de marca).
-- **Menú "Tienda"** + páginas **"Muy pronto"** (Sacos / Medias / Accesorios).
-- **Club / waitlist** (newsletter) en Supabase.
-- **Panel `/admin`** protegido con login temático Babuinos + **dashboard con gráficas** (pedidos por día, top productos, por ciudad) y tablas de pedidos y suscriptores.
-- **Efectos:** lianas con hojas (CSS), hojas cayendo (CSS + Canvas), trama de ladrillo y bordes de liana en CSS, shine dorado. Íconos SVG propios (incl. el babuino recoloreable) + IG / WhatsApp / Facebook. Favicon del babuino.
-- **Mobile-first**, accesible, con `prefers-reduced-motion`.
+**Arquitectura por secciones** (no una sola landing):
+
+- **Home** = entrada: intro scroll-reveal (el logo descubre el wallpaper fijo de selva) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**.
+- **`/tienda`** (PLP): grid de producto con **filtros en panel transparente (glass)** — dropdown en PC / bottom-sheet en móvil — barra slim con segmentado Todos/Hombre/Mujer + chips de filtros activos. Siempre arranca desde arriba.
+- **`/producto/[slug]`** (PDP): galería, tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con".
+- **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist).
+
+**Transversal:**
+
+- **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
+- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`).
+- **Globales en toda la página:** reproductor "Babuinos Radio" (botón mini que abre al clic), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
+- **Sello de género** en cada tarjeta (logo con moño en mujer, gorra en hombre, babuino en unisex) + **selector de colorway** en vivo.
+- **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
+- **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
+- **Efectos:** wallpaper fijo, lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios. **Mobile-first**, `prefers-reduced-motion`, taps sin delay, scroll suave (Lenis) solo en desktop.
 
 ## 🛠️ Stack
 
 - **Next.js 16** (App Router, Turbopack) · **React 19** · **TypeScript**
-- **Tailwind CSS v4** · **Framer Motion** · **GSAP** · **Lenis** · **Embla** · **Zustand** · **Recharts** · **Supabase**
+- **Tailwind CSS v4** · **Framer Motion** · **Lenis** (solo desktop) · **Zustand** (carrito, wishlist, tema) · **Recharts** (solo `/admin`) · **Supabase**
 
 ## 🚀 Desarrollo
 
@@ -95,16 +99,21 @@ Desplegado en https://babuinos-inc.vercel.app (repo conectado → auto-deploy en
 
 ```
 src/
-  app/         layout, page, admin/, sacos|medias|accesorios/ (Muy pronto),
+  app/         layout (globales: MusicPlayer, WhatsAppFloat, InstallPrompt), page (Home),
+               tienda/, producto/[slug]/, nosotros/, club/, favoritos/, admin/,
+               sacos|medias|accesorios/ (Muy pronto), manifest.ts,
                api/{checkout,waitlist,admin/login,admin/logout}, icon.png
   components/
-    sections/  ScrollExpansionHero, FeaturesStrip, Lookbook, Catalog, Story, Newsletter
-    layout/    AnnounceBar, Navbar, Footer
+    sections/  ScrollExpansionHero, GeneroSplit, DropCountdown, Destacados, Story, Newsletter, FeaturesStrip
+    tienda/    TiendaClient (PLP + panel de filtros)
+    producto/  ProductDetail (PDP), ProductCard
+    favoritos/ FavoritosClient
+    layout/    Navbar, Footer, Shell (marco de páginas internas)
     cart/      CartDrawer        admin/  AdminLogin, AdminCharts
-    fx/        FixedWallpaper, Lianas, CssLeaves, LeafCanvas, BaboonStrip, MusicPlayer, ...
-    ui/        Logo, BaboonMark, ImageAutoSlider, Icons, SocialButtons, Toast
-  lib/         products, store, theme, whatsapp, supabase, toast, utils
-public/        brand/ (logos, patches, products, jungle), music/
+    fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, MusicPlayer, WhatsAppFloat, InstallPrompt, SmoothScroll
+    ui/        Logo, BaboonMark, GeneroMark, Icons, SocialButtons, Toast
+  lib/         products, store, wishlist, theme, whatsapp, supabase, toast, scroll, utils
+public/        brand/ (logos, genero/{hombre,mujer}.svg, products, jungle), music/, og.png, sw.js
 ```
 
 ## 🗺️ Roadmap

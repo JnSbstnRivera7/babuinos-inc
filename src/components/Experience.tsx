@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollExpansionHero } from "@/components/sections/ScrollExpansionHero";
 import { GeneroSplit } from "@/components/sections/GeneroSplit";
+import { DropCountdown } from "@/components/sections/DropCountdown";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Toast } from "@/components/ui/Toast";
 
@@ -26,6 +27,7 @@ export function Experience() {
         <main>
           <ScrollExpansionHero />
           <GeneroSplit />
+          <DropCountdown />
         </main>
         <Footer />
       </div>

@@ -1,62 +1,46 @@
 # 📋 Pendientes — Babuinos Inc
 
-Próximos cambios para llevar la tienda de "lista y en línea" a "vendiendo de verdad".
-Estado actual: desplegada en https://babuinos-inc.vercel.app (ver [README](README.md)).
-Visión por fases en [ROADMAP.md](ROADMAP.md).
+Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)**.
+Estado: desplegada en https://babuinos-inc.vercel.app (arquitectura de tienda completa).
 
-> **Para continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key,
-> admin, WhatsApp) y cheat-sheet de push/deploy en **`CREDENCIALES.local.md`** (archivo local,
-> no se sube). Las del app también en `.env.local`.
+> **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin,
+> WhatsApp) en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`.
 
 ---
 
-## 🔴 Crítico (para vender en serio)
+## 🔴 Para vender de verdad (tú tienes la pelota)
 
-- [ ] **Precios.** El catálogo no muestra precios. Decidir:
-  - mostrar precio por producto/talla, **o**
-  - mantener "cotiza por WhatsApp" (como está hoy).
-- [ ] **Fotos reales de producto.** Las actuales son *flat-lays de referencia* y varias traen
-  texto/diseños de **otras marcas** (MTLS, Sacred Balance). Reemplazar por fotos reales de
-  Babuinos antes de publicitar (no son piezas propias).
-- [ ] **Catálogo administrable.** Hoy los productos están en código (`src/lib/products.ts`).
-  Pasarlos a Supabase para editarlos sin tocar código + manejar **stock**.
-- [ ] **Pasarela de pago** (opcional). Wompi / Mercado Pago / Bold, o seguir solo por WhatsApp.
-
-## 🟡 Marca y contenido
-
-- [ ] **Links reales** de Instagram / Facebook / WhatsApp (hoy placeholder en `SocialButtons`).
-- [ ] **Imagen OG** (Open Graph) con el babuino para que el link se vea bien al compartir.
-- [ ] **Páginas del footer**: Guía de tallas, Envíos, Cambios, FAQ (hoy son enlaces sin página).
-- [ ] **Lanzar Sacos / Medias / Accesorios** cuando existan (quitar las páginas "Muy pronto").
+- [ ] **Fotos reales por producto.** El diseño ya soporta galería (`images[]` en `src/lib/products.ts`); hoy cada pieza tiene 1 foto. Subir 4-6: frente, **espalda** (donde va el gráfico), plano/detalle y opcional lifestyle en la calle. Fondo/luz uniformes.
+- [ ] **Medidas reales de tallas.** Editar `SIZE_GUIDE` en `src/components/producto/ProductDetail.tsx` (hoy son valores de ejemplo) con pecho/largo/hombro por talla.
+- [ ] **Género por producto.** Hoy: lila=mujer, gris=hombre, resto unisex (en `products.ts`). Ajustar según la línea real.
+- [ ] **Editar el Drop.** Nombre y fecha reales en `DROP` de `src/components/sections/DropCountdown.tsx`.
 
 ## 🔒 Seguridad y operación
 
-- [ ] **Cambiar `ADMIN_PASSWORD`** por una propia (env var en Vercel).
-- [ ] **Rotar credenciales** compartidas durante el desarrollo (GitHub PAT, token de Vercel,
-  service key de Supabase).
-- [ ] **Música con licencia.** Los temas actuales son comerciales; para una tienda pública conviene
-  música libre de regalías (decisión legal/negocio).
+- [ ] **Rotar credenciales** compartidas en desarrollo (GitHub PAT `ghp_…`, token Vercel `vcp_…`, service key Supabase). Guardar las nuevas solo en `.env.local` / `CREDENCIALES.local.md`.
+- [ ] **Cambiar `ADMIN_PASSWORD`** (env var en Vercel).
+- [ ] **Música con licencia** (los temas actuales son comerciales).
 
-## 🟢 Crecimiento (después)
+## 🟡 Marca y contenido
 
-- [ ] **Dominio propio** (ej. `babuinos.co`) + correo de marca.
-- [ ] **Analítica** (Vercel Analytics / GA4) + píxel de Meta.
-- [ ] **SEO** por página, sitemap, datos estructurados de producto.
-- [ ] **Email del Club** (conectar la waitlist con un proveedor) y **drops/preventas** con cuenta regresiva.
-- [ ] **Tests** + auditoría de accesibilidad.
+- [ ] **Links reales** IG / Facebook / WhatsApp (placeholder en `SocialButtons.tsx`).
+- [ ] **Páginas del footer:** Envíos, Cambios, FAQ (hoy enlaces sin página).
+- [ ] Lanzar **Sacos / Medias / Accesorios** (quitar "Muy pronto").
+
+## 🟢 Siguientes builds (necesitan backend/decisión)
+
+- [ ] **Reseñas / estrellas** — con reseñas reales o captura por WhatsApp tras la compra (nada de reseñas falsas).
+- [ ] **Analítica "lo más visto"** — registrar vistas en Supabase + mostrarlo en `/admin`.
+- [ ] **Precios + pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.
+- [ ] **Catálogo desde Supabase** (CMS) + stock administrable.
+- [ ] **Email del Club** a un proveedor (para drops/preventas) + dominio propio.
 
 ---
 
-## ⚙️ Optimización móvil
+## ⚙️ Notas técnicas
 
-Hecho: imágenes a WebP · música 128 kbps · sin canvas/menos animaciones en móvil ·
-`content-visibility:auto` en secciones de abajo · lazy-load (Lookbook/Catálogo) ·
-sin `backdrop-blur` en móvil.
+- **PWA/caché:** la app se instala y cachea (service worker `babuinos-v2`, network-first). Al desplegar, en el celular **cerrar y reabrir** para bajar la versión nueva.
+- **Preview headless:** el home cuelga el navegador de pruebas por las animaciones perpetuas; verificar por navegación/DOM, no por screenshot.
+- **Deploy:** repo `JnSbstnRivera7/babuinos-inc` (cuenta personal, NO empresa) → push a `main` = auto-deploy en Vercel.
 
-Queda (opcional):
-- [ ] Simplificar la intro scroll-expansion en móvil (fade en vez de recalcular transforms).
-- [ ] Música a 96 kbps o arrancar muteada con control de volumen.
-- [ ] Correr Lighthouse/PageSpeed móvil y atacar lo que marque.
-- [ ] Afinar `sizes` de `next/image` en el wallpaper (warning menor).
-
-_Última actualización: 2026-06-23._
+_Última actualización: 2026-07-23._
