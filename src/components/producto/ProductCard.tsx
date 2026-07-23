@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getEdition, inStock, type Product } from "@/lib/products";
-import { BaboonMark } from "@/components/ui/BaboonMark";
+import { GeneroMark } from "@/components/ui/GeneroMark";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
@@ -78,7 +78,7 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         )}
         <span className="absolute bottom-3 right-3 grid h-11 w-11 place-items-center rounded-full bg-cream shadow-[0_4px_14px_rgba(30,32,33,.18)]">
-          <BaboonMark color={getEdition(product.edition).accent} className="w-6" />
+          <GeneroMark genero={product.genero} color={getEdition(product.edition).accent} className="w-6" />
         </span>
         {!available && (
           <span className="absolute inset-0 grid place-items-center bg-ink/45">
