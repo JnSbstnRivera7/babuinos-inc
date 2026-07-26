@@ -11,7 +11,7 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)**.
 - [x] Intro scroll-reveal (el logo crece/distorsiona y descubre el wallpaper fijo de selva de cemento) + tema oscuro coherente.
 - [x] Carrito persistente + formulario de cliente + **checkout por WhatsApp** (resumen a `wa.me`) + guardado en Supabase (`orders`).
 - [x] **Club / waitlist** (Supabase `waitlist`), **selector de colorway**, **Panel `/admin`** con login + gráficas.
-- [x] **PWA instalable** (manifest + service worker) + optimización móvil base (WebP, música 128k, etc.).
+- [x] **PWA instalable** (manifest + service worker) + optimización móvil base (WebP, música ~96k, etc.).
 - [x] Repo en GitHub (`JnSbstnRivera7/babuinos-inc`) + Vercel auto-deploy → https://babuinos-inc.vercel.app
 
 ## ✅ Fase 1 — De landing a tienda por secciones (hecho · 2026-07-23)
@@ -27,11 +27,19 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)**.
 - [x] **Fixes móvil:** Lenis apagado en táctil, `touch-action`, intro más corto, navegación Hombre/Mujer arreglada, **siempre arranca desde arriba** al cambiar de vista, service worker v2 (auto-reemplazo de caché).
 - [x] **Drop con cuenta regresiva + lista de espera** (enganchada al Club) en el home.
 
+## ✅ Fase 2a — Experiencia de producto real (hecho · 2026-07-26)
+
+- [x] **Fotos de modelo por producto** — la camisa **puesta** (frente/lateral/espalda × Hombre/Mujer) para las 5 piezas, normalizadas a 4:5 WebP en `public/brand/models/<slug>/`. Nuevo campo `Product.models` (helper `modelSet`).
+- [x] **PDP con minigalería** — abre con el modelo (frontal) en vez de la prenda sola; **toggle Hombre/Mujer**, miniaturas y **zoom** a pantalla completa (flechas / Esc / contador).
+- [x] **Tarjetas con el modelo puesto** — foto frontal + **hover → espalda** (el gráfico va atrás); respetan el género en contexto del filtro de tienda.
+- [x] **Wallpaper de marca responsive (art-directed)** — foto real con modelos: **vertical en móvil / horizontal en escritorio** (`<picture>`, descarga solo la que aplica) + velo más suave para lucir la marca.
+- [x] **Perf móvil:** audio comprimido (~96 kbps) + reproductor robusto (playsInline, gestos válidos iOS/Android), blur del hero desactivado en móvil.
+
 ## 🔜 Fase 2 — Contenido para vender (lo que sigue)
 
 > El diseño ya está listo; falta el material real. Detalle en **[PENDIENTES.md](PENDIENTES.md)**.
 
-- [ ] **Fotos reales por producto** (galería de 4-6: frente, espalda, detalle, lifestyle). Hoy hay 1 por pieza.
+- [x] **Fotos de producto** (26-jul) — modelo con la camisa puesta (frente/lateral/espalda × H/M). _Opcional:_ prenda sola en alta + lifestyle en calle.
 - [ ] **Medidas reales de tallas** en la guía (hoy son valores de ejemplo).
 - [ ] **Links reales** de Instagram / Facebook / WhatsApp.
 - [ ] **Editar el Drop** (nombre + fecha reales en `DropCountdown.tsx`).
@@ -56,4 +64,4 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)**.
 
 ---
 
-_Última actualización: 2026-07-23._
+_Última actualización: 2026-07-26._

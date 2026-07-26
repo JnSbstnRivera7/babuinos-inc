@@ -19,7 +19,7 @@ Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": 
 
 - **Home** = entrada: intro scroll-reveal (el logo descubre el wallpaper fijo de selva) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**.
 - **`/tienda`** (PLP): grid de producto con **filtros en panel transparente (glass)** — dropdown en PC / bottom-sheet en móvil — barra slim con segmentado Todos/Hombre/Mujer + chips de filtros activos. Siempre arranca desde arriba.
-- **`/producto/[slug]`** (PDP): galería, tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con".
+- **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer** y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con".
 - **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist).
 
 **Transversal:**
@@ -27,10 +27,10 @@ Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
 - **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`).
 - **Globales en toda la página:** reproductor "Babuinos Radio" (botón mini que abre al clic), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
-- **Sello de género** en cada tarjeta (logo con moño en mujer, gorra en hombre, babuino en unisex) + **selector de colorway** en vivo.
+- **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
-- **Efectos:** wallpaper fijo, lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios. **Mobile-first**, `prefers-reduced-motion`, taps sin delay, scroll suave (Lenis) solo en desktop.
+- **Efectos:** **wallpaper fijo art-directed** (foto de marca con modelos — **vertical en móvil / horizontal en escritorio** vía `<picture>`, se descarga solo la que aplica), lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios. **Mobile-first**, `prefers-reduced-motion`, taps sin delay, scroll suave (Lenis) solo en desktop, blur del hero desactivado en móvil, música ~96 kbps.
 
 ## 🛠️ Stack
 
@@ -113,7 +113,9 @@ src/
     fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, MusicPlayer, WhatsAppFloat, InstallPrompt, SmoothScroll
     ui/        Logo, BaboonMark, GeneroMark, Icons, SocialButtons, Toast
   lib/         products, store, wishlist, theme, whatsapp, supabase, toast, scroll, utils
-public/        brand/ (logos, genero/{hombre,mujer}.svg, products, jungle), music/, og.png, sw.js
+public/        brand/ (logos, genero/{hombre,mujer}.svg, products/ [prenda sola],
+               models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
+               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/, og.png, sw.js
 ```
 
 ## 🗺️ Roadmap
