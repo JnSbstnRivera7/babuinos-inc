@@ -19,7 +19,7 @@ export function FixedWallpaper() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(8,14,12,0.66) 0%, rgba(8,14,12,0.80) 45%, rgba(8,14,12,0.90) 100%)",
+            "linear-gradient(180deg, rgba(8,14,12,0.34) 0%, rgba(8,14,12,0.48) 45%, rgba(8,14,12,0.64) 100%)",
         }}
       />
     </div>
