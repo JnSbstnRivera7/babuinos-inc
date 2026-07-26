@@ -216,7 +216,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
       {list.length > 0 ? (
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} viewGenero={genero} />
           ))}
         </div>
       ) : (

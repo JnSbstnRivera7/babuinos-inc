@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getEdition, inStock, type Product } from "@/lib/products";
+import { getEdition, inStock, type Genero, type Product } from "@/lib/products";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
@@ -17,7 +17,14 @@ const BADGES: Record<string, { label: string; cls: string }> = {
   last: { label: "Últimas", cls: "bg-burgundy text-white" },
 };
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({
+  product,
+  viewGenero = "all",
+}: {
+  product: Product;
+  /** Género en contexto (p.ej. filtro de tienda) para elegir el modelo de la card. */
+  viewGenero?: Genero | "all";
+}) {
   const add = useCart((s) => s.add);
   const openCart = useCart((s) => s.open);
   const showToast = useToast((s) => s.show);
@@ -28,6 +35,19 @@ export function ProductCard({ product }: { product: Product }) {
   const available = inStock(product);
   const href = `/producto/${product.slug}`;
   const badge = product.badge ? BADGES[product.badge] : null;
+
+  // Modelo a mostrar: el del contexto (Hombre/Mujer) si existe; si no, el de la
+  // ficha (mujer → mujer, resto → hombre). Fallback a la prenda sola.
+  const cardGenero: "hombre" | "mujer" =
+    viewGenero === "hombre" || viewGenero === "mujer"
+      ? viewGenero
+      : product.genero === "mujer"
+        ? "mujer"
+        : "hombre";
+  const shots = product.models?.[cardGenero] ?? product.models?.hombre ?? product.models?.mujer;
+  const useModel = Boolean(shots);
+  const frontSrc = shots?.frontal ?? product.image;
+  const backSrc = shots?.espalda ?? product.image;
 
   function handleAdd() {
     if (!available) return;
@@ -58,15 +78,30 @@ export function ProductCard({ product }: { product: Product }) {
       <Link
         href={href}
         aria-label={`Ver ${product.name}`}
-        className="relative block h-[clamp(210px,28vw,320px)] w-full shrink-0 overflow-hidden bg-[#eceae6]"
+        className="relative block aspect-[4/5] w-full shrink-0 overflow-hidden bg-[#eceae6]"
       >
+        {/* frontal (por defecto) */}
         <Image
-          src={product.image}
+          src={frontSrc}
           alt={`${product.name} — ${product.colorway}`}
           fill
           sizes="(max-width:640px) 88vw, (max-width:1024px) 45vw, 30vw"
-          className="object-contain p-2 transition-transform duration-500 group-hover:scale-[1.04]"
+          className={cn(
+            "transition-all duration-500 group-hover:scale-[1.03]",
+            useModel ? "object-cover group-hover:opacity-0" : "object-contain p-2",
+          )}
         />
+        {/* espalda (aparece al pasar el mouse — el gráfico va atrás) */}
+        {useModel && (
+          <Image
+            src={backSrc}
+            alt=""
+            aria-hidden
+            fill
+            sizes="(max-width:640px) 88vw, (max-width:1024px) 45vw, 30vw"
+            className="object-cover opacity-0 transition-all duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+          />
+        )}
         {badge && (
           <span
             className={cn(
