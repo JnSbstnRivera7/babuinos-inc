@@ -69,6 +69,28 @@ export const CATEGORIES: { key: Category | "all"; label: string }[] = [
   { key: "grafica", label: "Gráficas" },
 ];
 
+/* ─── Fotos de modelo (camisa puesta) por género y ángulo ─── */
+export interface ModelShots {
+  frontal: string;
+  lateral: string;
+  espalda: string;
+}
+
+export interface ModelGallery {
+  hombre?: ModelShots;
+  mujer?: ModelShots;
+}
+
+/** Genera las rutas de las fotos de modelo a partir del slug del producto. */
+function modelSet(slug: string): ModelGallery {
+  const shots = (g: "hombre" | "mujer"): ModelShots => ({
+    frontal: `/brand/models/${slug}/${g}-frontal.webp`,
+    lateral: `/brand/models/${slug}/${g}-lateral.webp`,
+    espalda: `/brand/models/${slug}/${g}-espalda.webp`,
+  });
+  return { hombre: shots("hombre"), mujer: shots("mujer") };
+}
+
 /* ─── Producto ─── */
 export interface SizeStock {
   size: string;
@@ -90,7 +112,8 @@ export interface Product {
   fit?: string;
   composicion?: string;
   image: string; // foto principal (card, carrito, thumbnails)
-  images: string[]; // galería para la PDP (frente, espalda, detalle...)
+  images: string[]; // galería de la prenda sola (flat lay) para la PDP
+  models?: ModelGallery; // fotos con la camisa puesta, por género (toggle en la PDP)
   colorway: string;
   sizes: SizeStock[];
   price?: number; // opcional (sigue coordinándose por WhatsApp)
@@ -113,6 +136,7 @@ export const PRODUCTS: Product[] = [
     composicion: "100% algodón 220 g/m²",
     image: "/brand/products/lilac.webp",
     images: ["/brand/products/lilac.webp"],
+    models: modelSet("lila-manada"),
     colorway: "Lila Polvo",
     sizes: [
       { size: "S", stock: 5 },
@@ -137,6 +161,7 @@ export const PRODUCTS: Product[] = [
     composicion: "100% algodón 220 g/m²",
     image: "/brand/products/white.webp",
     images: ["/brand/products/white.webp"],
+    models: modelSet("marfil-expedicion"),
     colorway: "Marfil",
     sizes: [
       { size: "S", stock: 4 },
@@ -161,6 +186,7 @@ export const PRODUCTS: Product[] = [
     composicion: "100% algodón 220 g/m²",
     image: "/brand/products/black-tonal.webp",
     images: ["/brand/products/black-tonal.webp"],
+    models: modelSet("negro-tono"),
     colorway: "Negro",
     sizes: [
       { size: "S", stock: 0 },
@@ -186,6 +212,7 @@ export const PRODUCTS: Product[] = [
     composicion: "100% algodón 220 g/m²",
     image: "/brand/products/grey-gold.webp",
     images: ["/brand/products/grey-gold.webp"],
+    models: modelSet("gris-heritage"),
     colorway: "Gris Jaspe",
     sizes: [
       { size: "S", stock: 4 },
@@ -209,6 +236,7 @@ export const PRODUCTS: Product[] = [
     composicion: "100% algodón 220 g/m²",
     image: "/brand/products/black-gold.webp",
     images: ["/brand/products/black-gold.webp"],
+    models: modelSet("negro-oro"),
     colorway: "Negro / Oro",
     sizes: [
       { size: "S", stock: 3 },

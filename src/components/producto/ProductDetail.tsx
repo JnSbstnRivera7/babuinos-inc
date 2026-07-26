@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -37,11 +37,52 @@ export function ProductDetail({ product }: { product: Product }) {
   const [size, setSize] = useState("");
   const [active, setActive] = useState(0);
   const [guide, setGuide] = useState(false);
+  const [zoom, setZoom] = useState(false);
+  // Género del modelo mostrado en la galería (toggle). Por defecto el de la
+  // ficha; las piezas unisex arrancan en "hombre".
+  const [modelGender, setModelGender] = useState<"hombre" | "mujer">(
+    product.genero === "mujer" ? "mujer" : "hombre",
+  );
 
   const edition = getEdition(product.edition);
   const available = inStock(product);
-  const gallery = product.images.length ? product.images : [product.image];
+  const hasModels = Boolean(product.models?.hombre || product.models?.mujer);
+
+  // Galería: primero la camisa PUESTA (frente/lateral/espalda del género
+  // elegido), luego la prenda sola. Misma longitud en ambos géneros, así el
+  // toggle conserva el ángulo activo.
+  const gallery = useMemo<{ src: string; fit: "cover" | "contain"; label: string }[]>(() => {
+    const m = product.models?.[modelGender];
+    const worn = m
+      ? [
+          { src: m.frontal, fit: "cover" as const, label: "Frente" },
+          { src: m.lateral, fit: "cover" as const, label: "Lateral" },
+          { src: m.espalda, fit: "cover" as const, label: "Espalda" },
+        ]
+      : [];
+    const flat = (product.images.length ? product.images : [product.image]).map((src) => ({
+      src,
+      fit: "contain" as const,
+      label: "Prenda",
+    }));
+    return [...worn, ...flat];
+  }, [product.models, product.images, product.image, modelGender]);
+
+  const safeActive = Math.min(active, gallery.length - 1);
+  const activeShot = gallery[safeActive];
   const related = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
+
+  // Teclado en el zoom: Esc cierra, flechas navegan.
+  useEffect(() => {
+    if (!zoom) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoom(false);
+      else if (e.key === "ArrowRight") setActive((i) => (i + 1) % gallery.length);
+      else if (e.key === "ArrowLeft") setActive((i) => (i - 1 + gallery.length) % gallery.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoom, gallery.length]);
 
   function requireSize(): boolean {
     if (!size) {
@@ -82,38 +123,90 @@ export function ProductDetail({ product }: { product: Product }) {
 
       <div className="grid gap-10 lg:grid-cols-2">
         {/* galería */}
-        <div className="flex flex-col-reverse gap-4 sm:flex-row">
-          {gallery.length > 1 && (
-            <div className="flex gap-3 sm:flex-col">
-              {gallery.map((src, i) => (
-                <button
-                  key={src + i}
-                  onClick={() => setActive(i)}
-                  aria-label={`Ver foto ${i + 1}`}
-                  className={cn(
-                    "relative h-20 w-16 shrink-0 overflow-hidden rounded-lg border bg-[#eceae6] transition",
-                    active === i ? "border-[var(--accent)]" : "border-transparent opacity-70 hover:opacity-100",
-                  )}
-                >
-                  <Image src={src} alt="" fill sizes="64px" className="object-contain p-1" />
-                </button>
-              ))}
+        <div>
+          {/* toggle: ver la camisa en modelo Hombre / Mujer */}
+          {hasModels && (
+            <div className="mb-3 inline-flex items-center gap-2">
+              <span className="font-mono text-[0.58rem] font-bold tracking-[0.12em] text-cream/45 uppercase">
+                Ver en
+              </span>
+              <div className="inline-flex rounded-full border border-cream/15 bg-white/5 p-1">
+                {(["hombre", "mujer"] as const).map((g) => (
+                  <button
+                    key={g}
+                    onClick={() => setModelGender(g)}
+                    aria-pressed={modelGender === g}
+                    className={cn(
+                      "font-mono flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.62rem] font-bold tracking-[0.1em] uppercase transition",
+                      modelGender === g ? "bg-cream text-ink" : "text-cream/60 hover:text-cream",
+                    )}
+                  >
+                    <GeneroMark genero={g} color="currentColor" className="h-3.5 w-4" />
+                    {g}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
-          <div className="relative aspect-[4/5] flex-1 overflow-hidden rounded-2xl bg-[#eceae6]">
-            <Image
-              src={gallery[active]}
-              alt={`${product.name} — ${product.colorway}`}
-              fill
-              priority
-              sizes="(max-width:1024px) 90vw, 45vw"
-              className="object-contain p-4"
-            />
-            {!available && (
-              <span className="absolute left-5 top-5 rounded-full bg-ink px-4 py-1.5 font-mono text-[0.6rem] font-bold tracking-[0.16em] text-cream uppercase">
-                Agotado
-              </span>
+
+          <div className="flex flex-col-reverse gap-4 sm:flex-row">
+            {gallery.length > 1 && (
+              <div className="flex gap-3 sm:flex-col">
+                {gallery.map((shot, i) => (
+                  <button
+                    key={shot.src + i}
+                    onClick={() => setActive(i)}
+                    aria-label={`Ver ${shot.label}`}
+                    aria-pressed={safeActive === i}
+                    className={cn(
+                      "relative h-20 w-16 shrink-0 overflow-hidden rounded-lg border bg-[#eceae6] transition",
+                      safeActive === i ? "border-[var(--accent)]" : "border-transparent opacity-70 hover:opacity-100",
+                    )}
+                  >
+                    <Image
+                      src={shot.src}
+                      alt=""
+                      fill
+                      sizes="64px"
+                      className={shot.fit === "cover" ? "object-cover" : "object-contain p-1"}
+                    />
+                  </button>
+                ))}
+              </div>
             )}
+
+            <button
+              type="button"
+              onClick={() => setZoom(true)}
+              aria-label="Ampliar foto"
+              className="group relative aspect-[4/5] flex-1 cursor-zoom-in overflow-hidden rounded-2xl bg-[#eceae6]"
+            >
+              <Image
+                src={activeShot.src}
+                alt={`${product.name} — ${product.colorway} · ${activeShot.label}`}
+                fill
+                priority
+                sizes="(max-width:1024px) 90vw, 45vw"
+                className={cn(
+                  "transition-transform duration-500 group-hover:scale-[1.03]",
+                  activeShot.fit === "cover" ? "object-cover" : "object-contain p-4",
+                )}
+              />
+              <span className="font-mono pointer-events-none absolute bottom-3 left-3 rounded-full bg-ink/75 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.12em] text-cream uppercase backdrop-blur-sm">
+                {activeShot.label}
+              </span>
+              <span className="pointer-events-none absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-ink/70 text-cream backdrop-blur-sm">
+                <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden>
+                  <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+                  <path d="m20 20-3.2-3.2M11 8.2v5.6M8.2 11h5.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </span>
+              {!available && (
+                <span className="absolute left-5 top-5 rounded-full bg-ink px-4 py-1.5 font-mono text-[0.6rem] font-bold tracking-[0.16em] text-cream uppercase">
+                  Agotado
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
@@ -311,6 +404,63 @@ export function ProductDetail({ product }: { product: Product }) {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* zoom / lightbox */}
+      {zoom && (
+        <div
+          className="fixed inset-0 z-[130] flex items-center justify-center bg-ink/92 p-4 backdrop-blur-sm"
+          onClick={() => setZoom(false)}
+        >
+          <button
+            onClick={() => setZoom(false)}
+            aria-label="Cerrar"
+            className="font-mono absolute right-4 top-4 z-10 rounded-full border border-cream/20 px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-cream/80 uppercase hover:bg-cream/10"
+          >
+            Cerrar ×
+          </button>
+
+          <div
+            className="relative h-[82vh] w-full max-w-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={activeShot.src}
+              alt={`${product.name} — ${product.colorway} · ${activeShot.label}`}
+              fill
+              sizes="90vw"
+              className="object-contain"
+            />
+          </div>
+
+          {gallery.length > 1 && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActive((i) => (i - 1 + gallery.length) % gallery.length);
+                }}
+                aria-label="Anterior"
+                className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-cream/20 text-2xl leading-none text-cream hover:bg-cream/10"
+              >
+                ‹
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActive((i) => (i + 1) % gallery.length);
+                }}
+                aria-label="Siguiente"
+                className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-cream/20 text-2xl leading-none text-cream hover:bg-cream/10"
+              >
+                ›
+              </button>
+              <span className="font-mono absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-ink/70 px-3 py-1 text-[0.6rem] tracking-[0.1em] text-cream/80 uppercase">
+                {activeShot.label} · {safeActive + 1}/{gallery.length}
+              </span>
+            </>
+          )}
         </div>
       )}
     </div>
