@@ -51,7 +51,8 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)** · hallazgos medidos 
       que prometían páginas inexistentes y "Ediciones Patch", que ya no es un concepto de la marca.
 - [x] **Tope de stock en el carrito** — se podía pedir 10 de una talla con 3. Ahora corta exacto,
       avisa por toast y el `+` del carrito se apaga al llegar al máximo.
-- [x] **El home ya vende**: `Destacados` enchufado, de 0 a 3 productos visibles.
+- [~] **Vitrina en el home**: se enchufó `Destacados` (0 → 3 productos) y **Juan la revirtió** el
+      mismo día — quiere el home como puerta, no como catálogo. El componente queda listo en el repo.
 - [x] **Contraste AA**: 5 estilos de texto por debajo del mínimo → 0.
 - [x] **Áreas de toque**: 146 elementos bajo 44 px → 0. Lo peor eran las pills de talla (32 px).
 - [x] **SEO**: `sitemap.xml` (21 URLs), `robots.txt`, `schema.org/Product` en las 15 fichas,

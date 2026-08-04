@@ -7,18 +7,18 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollExpansionHero } from "@/components/sections/ScrollExpansionHero";
 import { GeneroSplit } from "@/components/sections/GeneroSplit";
-import { Destacados } from "@/components/sections/Destacados";
 import { DropCountdown } from "@/components/sections/DropCountdown";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Toast } from "@/components/ui/Toast";
 import { BRAND } from "@/lib/brand";
 
 /**
- * Home = la entrada. Intro de marca → "elige tu territorio" → vitrina de piezas
- * → Drop. Lo demás vive en su propia página: /tienda, /nosotros, /club.
+ * Home = SOLO la entrada: intro de marca → "elige tu territorio" → Drop.
+ * Lo demás vive en su propia página: /tienda, /nosotros, /club.
  *
- * `Destacados` es clave: sin él el home no mostraba NI UN producto (cero enlaces
- * a /producto/) y el visitante tenía que adivinar antes de ver mercancía.
+ * Nota: `Destacados` (la vitrina "Lo más buscado") se probó acá el 4-ago y Juan
+ * la quitó — quiere el home como puerta, no como catálogo. El componente sigue
+ * en el repo listo para volver a enchufarse con una línea si cambia de idea.
  */
 export function Experience() {
   return (
@@ -38,7 +38,6 @@ export function Experience() {
           </h1>
           <ScrollExpansionHero />
           <GeneroSplit />
-          <Destacados />
           <DropCountdown />
         </main>
         <Footer />

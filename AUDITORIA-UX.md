@@ -18,7 +18,7 @@ Casi todo lo de esta auditoría **ya está corregido**. Verificación posterior 
 |---|---|---|
 | Enlaces muertos en el footer | **12** | **0** |
 | Tope de stock en el carrito | sin validar | corta exacto en el stock de la talla |
-| Productos visibles en el home | **0** | **3** |
+| Productos visibles en el home | **0** | **0** — se probó con 3 y Juan lo revirtió (ver nota) |
 | Estilos de texto que fallan AA | **5** | **0** |
 | Áreas de toque bajo 44 px | **146** | **0** |
 | `<h1>` en el home | ninguno | 1 |
@@ -33,6 +33,12 @@ Casi todo lo de esta auditoría **ya está corregido**. Verificación posterior 
 
 Verificado sobre 24 combinaciones de ruta × ancho (320 / 375 / 414 px): **cero desbordes
 horizontales** y **cero tap targets bajo 44 px**.
+
+**Decisión de marca que revierte un hallazgo:** el punto 3.1 proponía mostrar piezas en el home. Se
+aplicó y Juan lo quitó el mismo día — el home es una puerta (Hombre/Mujer + Drop), no un catálogo.
+El componente `Destacados` queda en el repo. Queda anotado porque el diagnóstico sigue siendo cierto
+(el visitante da un clic más antes de ver mercancía); simplemente se acepta a cambio de la entrada
+limpia que quiere la marca.
 
 **Sigue pendiente** (necesita datos o decisión de Juan): links reales de redes, señal de precio,
 Sacos/Medias/Accesorios, stock real, medidas del inventario, licencias de terceros y la música.

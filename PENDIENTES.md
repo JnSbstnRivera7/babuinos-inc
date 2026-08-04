@@ -26,8 +26,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       pública, así que el riesgo está corriendo. Conseguir permiso, rediseñar, o sacarlas.
 - [ ] **Links reales** de Instagram y Facebook — hoy `instagram.com/babuinos.inc` y
       `facebook.com/babuinos.inc` son placeholders en `SocialButtons.tsx`.
-- [ ] **Verificar el Drop**: hoy dice `Drop 02 — Expedición` para el **15-ago-2026**
-      (`DropCountdown.tsx`). ¿Es real?
+- [ ] **Nombre del Drop**: la fecha ya es la real (**4-sep-2026, 8 pm hora Colombia**), pero el nombre
+      sigue siendo `Drop 02 — Expedición` en `DropCountdown.tsx`. ¿Se queda así?
 - [ ] **¿"Rootwailer" o "Rottweiler"?** Quedó como lo escribiste. Si fue dedo, cambia en
       `products.ts` y en el slug.
 - [ ] **¿Altura en metros o pies?** El copy dice **2.600 m** (Bogotá está a 2.600 metros; 2.600 ft
@@ -71,8 +71,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 - [x] **Wallpaper nuevo** + 10 temas de música.
 - [x] **Pipeline de fotos** guardado en el repo (`scripts/`).
 - [x] **Auditoría de UI/UX aplicada** (4-ago) — ver [AUDITORIA-UX.md](AUDITORIA-UX.md):
-      footer sin enlaces muertos (12 → 0), tope de stock en el carrito, `Destacados` en el home
-      (0 → 3 productos visibles), contraste AA (5 fallas → 0), áreas de toque (146 bajo 44 px → 0),
+      footer sin enlaces muertos (12 → 0), tope de stock en el carrito, contraste AA (5 fallas → 0),
+      áreas de toque (146 bajo 44 px → 0),
       `sitemap.xml` + `robots.txt` + `schema.org/Product` + 404 propia, `<h1>` en el home y
       jerarquía de `/tienda`, `:focus-visible` global, `aria-live` en el toast, `<label>` en los
       formularios, y borrados los 5 componentes muertos.

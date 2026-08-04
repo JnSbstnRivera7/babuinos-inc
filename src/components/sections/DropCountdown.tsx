@@ -9,7 +9,7 @@ import { useToast } from "@/lib/toast";
 /* ── Config del próximo drop (EDITAR aquí la fecha y el nombre) ── */
 const DROP = {
   name: "Drop 02 — Expedición",
-  date: "2026-08-15T20:00:00-05:00", // hora Colombia
+  date: "2026-09-04T20:00:00-05:00", // hora Colombia
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

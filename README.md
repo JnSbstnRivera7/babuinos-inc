@@ -38,7 +38,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 **Arquitectura por secciones** (no una sola landing):
 
-- **Home** = entrada: intro scroll-reveal (el logo descubre el wallpaper fijo de selva) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**.
+- **Home** = SOLO la entrada: intro scroll-reveal (el logo descubre el wallpaper fijo) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**. Nada de catálogo: es una puerta, no una vitrina. El `<h1>` va en `sr-only` porque el título visual es el logo.
 - **`/tienda`** (PLP): grid de producto. **Básicas / Estampadas visible en la barra** con conteos, segmentado Todos/Hombre/Mujer, y **Color** en el panel glass (dropdown en PC / bottom-sheet en móvil). Siempre arranca desde arriba.
 - **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer**, **flechas y deslizar con el dedo**, y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con". Entrar por la línea Mujer mantiene el modelo mujer en la ficha (`?g=`, leído con `useSyncExternalStore` para no perder el prerender).
 - **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist).
@@ -46,12 +46,27 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 **Transversal:**
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
-- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`).
+- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Topa el stock de cada talla**: `add()` devuelve `false` al llegar al máximo, avisa por toast y el `+` se apaga. Cada línea guarda su `max`.
 - **Globales en toda la página:** reproductor "Babuinos Radio" (botón mini que abre al clic), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
 - **Efectos:** **wallpaper fijo art-directed** (mural BABUINOS INC sobre el skyline — **vertical en móvil / horizontal en escritorio** vía `<picture>`, se descarga solo la que aplica), lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios.
+
+## 🔎 SEO y accesibilidad
+
+Estado tras la [auditoría del 4-ago](AUDITORIA-UX.md):
+
+- **`sitemap.xml`** (`src/app/sitemap.ts`, 21 URLs: estáticas + las 15 fichas) y **`robots.txt`** (`robots.ts`, bloquea `/admin` y `/api/`, referencia el sitemap).
+- **`schema.org/Product`** en cada ficha (`producto/[slug]/page.tsx`): nombre, marca, color, material, fotos, tallas disponibles y `availability`. **Sin precio no se declara oferta** — no se inventa lo que no hay.
+- **Jerarquía de encabezados** correcta: `<h1>` en el home y en cada página; en `/tienda` un `<h2>` en `sr-only` describe el filtro activo para no saltar de `h1` a los `h3` de las piezas.
+- **Página 404 propia** (`not-found.tsx`) con marca y salida a la tienda.
+- **Contraste AA** verificado midiendo el color compuesto sobre el fondo real. Regla práctica: nada de texto por debajo de **12 px** ni opacidades bajo **`/70`** para contenido (los estados `disabled` sí pueden, están exentos).
+- **Áreas de toque ≥ 44 px** en todo control. Para enlaces de texto se usa `inline-flex min-h-11 items-center` en vez de agrandar la letra.
+- **`:focus-visible` global** en `globals.css` (dorado; tinta sobre superficies claras). Solo se dispara con teclado, no al hacer clic.
+- **Toast con `aria-live="polite"`**: la región vive siempre en el DOM, si se montara con el mensaje el lector de pantalla no lo alcanzaría a anunciar.
+- **Formularios con `<label>` visible** (checkout y Club) + `autoComplete` para que el sistema autocomplete.
+- **Deep links** `?tipo=basica` · `?tipo=estampada` · `?genero=hombre|mujer`, leídos en `tienda/page.tsx` y usados por el footer y el sitemap.
 
 ## ⚡ Rendimiento en móvil
 
@@ -141,11 +156,12 @@ Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy 
 src/
   app/         layout (globales: MusicPlayer, WhatsAppFloat, InstallPrompt), page (Home),
                tienda/, producto/[slug]/, nosotros/, club/, favoritos/, admin/,
-               sacos|medias|accesorios/ (Muy pronto), manifest.ts,
+               sacos|medias|accesorios/ (Muy pronto), not-found (404 propia),
+               manifest.ts, sitemap.ts, robots.ts,
                api/{checkout,waitlist,admin/login,admin/logout}, icon.png
   components/
     sections/  ScrollExpansionHero, GeneroSplit, DropCountdown, Story, Newsletter
-               (sin usar: Destacados, Lookbook, BaboonStrip, FeaturesStrip)
+               (Destacados: listo pero fuera del home por decisión de marca)
     tienda/    TiendaClient (PLP + barra de tipo + panel de filtros)
     producto/  ProductDetail (PDP), ProductCard
     favoritos/ FavoritosClient
@@ -162,8 +178,10 @@ public/        brand/ (logos, baboon.webp [máscara], genero/{hombre,mujer}.svg,
 scripts/       models.mjs · models_convert.py · models_grid.py · ingest_camisas.py
 ```
 
-**`Destacados` está construido y sin usar** — el home hoy no muestra ningún producto. Enchufarlo es
-uno de los pendientes de conversión (ver [AUDITORIA-UX.md](AUDITORIA-UX.md#31-el-home-no-vende-nada)).
+`Lookbook`, `BaboonStrip`, `FeaturesStrip` y `AdminChat` se borraron el 4-ago. **`Destacados`** (la
+vitrina "Lo más buscado") se conserva a propósito: se probó en el home ese mismo día y Juan la quitó
+—quiere el home como puerta, no como catálogo—, así que queda lista para volver con una línea en
+`Experience.tsx` si cambia de idea.
 
 ## 📸 Fotos de modelo
 
@@ -218,7 +236,7 @@ en partes iguales. Otra disposición: `--grid 2x3`.
 | --- | --- |
 | **[PENDIENTES.md](PENDIENTES.md)** | Checklist accionable. Empieza acá: lo que solo Juan puede hacer está arriba. |
 | **[ROADMAP.md](ROADMAP.md)** | Qué está hecho y qué sigue, por fases. |
-| **[AUDITORIA-UX.md](AUDITORIA-UX.md)** | Auditoría de UI/UX del 4-ago con mediciones reales (contraste, áreas de toque, SEO, enlaces muertos). |
+| **[AUDITORIA-UX.md](AUDITORIA-UX.md)** | Auditoría de UI/UX del 4-ago con mediciones reales y el antes/después de cada arreglo. Ya está **aplicada**; sirve como registro de qué se midió y por qué se cambió. |
 | `CREDENCIALES.local.md` | Tokens y claves. **Local, nunca se sube.** |
 
 ## ⚠️ Gotchas que cuestan tiempo
@@ -228,6 +246,10 @@ en partes iguales. Otra disposición: `--grid 2x3`.
 - **`min-w-0` es obligatorio** en cadenas grid→flex cuando algo debe poder deslizarse: sin él, `min-width:auto` ignora el `overflow-x-auto` y el contenido estira al contenedor. Fue la causa de dos de los tres cortes de responsive.
 - **`useSearchParams` rompe el prerender** de las fichas (obliga a Suspense y las deja renderizando en cliente). Para leer query params sin perder el HTML estático: `useSyncExternalStore`.
 - **Las láminas de fotos se clasifican por proporción, no por nombre** — el sufijo está invertido entre las dos carpetas de `MATERIAL/Camisas`.
+- **`place-items-center` en un grid dimensiona al hijo por su `max-content`**, así que un `max-w-2xl` adentro desborda en celular en vez de encogerse. Se arregla con `grid-cols-1` (= `minmax(0,1fr)`). Era el bug de `/club`.
+- **Frente vs espalda en las láminas no se puede deducir.** Se probó por cobertura de tinta y por profundidad del escote: en prendas negras o lavadas la sombra de la tela pesa más que el estampado. Va en la tabla `ESPALDA_IZQ`, revisada a ojo.
+- **El medidor de contraste da falsos positivos con `background-clip: text`** (el degradado dorado de `.shine-gold`): su `color` es transparente a propósito, así que sale 1.0:1. Ignorarlo.
+- **Al medir áreas de toque, dejar 1 px de margen**: los altos fraccionarios (43.98) se muestran como 44 pero fallan una comparación estricta `< 44`.
 
 ---
 
