@@ -1,11 +1,15 @@
 # 🦍 Babuinos Inc — Streetwear Cult
 
-> _Selva de cemento, actitud de explorador._
-> Tienda y landing **inmersiva** de Babuinos Inc — streetwear oversize desde Bogotá. Colección Fundadores 2026.
+> _Del asfalto de Tábogo para el mundo._
+> Tienda **inmersiva** de Babuinos Inc — streetwear oversize diseñado a 2.600 m.
 
 - 🌐 **En vivo:** https://babuinos-inc.vercel.app
 - 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
 - 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
+
+**Estado:** 15 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
+**[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
 ---
 
@@ -13,13 +17,30 @@
 
 Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": la jungla tomándose la ciudad. La página traduce eso en una experiencia inmersiva — la selva se **revela con el scroll** y queda como **fondo fijo** de toda la tienda — con un look editorial/streetwear muy comercial.
 
+**Tábogo** es el nombre de calle de Bogotá en voz de marca; todo el copy vive en `src/lib/brand.ts`. El nombre real se usa donde el cliente lo necesita literal (envíos, línea legal, keywords de SEO).
+
+## 👕 El catálogo
+
+Dos líneas, definidas en `src/lib/products.ts` (fuente única):
+
+| Línea | Piezas | Qué es |
+| --- | --- | --- |
+| **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
+| **Colección Fundadores** | 10 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid. |
+
+El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
+
+Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMOS GRANDES_ (la espalda de Rootwailer lo escribe completo), y **Guns & Roses viene en dos cortes** — oversize en hombre, crop en mujer.
+
+**Sin precios en la web** por decisión de marca: precio, pago y envío se coordinan por WhatsApp. El campo `price` existe por si algún día se activan.
+
 ## 🧩 Arquitectura y características
 
 **Arquitectura por secciones** (no una sola landing):
 
 - **Home** = entrada: intro scroll-reveal (el logo descubre el wallpaper fijo de selva) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**.
-- **`/tienda`** (PLP): grid de producto con **filtros en panel transparente (glass)** — dropdown en PC / bottom-sheet en móvil — barra slim con segmentado Todos/Hombre/Mujer + chips de filtros activos. Siempre arranca desde arriba.
-- **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer** y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con".
+- **`/tienda`** (PLP): grid de producto. **Básicas / Estampadas visible en la barra** con conteos, segmentado Todos/Hombre/Mujer, y **Color** en el panel glass (dropdown en PC / bottom-sheet en móvil). Siempre arranca desde arriba.
+- **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer**, **flechas y deslizar con el dedo**, y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con". Entrar por la línea Mujer mantiene el modelo mujer en la ficha (`?g=`, leído con `useSyncExternalStore` para no perder el prerender).
 - **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist).
 
 **Transversal:**
@@ -30,7 +51,20 @@ Babuinos Inc es una marca de ropa oversize con identidad de "selva de cemento": 
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
-- **Efectos:** **wallpaper fijo art-directed** (foto de marca con modelos — **vertical en móvil / horizontal en escritorio** vía `<picture>`, se descarga solo la que aplica), lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios. **Mobile-first**, `prefers-reduced-motion`, taps sin delay, scroll suave (Lenis) solo en desktop, blur del hero desactivado en móvil, música ~96 kbps.
+- **Efectos:** **wallpaper fijo art-directed** (mural BABUINOS INC sobre el skyline — **vertical en móvil / horizontal en escritorio** vía `<picture>`, se descarga solo la que aplica), lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios.
+
+## ⚡ Rendimiento en móvil
+
+El home pasó de **3.8 MB a 1.19 MB**. Lo que lo logró, por si se quiere revertir algo:
+
+- **La música no autoarranca en celular.** Un tema son ~2.5 MB y arrancarlo en el primer toque le robaba el ancho de banda a la navegación — el tap a Hombre/Mujer parecía no responder. En escritorio sigue arrancando sola.
+- **Intro estática en celular** (y con `prefers-reduced-motion`): la versión animada recalculaba 7 valores por cada frame de scroll. De paso el hero pasó de 135vh a una pantalla, así que las puertas quedan a un desliz.
+- **Adornos fuera en celular:** `PageVines` no se renderiza (8 SVG de ~87 hojas cada uno) y `CssLeaves` tampoco. Ocultarlos por CSS mataba la animación pero el markup seguía viajando.
+- `baboon.png` 174 KB → `baboon.webp` **18 KB** (la máscara CSS solo usa el alfa).
+- Logo con `sizes`: pedía un render de 3840 px en un celular.
+- Lenis (scroll suave) apagado en táctil · `touch-action: manipulation` · música a 96 kbps.
+
+Lo que **queda** por hacer: framer-motion son 222 KB y lo usan 7 componentes incluido el Navbar, así que está en todas las páginas.
 
 ## 🛠️ Stack
 
@@ -87,7 +121,13 @@ create table public.waitlist (
 
 ## ☁️ Deploy (Vercel)
 
-Desplegado en https://babuinos-inc.vercel.app (repo conectado → auto-deploy en cada push). Env vars configuradas en el proyecto. Framework: Next.js.
+Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy en cada push a `main`**. Env vars configuradas en el proyecto. Framework: Next.js.
+
+> ⚠️ **El `git push` normal falla con 403.** El `gh` CLI y el credential helper de la máquina de trabajo están autenticados con la cuenta de **empresa** (`JnSbstnRivera`, sin el 7), no con la personal `JnSbstnRivera7`. Hay que usar el PAT personal de `CREDENCIALES.local.md` como header Basic — meterlo en la URL falla con "Could not resolve host". El comando exacto está en las notas técnicas de [PENDIENTES.md](PENDIENTES.md).
+>
+> Después del push, **verificar que el deploy corresponda al commit** (no basta con que diga READY): comparar `meta.githubCommitSha` en `GET /v6/deployments?projectId=babuinos-inc&limit=1`.
+>
+> En el celular, **cerrar y reabrir la PWA** para bajar la versión nueva (service worker `babuinos-v4`).
 
 ## 🎨 Marca
 
@@ -104,20 +144,26 @@ src/
                sacos|medias|accesorios/ (Muy pronto), manifest.ts,
                api/{checkout,waitlist,admin/login,admin/logout}, icon.png
   components/
-    sections/  ScrollExpansionHero, GeneroSplit, DropCountdown, Destacados, Story, Newsletter, FeaturesStrip
-    tienda/    TiendaClient (PLP + panel de filtros)
+    sections/  ScrollExpansionHero, GeneroSplit, DropCountdown, Story, Newsletter
+               (sin usar: Destacados, Lookbook, BaboonStrip, FeaturesStrip)
+    tienda/    TiendaClient (PLP + barra de tipo + panel de filtros)
     producto/  ProductDetail (PDP), ProductCard
     favoritos/ FavoritosClient
     layout/    Navbar, Footer, Shell (marco de páginas internas)
     cart/      CartDrawer        admin/  AdminLogin, AdminCharts
-    fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, MusicPlayer, WhatsAppFloat, InstallPrompt, SmoothScroll
+    fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, MusicPlayer, WhatsAppFloat,
+               InstallPrompt, SmoothScroll, Reveal
     ui/        Logo, BaboonMark, GeneroMark, Icons, SocialButtons, Toast
-  lib/         products, store, wishlist, theme, whatsapp, supabase, toast, scroll, utils
-public/        brand/ (logos, genero/{hombre,mujer}.svg, products/ [prenda sola],
+  lib/         products, brand (copy), store, wishlist, theme, whatsapp, supabase, toast, scroll, utils
+public/        brand/ (logos, baboon.webp [máscara], genero/{hombre,mujer}.svg,
+               products/<slug>-{espalda,frente}.webp [prenda sola],
                models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
                jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/, og.png, sw.js
-scripts/       models.mjs + models_convert.py (normalizan las fotos de modelo)
+scripts/       models.mjs · models_convert.py · models_grid.py · ingest_camisas.py
 ```
+
+**`Destacados` está construido y sin usar** — el home hoy no muestra ningún producto. Enchufarlo es
+uno de los pendientes de conversión (ver [AUDITORIA-UX.md](AUDITORIA-UX.md#31-el-home-no-vende-nada)).
 
 ## 📸 Fotos de modelo
 
@@ -166,9 +212,22 @@ en partes iguales. Otra disposición: `--grid 2x3`.
 > Motor: **Pillow** (`py -m pip install pillow`), que es el que respeta la altura impar 1125.
 > Sin Pillow cae a `ffmpeg` y la altura sale 1124 — avisa al correr.
 
-## 🗺️ Roadmap
+## 📚 Documentación
 
-Ver **[ROADMAP.md](ROADMAP.md)**.
+| Documento | Para qué |
+| --- | --- |
+| **[PENDIENTES.md](PENDIENTES.md)** | Checklist accionable. Empieza acá: lo que solo Juan puede hacer está arriba. |
+| **[ROADMAP.md](ROADMAP.md)** | Qué está hecho y qué sigue, por fases. |
+| **[AUDITORIA-UX.md](AUDITORIA-UX.md)** | Auditoría de UI/UX del 4-ago con mediciones reales (contraste, áreas de toque, SEO, enlaces muertos). |
+| `CREDENCIALES.local.md` | Tokens y claves. **Local, nunca se sube.** |
+
+## ⚠️ Gotchas que cuestan tiempo
+
+- **Next.js 16 no es el que conoces.** Turbopack por defecto, request APIs async, `middleware` → `proxy`. Los docs offline están en `node_modules/next/dist/docs/` (ver `AGENTS.md`).
+- **El preview headless cuelga el home** por las animaciones perpetuas: verificar por navegación y DOM, no por screenshot.
+- **`min-w-0` es obligatorio** en cadenas grid→flex cuando algo debe poder deslizarse: sin él, `min-width:auto` ignora el `overflow-x-auto` y el contenido estira al contenedor. Fue la causa de dos de los tres cortes de responsive.
+- **`useSearchParams` rompe el prerender** de las fichas (obliga a Suspense y las deja renderizando en cliente). Para leer query params sin perder el HTML estático: `useSyncExternalStore`.
+- **Las láminas de fotos se clasifican por proporción, no por nombre** — el sufijo está invertido entre las dos carpetas de `MATERIAL/Camisas`.
 
 ---
 
