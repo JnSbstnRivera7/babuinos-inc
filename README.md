@@ -116,7 +116,55 @@ src/
 public/        brand/ (logos, genero/{hombre,mujer}.svg, products/ [prenda sola],
                models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
                jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/, og.png, sw.js
+scripts/       models.mjs + models_convert.py (normalizan las fotos de modelo)
 ```
+
+## 📸 Fotos de modelo
+
+Las fotos con la camisa puesta se normalizan con un script, no a mano:
+
+```bash
+npm run models
+```
+
+Lee `MATERIAL/models-in/` y deja cada foto en `public/brand/models/<slug>/<genero>-<angulo>.webp`
+a **900×1125 (4:5), WebP, sobre fondo crema `#ECEAE6`**, sin canal alfa.
+
+- **Nombra los archivos** `<Pieza> - <Género> <Ángulo>.png` — p. ej. `Negro Oro - Mujer Espalda.png`.
+  Ignora acentos, mayúsculas y separadores, y entiende sinónimos (`frente`/`front`, `male`, `back`…).
+- **Cada pieza necesita 6:** hombre y mujer × frontal, lateral, espalda. El script avisa cuál falta.
+- Opciones: `-- <carpeta>` (otra entrada) · `--dry-run` (simular) · `--force` (rehacer las que ya existen).
+- **Pieza nueva:** agrégala a `SLUG_ALIASES` en `scripts/models.mjs` y a `PRODUCTS` en
+  `src/lib/products.ts` con `models: modelSet("<slug>")`.
+
+### Ingesta de una colección completa
+
+Para cargar una colección entera desde láminas (lo que se usó el 4-ago con las 15 piezas):
+
+```bash
+py scripts/ingest_camisas.py --dry-run   # revisa qué haría
+py scripts/ingest_camisas.py             # procesa
+```
+
+Lee `MATERIAL/Camisas/{BASICAS,Coleccion Fundadores}` donde cada pieza trae **dos** archivos y
+los clasifica **por proporción**, no por nombre: `~1.25` = lámina de modelos 3×2, `~1.78` = prenda
+sola (espalda + frente). El mapa `numero → slug` y la tabla `ESPALDA_IZQ` (qué láminas traen la
+espalda a la izquierda) están arriba del script.
+
+### Si las 6 fotos vienen en una sola lámina
+
+```bash
+npm run models -- --grid
+```
+
+Para la cuadrícula típica de **3 columnas** (frontal · lateral · espalda) × **2 filas**
+(hombre · mujer). El archivo solo tiene que nombrar la pieza (`Negro Oro.png`) y sale
+partido en las 6. Los cortes se buscan por las **calles blancas** entre fotos, no en partes
+iguales, así que aguanta márgenes desiguales; si no encuentra la cuadrícula avisa y divide
+en partes iguales. Otra disposición: `--grid 2x3`.
+
+> Motor: **Pillow** (`py -m pip install pillow`), que es el que respeta la altura impar 1125.
+> Sin Pillow cae a `ffmpeg` y la altura sale 1124 — avisa al correr.
 
 ## 🗺️ Roadmap
 
