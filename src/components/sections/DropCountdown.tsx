@@ -117,7 +117,7 @@ export function DropCountdown() {
                       <div className="font-condensed text-[clamp(1.8rem,7vw,3rem)] leading-none text-cream tabular-nums">
                         {u.v}
                       </div>
-                      <div className="font-mono mt-1 text-[0.52rem] font-bold tracking-[0.14em] text-cream/45 uppercase">
+                      <div className="font-mono mt-1 text-[0.62rem] font-bold tracking-[0.14em] text-cream/70 uppercase">
                         {u.label}
                       </div>
                     </div>

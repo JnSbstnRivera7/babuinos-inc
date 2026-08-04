@@ -25,9 +25,15 @@ const GENERO_SEG: { key: Genero | "all"; label: string }[] = [
   { key: "mujer", label: "Mujer" },
 ];
 
-export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero | "all" }) {
+export function TiendaClient({
+  initialGenero = "all",
+  initialTipo = "all",
+}: {
+  initialGenero?: Genero | "all";
+  initialTipo?: Category | "all";
+}) {
   const [genero, setGenero] = useState<Genero | "all">(initialGenero);
-  const [category, setCategory] = useState<Category | "all">("all");
+  const [category, setCategory] = useState<Category | "all">(initialTipo);
   const [color, setColor] = useState<string | "all">("all");
   const [open, setOpen] = useState(false);
 
@@ -92,7 +98,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
             onClick={() => pickCategory(c.key)}
             aria-pressed={category === c.key}
             className={cn(
-              "font-condensed rounded-full border px-5 py-2 text-[1.05rem] leading-none uppercase transition",
+              "font-condensed inline-flex min-h-11 items-center rounded-full border px-5 text-[1.05rem] leading-none uppercase transition",
               category === c.key
                 ? "border-transparent bg-[var(--accent)] text-[var(--accent-ink)]"
                 : "border-cream/25 text-cream/70 hover:border-cream hover:text-cream",
@@ -116,7 +122,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
               key={g.key}
               onClick={() => pickGenero(g.key)}
               className={cn(
-                "font-mono inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.64rem] font-bold tracking-[0.06em] uppercase transition sm:px-3",
+                "font-mono inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-3 text-[0.68rem] font-bold tracking-[0.06em] uppercase transition sm:px-4",
                 genero === g.key ? "bg-cream text-ink" : "text-cream/60 hover:text-cream",
               )}
             >
@@ -138,7 +144,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
               aria-expanded={open}
               aria-label="Filtros"
               className={cn(
-                "font-mono inline-flex items-center gap-2 rounded-full border px-3 py-2 text-[0.66rem] font-bold tracking-[0.1em] uppercase transition sm:px-4",
+                "font-mono inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full border px-3 text-[0.66rem] font-bold tracking-[0.1em] uppercase transition sm:px-4",
                 activeCount
                   ? "border-[var(--accent)] text-[var(--accent)]"
                   : "border-cream/25 text-cream/80 hover:border-cream",
@@ -234,19 +240,31 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
           )}
           <button
             onClick={clearAll}
-            className="font-mono text-[0.62rem] font-bold tracking-[0.1em] text-cream/45 uppercase transition hover:text-cream"
+            className="font-mono min-h-11 text-[0.68rem] font-bold tracking-[0.1em] text-cream/70 uppercase transition hover:text-cream"
           >
             Limpiar todo
           </button>
         </div>
       )}
 
-      {/* grid — la ropa aparece de inmediato */}
+      {/* grid — la ropa aparece de inmediato.
+          El h2 cierra el salto h1→h3: los nombres de las piezas son h3 y antes
+          no había ningún h2 en medio. */}
       {list.length > 0 ? (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map((p) => (
-            <ProductCard key={p.id} product={p} viewGenero={genero} />
-          ))}
+        <div className="mt-8">
+          <h2 className="sr-only">
+            {category === "basica"
+              ? "Básicas"
+              : category === "estampada"
+                ? "Estampadas"
+                : "Todas las piezas"}
+            {genero !== "all" && genero !== "unisex" ? ` — línea ${genero}` : ""}
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((p) => (
+              <ProductCard key={p.id} product={p} viewGenero={genero} />
+            ))}
+          </div>
         </div>
       ) : (
         <div className="mt-16 text-center">
@@ -288,7 +306,7 @@ export function TiendaClient({ initialGenero = "all" }: { initialGenero?: Genero
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="mb-5 last:mb-0">
-      <p className="font-mono mb-2.5 text-[0.58rem] font-bold tracking-[0.16em] text-cream/45 uppercase">
+      <p className="font-mono mb-2.5 text-[0.64rem] font-bold tracking-[0.16em] text-cream/70 uppercase">
         {label}
       </p>
       <div className="flex flex-wrap gap-2">{children}</div>

@@ -151,7 +151,10 @@ export function ProductDetail({ product }: { product: Product }) {
 
   function addToBag() {
     if (!available || !requireSize()) return;
-    add(product, size);
+    if (!add(product, size)) {
+      showToast(`Talla ${size}: no queda más stock`);
+      return;
+    }
     showToast(`${product.name} · ${size} a la mochila`);
     openCart();
   }
@@ -170,10 +173,10 @@ export function ProductDetail({ product }: { product: Product }) {
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-8 md:px-8 md:pt-12">
       {/* breadcrumb */}
-      <nav className="font-mono mb-8 flex items-center gap-2 text-[0.62rem] tracking-[0.1em] text-cream/45 uppercase">
-        <Link href="/" className="hover:text-cream">Inicio</Link>
+      <nav className="font-mono mb-8 flex items-center gap-2 text-[0.68rem] tracking-[0.1em] text-cream/70 uppercase">
+        <Link href="/" className="inline-flex min-h-11 items-center hover:text-cream">Inicio</Link>
         <span>/</span>
-        <Link href="/tienda" className="hover:text-cream">Tienda</Link>
+        <Link href="/tienda" className="inline-flex min-h-11 items-center hover:text-cream">Tienda</Link>
         <span>/</span>
         <span className="text-cream/80">{product.name}</span>
       </nav>
@@ -185,7 +188,7 @@ export function ProductDetail({ product }: { product: Product }) {
           {/* toggle: ver la camisa en modelo Hombre / Mujer */}
           {hasModels && (
             <div className="mb-3 inline-flex items-center gap-2">
-              <span className="font-mono text-[0.58rem] font-bold tracking-[0.12em] text-cream/45 uppercase">
+              <span className="font-mono text-[0.64rem] font-bold tracking-[0.12em] text-cream/70 uppercase">
                 Ver en
               </span>
               <div className="inline-flex rounded-full border border-cream/15 bg-white/5 p-1">
@@ -195,7 +198,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     onClick={() => setPickedGender(g)}
                     aria-pressed={modelGender === g}
                     className={cn(
-                      "font-mono flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.62rem] font-bold tracking-[0.1em] uppercase transition",
+                      "font-mono flex min-h-11 items-center gap-1.5 rounded-full px-4 text-[0.68rem] font-bold tracking-[0.1em] uppercase transition",
                       modelGender === g ? "bg-cream text-ink" : "text-cream/60 hover:text-cream",
                     )}
                   >
@@ -289,7 +292,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     type="button"
                     onClick={goPrev}
                     aria-label="Foto anterior"
-                    className="absolute left-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-xl leading-none text-cream backdrop-blur-sm transition hover:bg-ink/80 active:scale-95"
+                    className="absolute left-2 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-xl leading-none text-cream backdrop-blur-sm transition hover:bg-ink/80 active:scale-95"
                   >
                     ‹
                   </button>
@@ -297,7 +300,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     type="button"
                     onClick={goNext}
                     aria-label="Foto siguiente"
-                    className="absolute right-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-xl leading-none text-cream backdrop-blur-sm transition hover:bg-ink/80 active:scale-95"
+                    className="absolute right-2 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-xl leading-none text-cream backdrop-blur-sm transition hover:bg-ink/80 active:scale-95"
                   >
                     ›
                   </button>
@@ -358,7 +361,7 @@ export function ProductDetail({ product }: { product: Product }) {
               </span>
               <button
                 onClick={() => setGuide(true)}
-                className="font-mono text-[0.62rem] font-bold tracking-[0.08em] text-[var(--accent)] uppercase underline-offset-4 hover:underline"
+                className="font-mono inline-flex min-h-11 items-center text-[0.68rem] font-bold tracking-[0.08em] text-[var(--accent)] uppercase underline-offset-4 hover:underline"
               >
                 Guía de tallas
               </button>
@@ -387,7 +390,7 @@ export function ProductDetail({ product }: { product: Product }) {
               })}
             </div>
             {size && (
-              <p className="font-mono mt-2 text-[0.62rem] tracking-[0.08em] text-cream/45 uppercase">
+              <p className="font-mono mt-2 text-[0.68rem] tracking-[0.08em] text-cream/70 uppercase">
                 {(product.sizes.find((s) => s.size === size)?.stock ?? 0) <= 3
                   ? "Últimas unidades en esta talla"
                   : "Disponible"}

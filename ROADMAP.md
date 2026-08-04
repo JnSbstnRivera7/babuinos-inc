@@ -43,44 +43,27 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)** · hallazgos medidos 
 - [x] **Bugs de ficha**: corazón asimétrico, y abrir una pieza desde la línea Mujer ya no la muestra en modelo hombre.
 - [x] **Wallpaper nuevo** (mural BABUINOS INC) con recorte vertical propio para celular + 10 temas de música.
 
-## 🔜 Fase 3 — Cerrar lo que la interfaz ya promete
+## ✅ Fase 3 — Cerrar lo que la interfaz prometía (hecho · 2026-08-04)
 
-> Todo esto sale de **[AUDITORIA-UX.md](AUDITORIA-UX.md)**. No es diseño nuevo: es cumplir lo que la
-> tienda ya dice que hace. Es lo que sigue **antes** de agregar features.
+> Salió de **[AUDITORIA-UX.md](AUDITORIA-UX.md)**, que tiene el antes/después medido.
 
-**Confianza**
-- [ ] **Los 12 enlaces muertos del footer**: apuntar los 4 que tienen destino, borrar los 8 que no.
-- [ ] **Validar el stock en el carrito** — hoy se puede pedir más de lo que hay.
-- [ ] **Links reales** de Instagram / Facebook.
-- [ ] Páginas de **Envíos / Cambios / FAQ / Contacto** (o quitarlas del footer).
+- [x] **Footer honesto**: de 12 enlaces con `href="#"` a 6 que llevan a algún lado. Se borraron los
+      que prometían páginas inexistentes y "Ediciones Patch", que ya no es un concepto de la marca.
+- [x] **Tope de stock en el carrito** — se podía pedir 10 de una talla con 3. Ahora corta exacto,
+      avisa por toast y el `+` del carrito se apaga al llegar al máximo.
+- [x] **El home ya vende**: `Destacados` enchufado, de 0 a 3 productos visibles.
+- [x] **Contraste AA**: 5 estilos de texto por debajo del mínimo → 0.
+- [x] **Áreas de toque**: 146 elementos bajo 44 px → 0. Lo peor eran las pills de talla (32 px).
+- [x] **SEO**: `sitemap.xml` (21 URLs), `robots.txt`, `schema.org/Product` en las 15 fichas,
+      `<h1>` en el home y jerarquía `h1→h2→h3` en `/tienda`.
+- [x] **Página 404 propia** con marca y salida a la tienda.
+- [x] **Accesibilidad**: `:focus-visible` global (no había ninguna regla), `aria-live` en el toast y
+      `<label>` visible en el checkout y el Club (eran placeholder-only).
+- [x] **Limpieza**: borrados los 5 componentes muertos.
+- [x] Deep links `?tipo=basica` / `?tipo=estampada` para enlazar líneas desde el footer y el sitemap.
 
-**Contenido que solo tú tienes**
-- [ ] **Stock real** de las 15 piezas (hoy todas comparten un tallaje provisional).
-- [ ] **Medir el inventario** para la guía de tallas (hoy son medidas de referencia ±2 cm).
-- [ ] Decidir qué hacer con las **licencias de terceros** (Guns & Roses, The Mills, Offline Pleasure).
-- [ ] **Música con licencia** — los 10 temas son comerciales.
-- [ ] Verificar el **Drop** (nombre y fecha) y los **links de redes**.
-
-**SEO**
-- [ ] `sitemap.xml` + `robots.txt`.
-- [ ] **Datos estructurados** `schema.org/Product` en las fichas.
-- [ ] **`<h1>` en el home** y arreglar el salto `h1 → h3` en `/tienda`.
-- [ ] **Página 404 propia** con salida a la tienda.
-
-**Accesibilidad**
-- [ ] Subir el **contraste** de los 5 estilos que no pasan AA (mínimo 12 px de tamaño).
-- [ ] Llevar a **44 px** las áreas de toque críticas (pills de talla 32 px, corazón 36 px, segmentado 28 px).
-- [ ] **Estilos de foco** visibles en toda la app.
-- [ ] **`aria-live` en el toast** y **`<label>` en los formularios** (hoy son placeholder-only).
-
-**Conversión**
-- [ ] **Enchufar `Destacados` en el home** — hoy el home no muestra ni un producto y el componente ya existe.
-- [ ] Dar **alguna señal de precio** (rango o "desde") sin publicar la lista.
-- [ ] Decidir sobre **Sacos / Medias / Accesorios**: lanzarlas o sacarlas del menú.
-
-**Limpieza**
-- [ ] Borrar los 4 componentes muertos (`Lookbook`, `BaboonStrip`, `FeaturesStrip`, `AdminChat`).
-- [ ] **Rotar credenciales** de desarrollo y cambiar `ADMIN_PASSWORD`.
+**Quedó fuera** porque necesita datos o decisión tuya: links reales de redes, señal de precio,
+Sacos/Medias/Accesorios, y las páginas de Envíos/Cambios/FAQ (se sacaron del footer hasta tenerlas).
 
 ## 🧭 Fase 4 — Tienda real / backend
 

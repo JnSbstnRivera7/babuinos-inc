@@ -10,6 +10,37 @@ Accionables en **[PENDIENTES.md](PENDIENTES.md)** · plan por fases en **[ROADMA
 
 ---
 
+## ✅ Estado: aplicado el mismo 4-ago
+
+Casi todo lo de esta auditoría **ya está corregido**. Verificación posterior a los arreglos:
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Enlaces muertos en el footer | **12** | **0** |
+| Tope de stock en el carrito | sin validar | corta exacto en el stock de la talla |
+| Productos visibles en el home | **0** | **3** |
+| Estilos de texto que fallan AA | **5** | **0** |
+| Áreas de toque bajo 44 px | **146** | **0** |
+| `<h1>` en el home | ninguno | 1 |
+| Jerarquía en `/tienda` | h1 → h3 | h1 → h2 → h3 |
+| `sitemap.xml` / `robots.txt` | no existían | 21 URLs / con Sitemap |
+| Datos estructurados de Producto | ninguno | `schema.org/Product` en las 15 fichas |
+| Página 404 | la cruda de Next | propia, con marca y salida |
+| Estilos de foco | 0 reglas | `:focus-visible` global |
+| `aria-live` en el toast | no | sí (`polite`) |
+| Formularios con `<label>` | 0 | checkout (4) + Club (1) |
+| Componentes muertos | 5 | 0 |
+
+Verificado sobre 24 combinaciones de ruta × ancho (320 / 375 / 414 px): **cero desbordes
+horizontales** y **cero tap targets bajo 44 px**.
+
+**Sigue pendiente** (necesita datos o decisión de Juan): links reales de redes, señal de precio,
+Sacos/Medias/Accesorios, stock real, medidas del inventario, licencias de terceros y la música.
+
+El detalle de abajo se conserva como registro de qué se midió y por qué se cambió.
+
+---
+
 ## Resumen
 
 La tienda **funciona y se ve bien**. La arquitectura (Home → PLP → PDP), la galería con modelo, el

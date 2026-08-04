@@ -81,6 +81,22 @@ select,
 label {
   touch-action: manipulation;
 }
+
+/* Foco visible en TODA la app. No había ninguna regla, así que navegar con
+   teclado era a ciegas. :focus-visible solo se dispara con teclado, nunca al
+   hacer clic con el mouse, así que no ensucia el diseño. */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Sobre superficies claras (tarjetas, carrito, modales) el dorado se pierde. */
+.bg-cream :focus-visible,
+.bg-white :focus-visible,
+article :focus-visible {
+  outline-color: var(--color-ink);
+}
+
 img {
   display: block;
   max-width: 100%;

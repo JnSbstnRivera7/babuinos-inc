@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/layout/Shell";
 import { ProductDetail } from "@/components/producto/ProductDetail";
-import { PRODUCTS, getProduct } from "@/lib/products";
+import { PRODUCTS, getProduct, inStock } from "@/lib/products";
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -22,6 +22,8 @@ export async function generateMetadata({
   };
 }
 
+const BASE = "https://babuinos-inc.vercel.app";
+
 export default async function ProductoPage({
   params,
 }: {
@@ -31,8 +33,42 @@ export default async function ProductoPage({
   const product = getProduct(slug);
   if (!product) notFound();
 
+  /**
+   * schema.org/Product: es lo que hace que Google muestre foto, marca y
+   * disponibilidad en los resultados. Sin precio se declara solo la
+   * disponibilidad — no se inventa una oferta que no existe.
+   */
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.descLong ?? product.desc,
+    sku: product.slug,
+    color: product.colorway,
+    material: product.composicion,
+    brand: { "@type": "Brand", name: "Babuinos Inc" },
+    image: [product.models?.hombre?.frontal, ...product.images]
+      .filter(Boolean)
+      .map((src) => `${BASE}${src}`),
+    offers: {
+      "@type": "Offer",
+      url: `${BASE}/producto/${product.slug}`,
+      availability: inStock(product)
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", name: "Babuinos Inc" },
+    },
+    size: product.sizes.filter((s) => s.stock > 0).map((s) => s.size),
+  };
+
   return (
     <Shell>
+      <script
+        type="application/ld+json"
+        // Contenido propio del catálogo, no entrada de usuario.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ProductDetail product={product} />
     </Shell>
   );

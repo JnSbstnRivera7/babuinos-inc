@@ -164,7 +164,7 @@ export function MusicPlayer() {
               <div className="font-mono truncate text-[0.62rem] font-bold tracking-[0.06em] text-cream">
                 {started && index >= 0 ? TRACKS[index].title : "Babuinos Radio"}
               </div>
-              <div className="font-mono text-[0.5rem] tracking-[0.12em] text-cream/45 uppercase">
+              <div className="font-mono text-[0.6rem] tracking-[0.12em] text-cream/70 uppercase">
                 Toca para la selva
               </div>
             </div>

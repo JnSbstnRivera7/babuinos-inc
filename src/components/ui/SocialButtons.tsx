@@ -29,7 +29,7 @@ export function SocialButtons({
             rel="noopener noreferrer"
             aria-label={label}
             title={label}
-            className="grid h-10 w-10 place-items-center rounded-full border border-cream/15 text-cream/80 transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="grid h-11 w-11 place-items-center rounded-full border border-cream/15 text-cream/80 transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             <Icon className="h-[18px] w-[18px]" />
           </a>

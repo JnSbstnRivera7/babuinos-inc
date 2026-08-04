@@ -41,17 +41,27 @@ export function Newsletter() {
           Drops exclusivos, preventas fundadoras y acceso anticipado a cada nueva expedición.
         </p>
         <form onSubmit={submit} className="mx-auto mt-9 flex max-w-md flex-col gap-3 sm:flex-row">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="tu@correo.com"
-            className="flex-1 rounded-md border border-cream/20 bg-cream/10 px-5 py-3.5 text-cream placeholder:text-cream/35 focus:border-gold focus:outline-none"
-          />
+          <div className="flex-1 text-left">
+            <label
+              htmlFor="club-email"
+              className="font-mono mb-1.5 block text-[0.6rem] font-bold tracking-[0.12em] text-cream/70 uppercase"
+            >
+              Tu correo
+            </label>
+            <input
+              id="club-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="tu@correo.com"
+              className="w-full rounded-md border border-cream/20 bg-cream/10 px-5 py-3.5 text-cream placeholder:text-cream/50 focus:border-gold"
+            />
+          </div>
           <button
             type="submit"
             disabled={loading}
-            className="font-mono rounded-md px-6 py-3.5 text-[0.72rem] font-bold tracking-[0.1em] uppercase transition hover:brightness-95 disabled:opacity-60"
+            className="font-mono min-h-12 rounded-md px-6 text-[0.72rem] font-bold tracking-[0.1em] uppercase transition hover:brightness-95 disabled:opacity-60 sm:mt-[1.6rem]"
             style={{ backgroundColor: "var(--accent)", color: "var(--accent-ink)" }}
           >
             {loading ? "..." : "Entrar →"}

@@ -39,41 +39,13 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 - [ ] **Rotar credenciales** compartidas en desarrollo (GitHub PAT `ghp_…`, token Vercel `vcp_…`,
       service key de Supabase) y **cambiar `ADMIN_PASSWORD`** (env var en Vercel).
 
-## 🟠 Rompe la confianza — arreglar primero
-
-- [ ] **12 enlaces muertos en el footer** (`Footer.tsx:52`, todos `href="#"`). Ninguna de las 8 rutas
-      existe. Detalle en [AUDITORIA-UX.md](AUDITORIA-UX.md#11-doce-enlaces-muertos-en-el-footer).
-      Nota: **"Nuestra Historia" ya existe** (es `/nosotros`) y **"Ediciones Patch" ya no es un
-      concepto de la marca**.
-- [ ] **El carrito no valida el stock.** `store.ts:41` y `:65` suman cantidad sin comparar contra
-      `sizes[].stock` → se puede pedir 10 de una talla que tiene 3. **El más caro de la lista.**
-- [ ] **El home no muestra ni un producto** (0 enlaces a `/producto/`). El componente `Destacados` y
-      el helper `getFeatured()` ya existen y funcionan: solo hay que enchufarlos al flujo.
-
-## 🟡 SEO — la tienda es pública pero invisible
-
-- [ ] **`sitemap.xml`** y **`robots.txt`** (con `src/app/sitemap.ts` / `robots.ts`).
-- [ ] **Datos estructurados `schema.org/Product`** en las fichas (foto, disponibilidad, marca).
-- [ ] **`<h1>` en el home** — hoy no tiene ninguno (2 `<h2>` y cero `<h1>`).
-- [ ] **Salto de jerarquía en `/tienda`**: 1 `<h1>`, **0 `<h2>`**, 15 `<h3>`.
-- [ ] **Página 404 propia** (`src/app/not-found.tsx`) con salida a la tienda.
-
-## 🟢 Accesibilidad — todo medido
-
-- [ ] **Contraste bajo AA en 5 estilos.** Los peores: copyright 10 px **2.10:1**, colorway de la
-      tarjeta 10 px **2.81:1**, descripción de la tarjeta 13 px **3.71:1**. El patrón es opacidad
-      `/25`–`/55` en texto de 10–14 px. Tabla completa en la auditoría.
-- [ ] **Áreas de toque bajo 44 px** (146 elementos). Críticos: pills de talla **32×32**, corazón de
-      favoritos **36×36**, segmentado Hombre/Mujer **28 de alto**, botón de Filtros **42×34**.
-- [ ] **Sin indicador de foco**: cero `:focus-visible` en `globals.css`; solo 4 componentes definen
-      foco. Navegar con teclado es a ciegas.
-- [ ] **`aria-live` en el toast** — hoy un lector de pantalla no sabe que agregaste algo a la mochila.
-- [ ] **`<label>` en los formularios** — checkout (nombre/teléfono/ciudad/nota) y Club son
-      placeholder-only: al escribir desaparece la etiqueta.
-
 ## 🔵 Siguientes builds (necesitan decisión o backend)
 
-- [ ] **Alguna señal de precio** sin publicar la lista (rango por línea, o "desde $X").
+- [ ] **Alguna señal de precio** sin publicar la lista (rango por línea, o "desde $X"). Hoy el
+      cliente no sabe si la camisa vale $60.000 o $300.000 antes de escribir. Es la fricción más
+      grande que queda en el embudo.
+- [ ] **Páginas de Envíos / Cambios / FAQ.** Se sacaron del footer para no prometer en falso; cuando
+      me des tiempos y condiciones reales las escribo y vuelven a enlazarse.
 - [ ] **Sacos / Medias / Accesorios**: lanzarlas o sacarlas del menú (3 de 4 categorías del nav están
       vacías con badge "Pronto").
 - [ ] **Catálogo desde Supabase** (CMS) — resuelve de raíz el pendiente del stock.
@@ -81,7 +53,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 - [ ] **Reseñas / estrellas** con reseñas reales o captura por WhatsApp tras la compra.
 - [ ] **Analítica "lo más visto"** (vistas en Supabase + vista en `/admin`).
 - [ ] **Email del Club** a un proveedor + dominio propio.
-- [ ] Borrar los 4 componentes muertos: `Lookbook`, `BaboonStrip`, `FeaturesStrip`, `AdminChat`.
 - [ ] Sacar **framer-motion** del bundle base (222 KB, en 7 componentes incluido el Navbar).
 
 ---
@@ -99,6 +70,12 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 - [x] **Copy de Tábogo** en una sola fuente (`src/lib/brand.ts`).
 - [x] **Wallpaper nuevo** + 10 temas de música.
 - [x] **Pipeline de fotos** guardado en el repo (`scripts/`).
+- [x] **Auditoría de UI/UX aplicada** (4-ago) — ver [AUDITORIA-UX.md](AUDITORIA-UX.md):
+      footer sin enlaces muertos (12 → 0), tope de stock en el carrito, `Destacados` en el home
+      (0 → 3 productos visibles), contraste AA (5 fallas → 0), áreas de toque (146 bajo 44 px → 0),
+      `sitemap.xml` + `robots.txt` + `schema.org/Product` + 404 propia, `<h1>` en el home y
+      jerarquía de `/tienda`, `:focus-visible` global, `aria-live` en el toast, `<label>` en los
+      formularios, y borrados los 5 componentes muertos.
 
 ---
 

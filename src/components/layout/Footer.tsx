@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { IconTruck, IconRefresh, IconCheck } from "@/components/ui/Icons";
@@ -11,10 +12,29 @@ const TRUST = [
   { Icon: IconCheck, text: "Pago seguro por WhatsApp" },
 ];
 
-const COLS = [
-  { title: "Tienda", links: ["Camisas Oversize", "Ediciones Patch", "Drops Exclusivos", "Guía de Tallas"] },
-  { title: "Info", links: ["Nuestra Historia", "Proceso", "Sostenibilidad", "Prensa"] },
-  { title: "Ayuda", links: ["Envíos y Tiempos", "Cambios", "FAQ", "Contacto"] },
+/**
+ * Solo enlaces que LLEVAN a algún lado. Antes eran 12 con href="#" prometiendo
+ * páginas que no existen (Proceso, Sostenibilidad, Prensa, Ediciones Patch...);
+ * en una tienda en vivo un footer así lee como que no hay nadie detrás.
+ * Cuando existan Envíos/Cambios/FAQ se agregan acá.
+ */
+const COLS: { title: string; links: { label: string; href: string; externo?: boolean }[] }[] = [
+  {
+    title: "Tienda",
+    links: [
+      { label: "Todas las camisas", href: "/tienda" },
+      { label: "Básicas", href: "/tienda?tipo=basica" },
+      { label: "Estampadas", href: "/tienda?tipo=estampada" },
+      { label: "Favoritos", href: "/favoritos" },
+    ],
+  },
+  {
+    title: "Info",
+    links: [
+      { label: "Nuestra historia", href: "/nosotros" },
+      { label: "Club Babuinos", href: "/club" },
+    ],
+  },
 ];
 
 export function Footer() {
@@ -30,28 +50,31 @@ export function Footer() {
         ))}
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-8 border-b border-cream/10 pb-7 md:grid-cols-[2fr_1fr_1fr_1fr]">
+      <div className="mx-auto grid max-w-6xl gap-8 border-b border-cream/10 pb-7 md:grid-cols-[2fr_1fr_1fr]">
         <div>
           <Logo tone="cream" className="h-9 w-auto" />
-          <p className="mt-4 max-w-xs text-[0.85rem] leading-relaxed text-cream/45">
+          <p className="mt-4 max-w-xs text-[0.85rem] leading-relaxed text-cream/75">
             {BRAND.origen}
           </p>
-          <p className="font-mono mt-3 text-[0.6rem] font-bold tracking-[0.16em] text-[var(--accent)]/70 uppercase">
+          <p className="font-mono mt-3 text-[0.68rem] font-bold tracking-[0.16em] text-[var(--accent)] uppercase">
             {BRAND.sello}
           </p>
           <SocialButtons variant="icon" className="mt-5" />
         </div>
         {COLS.map((c) => (
           <div key={c.title}>
-            <h4 className="font-mono mb-4 text-[0.62rem] font-bold tracking-[0.16em] text-gold uppercase">
+            <h4 className="font-mono mb-4 text-[0.68rem] font-bold tracking-[0.16em] text-gold uppercase">
               {c.title}
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-1">
               {c.links.map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-[0.85rem] text-cream/45 transition hover:text-cream">
-                    {l}
-                  </a>
+                <li key={l.label}>
+                  <Link
+                    href={l.href}
+                    className="-mx-2 flex min-h-11 items-center rounded px-2 text-[0.85rem] text-cream/75 transition hover:text-cream"
+                  >
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -59,11 +82,11 @@ export function Footer() {
         ))}
       </div>
       <div className="mx-auto mt-5 flex max-w-6xl flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-[0.62rem] tracking-[0.06em] text-cream/25">
+        <p className="font-mono text-[0.68rem] tracking-[0.06em] text-cream/55">
           © {BRAND.est} {BRAND.nombre}. — {BRAND.ciudadReal}, {BRAND.pais}. Todos los derechos
           reservados.
         </p>
-        <p className="font-mono text-[0.62rem] text-cream/25">Streetwear Cult · Est. 2026</p>
+        <p className="font-mono text-[0.68rem] text-cream/55">Streetwear Cult · Est. {BRAND.est}</p>
       </div>
     </footer>
   );

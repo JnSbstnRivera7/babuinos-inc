@@ -79,7 +79,7 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 md:px-8">
-        <Link href="/" aria-label="Babuinos Inc — inicio" className="flex items-center">
+        <Link href="/" aria-label="Babuinos Inc — inicio" className="flex min-h-11 items-center">
           <Logo tone="cream" priority className="h-9 w-auto md:h-10" />
         </Link>
 
@@ -185,7 +185,7 @@ export function Navbar() {
           <Link
             href="/favoritos"
             aria-label="Favoritos"
-            className="relative grid h-10 w-10 place-items-center rounded-md text-cream/80 transition hover:text-cream"
+            className="relative grid h-11 w-11 place-items-center rounded-md text-cream/80 transition hover:text-cream"
           >
             <IconHeart className="h-[20px] w-[20px]" />
             {wishCount > 0 && (
@@ -198,7 +198,7 @@ export function Navbar() {
           <button
             onClick={open}
             aria-label="Abrir carrito"
-            className="relative flex items-center gap-2 rounded-md px-4 py-2.5 text-[var(--accent-ink)] transition hover:brightness-95"
+            className="relative flex min-h-11 items-center gap-2 rounded-md px-4 text-[var(--accent-ink)] transition hover:brightness-95"
             style={{ backgroundColor: "var(--accent)" }}
           >
             <IconBag className="h-[18px] w-[18px]" />
@@ -210,7 +210,7 @@ export function Navbar() {
           <button
             onClick={() => setMenu((m) => !m)}
             aria-label={menu ? "Cerrar menú" : "Abrir menú"}
-            className="grid h-10 w-10 place-items-center rounded-md text-cream md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-md text-cream md:hidden"
           >
             {menu ? <IconClose className="h-6 w-6" /> : <IconMenu className="h-6 w-6" />}
           </button>

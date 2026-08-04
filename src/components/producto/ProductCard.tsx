@@ -61,7 +61,10 @@ export function ProductCard({
       showToast("Elige una talla primero");
       return;
     }
-    add(product, size);
+    if (!add(product, size)) {
+      showToast(`Talla ${size}: no queda más stock`);
+      return;
+    }
     showToast(`${product.name} · ${size} a la mochila`);
     openCart();
   }
@@ -73,7 +76,7 @@ export function ProductCard({
         onClick={() => toggleWish(product.slug)}
         aria-label={saved ? "Quitar de favoritos" : "Guardar en favoritos"}
         aria-pressed={saved}
-        className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/90 shadow-[0_2px_10px_rgba(30,32,33,.18)] transition hover:scale-110"
+        className="absolute right-2 top-2 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-[0_2px_10px_rgba(30,32,33,.18)] transition hover:scale-110"
       >
         <IconHeart
           className="h-[18px] w-[18px]"
@@ -139,12 +142,14 @@ export function ProductCard({
             {product.name}
           </h3>
         </Link>
-        <p className="mt-1.5 line-clamp-2 text-[0.82rem] leading-relaxed text-ink/55">
+        {/* /55 daba 3.71:1 — es el copy que vende, tiene que leerse */}
+        <p className="mt-1.5 line-clamp-2 text-[0.85rem] leading-relaxed text-ink/75">
           {product.desc}
         </p>
 
         <div className="mt-4 flex items-center justify-between">
-          <span className="font-mono text-[0.6rem] font-bold tracking-[0.12em] text-ink/45 uppercase">
+          {/* /45 daba 2.81:1 a 10px — bajo el mínimo AA de 4.5 */}
+          <span className="font-mono text-[0.68rem] font-bold tracking-[0.12em] text-ink/70 uppercase">
             {product.colorway}
           </span>
           <span className="font-mono inline-flex items-center gap-1.5 rounded-full bg-teal/10 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.1em] text-teal uppercase">
@@ -152,7 +157,8 @@ export function ProductCard({
           </span>
         </div>
 
-        {/* size pills */}
+        {/* size pills — 44px: son el control con el que se decide la compra
+            desde la grilla y estaban en 32, doce por debajo del mínimo */}
         <div className="mt-4 flex flex-wrap gap-1.5">
           {product.sizes.map((s) => {
             const soldOut = s.stock === 0;
@@ -163,8 +169,9 @@ export function ProductCard({
                 disabled={soldOut}
                 onClick={() => setSize(s.size)}
                 aria-pressed={size === s.size}
+                aria-label={`Talla ${s.size}${soldOut ? " — agotada" : ""}`}
                 className={cn(
-                  "font-mono grid h-8 min-w-8 place-items-center rounded-md border px-2 text-[0.7rem] font-bold transition",
+                  "font-mono grid h-11 min-w-11 place-items-center rounded-md border px-2 text-[0.75rem] font-bold transition",
                   soldOut
                     ? "cursor-not-allowed border-ink/10 text-ink/25 line-through"
                     : size === s.size
@@ -182,7 +189,7 @@ export function ProductCard({
           type="button"
           onClick={handleAdd}
           disabled={!available}
-          className="font-mono mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-ink px-5 py-3 text-[0.7rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:-translate-y-0.5 hover:bg-teal active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink/40 disabled:hover:translate-y-0"
+          className="font-mono mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-ink px-5 text-[0.72rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:-translate-y-0.5 hover:bg-teal active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink/40 disabled:hover:translate-y-0"
         >
           <IconPlus className="h-4 w-4" /> {available ? "A la mochila" : "Agotado"}
         </button>

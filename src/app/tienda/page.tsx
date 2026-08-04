@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Shell } from "@/components/layout/Shell";
 import { TiendaClient } from "@/components/tienda/TiendaClient";
-import type { Genero } from "@/lib/products";
+import type { Category, Genero } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Tienda — Babuinos Inc",
@@ -9,19 +9,27 @@ export const metadata: Metadata = {
 };
 
 const VALID: (Genero | "all")[] = ["all", "hombre", "mujer", "unisex"];
+const VALID_TIPO: (Category | "all")[] = ["all", "basica", "estampada"];
 
 export default async function TiendaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ genero?: string }>;
+  searchParams: Promise<{ genero?: string; tipo?: string }>;
 }) {
-  const { genero } = await searchParams;
+  const { genero, tipo } = await searchParams;
   const initial = (VALID as string[]).includes(genero ?? "") ? (genero as Genero | "all") : "all";
+  const initialTipo = (VALID_TIPO as string[]).includes(tipo ?? "")
+    ? (tipo as Category | "all")
+    : "all";
 
   return (
     <Shell>
-      {/* key remonta al cambiar ?genero= para que el filtro siga a la URL */}
-      <TiendaClient key={initial} initialGenero={initial} />
+      {/* key remonta al cambiar los params para que los filtros sigan a la URL */}
+      <TiendaClient
+        key={`${initial}-${initialTipo}`}
+        initialGenero={initial}
+        initialTipo={initialTipo}
+      />
     </Shell>
   );
 }

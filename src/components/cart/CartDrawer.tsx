@@ -68,7 +68,7 @@ export function CartDrawer() {
               <button
                 onClick={close}
                 aria-label="Cerrar"
-                className="grid h-9 w-9 place-items-center rounded-full bg-cream/10 text-cream transition hover:bg-cream/20"
+                className="grid h-11 w-11 place-items-center rounded-full bg-cream/10 text-cream transition hover:bg-cream/20"
               >
                 <IconClose className="h-5 w-5" />
               </button>
@@ -92,28 +92,35 @@ export function CartDrawer() {
                     </div>
                     <div className="flex-1">
                       <div className="font-display text-[0.95rem] font-black text-ink">{l.name}</div>
-                      <div className="font-mono text-[0.62rem] tracking-[0.08em] text-ink/50 uppercase">
+                      <div className="font-mono text-[0.68rem] tracking-[0.08em] text-ink/70 uppercase">
                         {l.colorway} · Talla {l.size}
                       </div>
                       <div className="mt-2 flex items-center gap-2.5">
                         <button
                           onClick={() => changeQty(l.id, l.size, -1)}
                           aria-label="Quitar una unidad"
-                          className="grid h-7 w-7 place-items-center rounded-full bg-ink/10 transition hover:bg-ink hover:text-white"
+                          className="grid h-11 w-11 place-items-center rounded-full bg-ink/10 transition hover:bg-ink hover:text-white"
                         >
                           <IconMinus className="h-3.5 w-3.5" />
                         </button>
                         <span className="font-mono w-5 text-center text-sm font-bold">{l.qty}</span>
+                        {/* Tope el stock de la talla: al llegar al máximo el + se apaga. */}
                         <button
                           onClick={() => changeQty(l.id, l.size, 1)}
+                          disabled={l.qty >= (l.max ?? 99)}
                           aria-label="Agregar una unidad"
-                          className="grid h-7 w-7 place-items-center rounded-full bg-ink/10 transition hover:bg-ink hover:text-white"
+                          className="grid h-11 w-11 place-items-center rounded-full bg-ink/10 transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink/10 disabled:hover:text-ink"
                         >
                           <IconPlus className="h-3.5 w-3.5" />
                         </button>
+                        {l.qty >= (l.max ?? 99) && (
+                          <span className="font-mono text-[0.58rem] tracking-[0.08em] text-umber/70 uppercase">
+                            Máx.
+                          </span>
+                        )}
                         <button
                           onClick={() => remove(l.id, l.size)}
-                          className="font-mono ml-1 text-[0.62rem] tracking-[0.08em] text-umber/60 uppercase transition hover:text-burgundy"
+                          className="font-mono ml-1 inline-flex min-h-11 items-center text-[0.68rem] tracking-[0.08em] text-umber/80 uppercase transition hover:text-burgundy"
                         >
                           Quitar
                         </button>
@@ -127,37 +134,53 @@ export function CartDrawer() {
             <footer className="border-t-2 border-ink/10 bg-white px-6 py-5">
               {lines.length > 0 && (
                 <div className="mb-3">
-                  <p className="font-mono mb-2 text-[0.6rem] font-bold tracking-[0.12em] text-ink/50 uppercase">
+                  <p className="font-mono mb-2 text-[0.66rem] font-bold tracking-[0.12em] text-ink/70 uppercase">
                     Tus datos
                   </p>
-                  <div className="grid gap-2">
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Nombre y apellido *"
-                      className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
-                    />
+                  {/* Con label visible: los placeholder desaparecen al escribir
+                      y en el checkout es donde menos se puede dudar qué campo
+                      se está llenando. */}
+                  <div className="grid gap-2.5">
+                    <Campo id="cart-nombre" label="Nombre y apellido" required>
+                      <input
+                        id="cart-nombre"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        autoComplete="name"
+                        required
+                        className={CAMPO_CLS}
+                      />
+                    </Campo>
                     <div className="grid grid-cols-2 gap-2">
-                      <input
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        inputMode="tel"
-                        placeholder="Teléfono"
-                        className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
-                      />
-                      <input
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        placeholder="Ciudad"
-                        className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
-                      />
+                      <Campo id="cart-tel" label="Teléfono">
+                        <input
+                          id="cart-tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          inputMode="tel"
+                          type="tel"
+                          autoComplete="tel"
+                          className={CAMPO_CLS}
+                        />
+                      </Campo>
+                      <Campo id="cart-ciudad" label="Ciudad">
+                        <input
+                          id="cart-ciudad"
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
+                          autoComplete="address-level2"
+                          className={CAMPO_CLS}
+                        />
+                      </Campo>
                     </div>
-                    <input
-                      value={note}
-                      onChange={(e) => setNote(e.target.value)}
-                      placeholder="Nota (opcional): color, dirección, etc."
-                      className="w-full rounded-md border border-ink/15 bg-cream/40 px-3 py-2.5 text-[0.85rem] text-ink placeholder:text-ink/40 focus:border-teal focus:outline-none"
-                    />
+                    <Campo id="cart-nota" label="Nota" hint="color, dirección, referencias…">
+                      <input
+                        id="cart-nota"
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        className={CAMPO_CLS}
+                      />
+                    </Campo>
                   </div>
                 </div>
               )}
@@ -177,5 +200,37 @@ export function CartDrawer() {
         </>
       )}
     </AnimatePresence>
+  );
+}
+
+/** Alto ≥44px para cumplir el mínimo de toque en móvil. */
+const CAMPO_CLS =
+  "w-full min-h-11 rounded-md border border-ink/15 bg-cream/40 px-3 text-[0.9rem] text-ink focus:border-teal";
+
+function Campo({
+  id,
+  label,
+  hint,
+  required,
+  children,
+}: {
+  id: string;
+  label: string;
+  hint?: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="font-mono mb-1 block text-[0.6rem] font-bold tracking-[0.1em] text-ink/70 uppercase"
+      >
+        {label}
+        {required && <span className="ml-1 text-burgundy">*</span>}
+        {hint && <span className="ml-1.5 font-normal normal-case tracking-normal text-ink/65">({hint})</span>}
+      </label>
+      {children}
+    </div>
   );
 }
