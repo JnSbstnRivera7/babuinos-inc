@@ -1,9 +1,12 @@
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { IconTruck, IconRefresh, IconCheck } from "@/components/ui/Icons";
+import { BRAND } from "@/lib/brand";
 
 const TRUST = [
-  { Icon: IconTruck, text: "Envío 24h Bogotá · 3-5 días Colombia" },
+  // Envíos y la línea legal usan el nombre REAL de la ciudad: el cliente
+  // necesita entenderlos literal. "Tábogo" es solo voz de marca.
+  { Icon: IconTruck, text: `Envío 24h ${BRAND.ciudadReal} · 3-5 días ${BRAND.pais}` },
   { Icon: IconRefresh, text: "Cambios en 15 días" },
   { Icon: IconCheck, text: "Pago seguro por WhatsApp" },
 ];
@@ -31,8 +34,10 @@ export function Footer() {
         <div>
           <Logo tone="cream" className="h-9 w-auto" />
           <p className="mt-4 max-w-xs text-[0.85rem] leading-relaxed text-cream/45">
-            Streetwear Cult desde Bogotá para el mundo. Ropa oversize con identidad, actitud y un
-            parche que te representa.
+            {BRAND.origen}
+          </p>
+          <p className="font-mono mt-3 text-[0.6rem] font-bold tracking-[0.16em] text-[var(--accent)]/70 uppercase">
+            {BRAND.sello}
           </p>
           <SocialButtons variant="icon" className="mt-5" />
         </div>
@@ -55,7 +60,8 @@ export function Footer() {
       </div>
       <div className="mx-auto mt-5 flex max-w-6xl flex-wrap items-center justify-between gap-3">
         <p className="font-mono text-[0.62rem] tracking-[0.06em] text-cream/25">
-          © 2026 Babuinos Inc. — Bogotá, Colombia. Todos los derechos reservados.
+          © {BRAND.est} {BRAND.nombre}. — {BRAND.ciudadReal}, {BRAND.pais}. Todos los derechos
+          reservados.
         </p>
         <p className="font-mono text-[0.62rem] text-cream/25">Streetwear Cult · Est. 2026</p>
       </div>

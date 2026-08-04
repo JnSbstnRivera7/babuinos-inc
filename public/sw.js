@@ -1,5 +1,12 @@
 /* Babuinos Inc — service worker (PWA installability + light offline). */
-const CACHE = "babuinos-v2";
+/* Subir la versión invalida el caché viejo en los celulares que ya instalaron
+   la PWA (el activate borra todo caché con otro nombre).
+   v3: optimización móvil — baboon.png (174 KB) salió, la música ya no
+       autoarranca en teléfono.
+   v4: catálogo nuevo (15 piezas) + wallpaper nuevo. Los wallpapers conservan el
+       nombre de archivo con contenido distinto, así que sin subir versión el
+       celular seguiría mostrando el viejo. */
+const CACHE = "babuinos-v4";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.

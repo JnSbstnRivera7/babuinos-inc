@@ -16,13 +16,22 @@ const TRACKS: Track[] = [
   { src: "/music/six-days-remix.mp3", title: "Six Days (Remix)" },
   { src: "/music/vico-c-desahogo.mp3", title: "Vico C — Desahogo" },
   { src: "/music/shaggy-luv-me-up.mp3", title: "Shaggy — Luv Me Up" },
+  { src: "/music/dmx-party-up-in-here.mp3", title: "DMX — Party Up In Here" },
+  { src: "/music/eminem-without-me.mp3", title: "Eminem — Without Me" },
+  { src: "/music/eminem-shake-that.mp3", title: "Eminem ft. Nate Dogg — Shake That" },
+  { src: "/music/snoop-dogg-gin-and-juice.mp3", title: "Snoop Dogg — Gin and Juice" },
 ];
 
 /**
  * Reproductor "Babuinos Radio" GLOBAL (en toda la página vía layout).
  * Colapsado = botón redondo chico en la esquina inferior izquierda; se ABRE al
- * hacer clic para mostrar los controles. La música arranca en el primer gesto
- * del usuario (tap/scroll) aunque esté colapsado.
+ * hacer clic para mostrar los controles.
+ *
+ * En ESCRITORIO la música arranca sola en el primer gesto. En CELULAR **no**:
+ * un tema son ~2.5 MB y arrancarlo justo en el primer toque le robaba el ancho
+ * de banda a la navegación (el tap a Hombre/Mujer parecía no responder) además
+ * de sumar dos tercios del peso de la página. En móvil suena solo si el usuario
+ * toca el botón.
  */
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -50,8 +59,11 @@ export function MusicPlayer() {
   }, []);
 
   // Autostart en el primer gesto (re-arma si el navegador lo bloquea).
+  // Solo en escritorio: ver la nota del componente. Misma consulta que usa el
+  // hero — cubre teléfonos y ventanas angostas, no solo pantallas táctiles.
   useEffect(() => {
     if (started) return;
+    if (window.matchMedia("(max-width: 700px), (pointer: coarse)").matches) return;
     const events = ["touchend", "pointerup", "click", "keydown", "pointerdown", "touchstart", "wheel", "scroll"];
     let done = false;
     const cleanup = () => events.forEach((e) => window.removeEventListener(e, onFirst));

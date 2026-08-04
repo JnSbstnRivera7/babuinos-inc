@@ -12,10 +12,13 @@ export function Logo({
   className,
   tone = "ink",
   priority = false,
+  sizes = "(max-width: 640px) 60vw, 460px",
 }: {
   className?: string;
   tone?: keyof typeof SRC;
   priority?: boolean;
+  /** Ancho real que ocupa, para que no baje un render de 3840px en un celular. */
+  sizes?: string;
 }) {
   return (
     <Image
@@ -24,6 +27,7 @@ export function Logo({
       width={1536}
       height={1024}
       priority={priority}
+      sizes={sizes}
       className={cn("max-w-full object-contain", className)}
     />
   );

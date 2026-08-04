@@ -28,17 +28,18 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://babuinos-inc.vercel.app"),
   title: "Babuinos Inc — Streetwear Cult",
   description:
-    "Streetwear oversize para los que no siguen la manada. Selva de cemento, actitud de explorador. Colección Fundadores 2026 desde Bogotá.",
+    "Del asfalto de Tábogo para el mundo. Streetwear oversize para los que no siguen la manada. Diseñado a 2.600 m. Colección Fundadores 2026.",
   applicationName: "Babuinos",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Babuinos",
   },
-  keywords: ["streetwear", "oversize", "Babuinos", "Bogotá", "ropa urbana", "Colombia"],
+  // "Bogotá" se queda entre las keywords: es como la busca la gente.
+  keywords: ["streetwear", "oversize", "Babuinos", "Tábogo", "Bogotá", "ropa urbana", "Colombia"],
   openGraph: {
     title: "Babuinos Inc — Streetwear Cult",
-    description: "Ropa oversize con identidad. Bienvenido al Cult. 🦍",
+    description: "Del asfalto de Tábogo para el mundo. Bienvenido a la manada. 🦍",
     type: "website",
     locale: "es_CO",
     siteName: "Babuinos Inc",
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Babuinos Inc — Streetwear Cult",
-    description: "Ropa oversize con identidad. Bienvenido al Cult.",
+    description: "Del asfalto de Tábogo para el mundo. Bienvenido a la manada.",
     images: ["/og.png"],
   },
 };

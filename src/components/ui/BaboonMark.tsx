@@ -31,8 +31,9 @@ export function BaboonMark({
       style={{
         ...shineStyle,
         aspectRatio: "372 / 320",
-        WebkitMaskImage: "url(/brand/baboon.png)",
-        maskImage: "url(/brand/baboon.png)",
+        // WebP con solo el alfa (lo único que usa la máscara): 174 KB → 18 KB.
+        WebkitMaskImage: "url(/brand/baboon.webp)",
+        maskImage: "url(/brand/baboon.webp)",
         WebkitMaskRepeat: "no-repeat",
         maskRepeat: "no-repeat",
         WebkitMaskPosition: "center",

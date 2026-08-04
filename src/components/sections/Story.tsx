@@ -3,6 +3,7 @@
 import { BaboonMark } from "@/components/ui/BaboonMark";
 import { Reveal } from "@/components/fx/Reveal";
 import { IconCompass, IconShirt, IconNeedle, IconLeaf } from "@/components/ui/Icons";
+import { BRAND, SELLO_ORIGEN } from "@/lib/brand";
 
 const PILLARS = [
   { Icon: IconCompass, name: "Exploración", desc: "Diseños inspirados en rutas y aventura urbana." },
@@ -30,9 +31,15 @@ export function Story() {
             </Reveal>
             <Reveal delay={0.15}>
               <p className="text-cream/70">
-                Nacimos en Bogotá en 2026 con una obsesión: ropa que dure, que hable y que te
-                identifique más allá de la etiqueta. Cada pieza cuenta una historia de exploración,
-                actitud y calle.
+                {BRAND.origen} Nacimos en {BRAND.est} con una obsesión: ropa que dure, que hable y
+                que te identifique más allá de la etiqueta. Cada pieza cuenta una historia de
+                exploración, actitud y calle.
+              </p>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="mt-4 text-cream/70">{BRAND.bienvenida}</p>
+              <p className="font-mono mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/40 px-4 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-[var(--accent)] uppercase">
+                {BRAND.sello}
               </p>
             </Reveal>
             <div className="mt-8 grid grid-cols-2 gap-4">
@@ -58,7 +65,7 @@ export function Story() {
               <div className="absolute inset-12 rounded-full border border-gold/20" />
               <BaboonMark shine className="anim-float w-[52%]" />
               <div className="font-mono absolute bottom-7 left-0 right-0 text-center text-[0.6rem] tracking-[0.3em] text-cream/70 uppercase">
-                Est. 2026 · Bogotá
+                {SELLO_ORIGEN}
               </div>
             </div>
           </Reveal>

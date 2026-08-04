@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Babuinos Inc — Streetwear Cult",
     short_name: "Babuinos",
     description:
-      "Streetwear oversize para los que no siguen la manada. Selva de cemento, actitud de explorador. 🦍",
+      "Del asfalto de Tábogo para el mundo. Streetwear oversize para los que no siguen la manada. Diseñado a 2.600 m. 🦍",
     id: "/",
     start_url: "/",
     scope: "/",

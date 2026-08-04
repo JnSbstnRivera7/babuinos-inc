@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 const DARK = ["#1f7a4d", "#2b8f57", "#176b41", "#3d7a2f", "#245c3a", "#0e5a51"];
 const LIGHT = ["#5bb87e", "#74c98f", "#49a86c", "#84cf73", "#62c79a", "#9bd9a0"];
 const LEAF = "M0 0 C9 5 12 20 3 31 C-2 23 -7 11 0 0Z";
@@ -12,7 +14,6 @@ interface VineDef {
   seed: number;
   mirror?: boolean;
   light?: boolean;
-  mobile?: boolean; // show on small screens
 }
 
 function TallVine({ left, h, delay, dur, seed, mirror, light }: VineDef) {
@@ -67,27 +68,44 @@ function TallVine({ left, h, delay, dur, seed, mirror, light }: VineDef) {
 /**
  * Full-page hanging vines along the SIDES only (ceiling → floor), fixed behind
  * the UI. Mixes long dark vines with shorter, lighter-green ones for an uneven,
- * real-jungle feel. Mobile shows just one tall vine per side for performance.
+ * real-jungle feel.
+ *
+ * En CELULAR no se renderiza NINGUNA: son 8 SVG de ~87 hojas cada uno con
+ * animación infinita. Ocultarlas por CSS mataba la animación pero el markup
+ * seguía viajando (≈40 KB de HTML), así que se montan solo en pantalla ancha.
  */
 export function PageVines() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px) and (prefers-reduced-motion: no-preference)");
+    const update = () => setShow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  if (!show) return null;
+
   const vines: VineDef[] = [
     // left side
-    { left: "0.5%", h: 100, delay: 0, dur: 13, seed: 0, mobile: true },
+    { left: "0.5%", h: 100, delay: 0, dur: 13, seed: 0 },
     { left: "5%", h: 60, delay: 1.6, dur: 15, seed: 3, light: true },
     { left: "11%", h: 80, delay: 2.4, dur: 14, seed: 5, light: true, mirror: true },
     { left: "16%", h: 46, delay: 0.9, dur: 16, seed: 8, light: true },
     // right side
-    { left: "83%", h: 100, delay: 0.7, dur: 13.5, seed: 1, mirror: true, mobile: true },
+    { left: "83%", h: 100, delay: 0.7, dur: 13.5, seed: 1, mirror: true },
     { left: "89%", h: 56, delay: 2.0, dur: 15.5, seed: 4, light: true },
     { left: "94%", h: 78, delay: 1.1, dur: 14.5, seed: 2, light: true, mirror: true },
     { left: "99%", h: 50, delay: 2.7, dur: 16.5, seed: 6, light: true, mirror: true },
   ];
   return (
-    <div className="pointer-events-none fixed inset-0 z-[3] overflow-hidden opacity-45" aria-hidden>
+    <div
+      className="pointer-events-none fixed inset-0 z-[3] overflow-hidden opacity-45"
+      aria-hidden
+    >
       {vines.map((v, i) => (
-        <div key={i} className={v.mobile ? "" : "hidden sm:block"}>
-          <TallVine {...v} />
-        </div>
+        <TallVine key={i} {...v} />
       ))}
     </div>
   );

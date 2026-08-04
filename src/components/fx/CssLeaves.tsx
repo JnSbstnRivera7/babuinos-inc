@@ -11,15 +11,20 @@ const LEAVES = [
   { left: "94%", size: 15, dur: 15, delay: 6, hue: "#4a5c2a" },
 ];
 
-/** CSS-driven falling leaves overlay (pairs with the JS LeafCanvas for depth). */
+/**
+ * CSS-driven falling leaves overlay (pairs with the JS LeafCanvas for depth).
+ * Apagado en celular: eran 4 animaciones infinitas robándole frames al scroll.
+ */
 export function CssLeaves() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden" aria-hidden>
+    <div
+      className="pointer-events-none absolute inset-0 z-[2] hidden overflow-hidden sm:block"
+      aria-hidden
+    >
       {LEAVES.map((l, i) => (
         <svg
           key={i}
           viewBox="0 0 40 24"
-          className={i % 2 === 1 ? "hidden sm:block" : ""}
           style={{
             position: "absolute",
             top: "-6%",
