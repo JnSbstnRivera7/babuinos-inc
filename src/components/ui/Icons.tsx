@@ -99,9 +99,11 @@ export const IconCompass = (p: P) => (
   </svg>
 );
 
+/* Corazón simétrico respecto a x=12 (3.4↔20.6, 8.2↔15.8): el trazo anterior
+   tenía el lóbulo derecho más angosto que el izquierdo y se veía cortado. */
 export const IconHeart = (p: P) => (
   <svg {...base(p)}>
-    <path d="M12 20s-7-4.3-9.3-8.2C1.3 9 2.3 5.4 5.8 5.4c2 0 3.3 1.3 4.2 2.5.9-1.2 2.2-2.5 4.2-2.5 3.5 0 4.5 3.6 3.1 6.4C19 15.7 12 20 12 20Z" />
+    <path d="M12 20.4C9.4 18.3 3.4 14.1 3.4 9.3C3.4 6.6 5.6 4.6 8.2 4.6C9.9 4.6 11.2 5.6 12 7C12.8 5.6 14.1 4.6 15.8 4.6C18.4 4.6 20.6 6.6 20.6 9.3C20.6 14.1 14.6 18.3 12 20.4Z" />
   </svg>
 );
 

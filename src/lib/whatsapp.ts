@@ -36,6 +36,14 @@ export function buildProductMessage(name: string, colorway: string, size?: strin
   return `${header}\n${item}${footer}`;
 }
 
+/** Consulta de talla: mientras no haya tabla de medidas, se resuelve en el chat. */
+export function buildSizeMessage(name: string, colorway: string): string {
+  const header = "🦍 *BABUINOS INC*\n";
+  const item = `Quiero saber qué talla me sirve en:\n*${name}* — ${colorway}`;
+  const footer = "\n\n_¿Me pasas las medidas de la prenda?_ 🌿";
+  return `${header}\n${item}${footer}`;
+}
+
 /** Normalizes a phone number to digits only (wa.me format, no +). */
 export function normalizeNumber(raw: string): string {
   return raw.replace(/[^0-9]/g, "");

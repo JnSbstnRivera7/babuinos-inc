@@ -33,8 +33,14 @@ export function ProductCard({
   const [size, setSize] = useState("");
 
   const available = inStock(product);
-  const href = `/producto/${product.slug}`;
   const badge = product.badge ? BADGES[product.badge] : null;
+
+  // Se lleva el género en contexto a la ficha (?g=), para que abrir una pieza
+  // desde la línea Mujer no la muestre en modelo hombre.
+  const href =
+    viewGenero === "hombre" || viewGenero === "mujer"
+      ? `/producto/${product.slug}?g=${viewGenero}`
+      : `/producto/${product.slug}`;
 
   // Modelo a mostrar: el del contexto (Hombre/Mujer) si existe; si no, el de la
   // ficha (mujer → mujer, resto → hombre). Fallback a la prenda sola.

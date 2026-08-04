@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,19 +14,42 @@ import { BaboonMark } from "@/components/ui/BaboonMark";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
-import { buildProductMessage, buildWaLink } from "@/lib/whatsapp";
+import { buildProductMessage, buildSizeMessage, buildWaLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { IconWhatsApp, IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 
+/**
+ * Medidas de REFERENCIA para tee oversize de mercado (algodón pesado, hombro
+ * caído), en cm sobre la prenda estirada plana. No están medidas pieza por
+ * pieza: por eso la guía las muestra como referencia con tolerancia ±2 cm y
+ * ofrece pedir las exactas por WhatsApp.
+ *
+ * Cuando Juan mida el inventario real, reemplazar estos números y quitar el
+ * aviso de "referencia" del modal.
+ */
 const SIZE_GUIDE = [
-  { size: "S", pecho: 56, largo: 70, hombro: 52 },
-  { size: "M", pecho: 58, largo: 72, hombro: 54 },
-  { size: "L", pecho: 60, largo: 74, hombro: 56 },
-  { size: "XL", pecho: 62, largo: 76, hombro: 58 },
-  { size: "2XL", pecho: 64, largo: 78, hombro: 60 },
-  { size: "3XL", pecho: 66, largo: 80, hombro: 62 },
+  { size: "S", ancho: 54, largo: 68, hombro: 50, manga: 21 },
+  { size: "M", ancho: 57, largo: 71, hombro: 53, manga: 22 },
+  { size: "L", ancho: 60, largo: 73, hombro: 56, manga: 23 },
+  { size: "XL", ancho: 63, largo: 76, hombro: 59, manga: 24 },
+  { size: "2XL", ancho: 66, largo: 78, hombro: 62, manga: 25 },
+  { size: "3XL", ancho: 69, largo: 80, hombro: 65, manga: 26 },
 ];
+
+/**
+ * Lee `?g=` de la URL sin `useSearchParams`: ese hook obliga a envolver la ficha
+ * en Suspense y la deja renderizando en el cliente (adiós HTML prerenderizado de
+ * cada producto). Con useSyncExternalStore la hidratación usa el snapshot del
+ * servidor (null) y React corrige al valor real en el cliente, sin desajuste.
+ */
+function useLinkGender(): string | null {
+  return useSyncExternalStore(
+    () => () => {}, // no hay a qué suscribirse: cambiar de ?g= remonta la ficha
+    () => new URLSearchParams(window.location.search).get("g"),
+    () => null,
+  );
+}
 
 export function ProductDetail({ product }: { product: Product }) {
   const add = useCart((s) => s.add);
@@ -38,13 +61,22 @@ export function ProductDetail({ product }: { product: Product }) {
   const [active, setActive] = useState(0);
   const [guide, setGuide] = useState(false);
   const [zoom, setZoom] = useState(false);
-  // Género del modelo mostrado en la galería (toggle). Por defecto el de la
-  // ficha; las piezas unisex arrancan en "hombre".
-  const [modelGender, setModelGender] = useState<"hombre" | "mujer">(
-    product.genero === "mujer" ? "mujer" : "hombre",
-  );
+  // Género del modelo en la galería. Manda lo que el usuario elija con el
+  // toggle; si no ha elegido, el de la línea por la que llegó (?g=hombre|mujer,
+  // que pone ProductCard) y en último caso el de la pieza. Venir de Mujer y ver
+  // el modelo hombre era el bug.
+  const [pickedGender, setPickedGender] = useState<"hombre" | "mujer" | null>(null);
+  const linkGender = useLinkGender();
+  const modelGender: "hombre" | "mujer" =
+    pickedGender ??
+    (linkGender === "hombre" || linkGender === "mujer"
+      ? linkGender
+      : product.genero === "mujer"
+        ? "mujer"
+        : "hombre");
 
   const edition = getEdition(product.edition);
+  const linea = product.category === "basica" ? "Básicas" : "Colección Fundadores";
   const available = inStock(product);
   const hasModels = Boolean(product.models?.hombre || product.models?.mujer);
 
@@ -72,17 +104,42 @@ export function ProductDetail({ product }: { product: Product }) {
   const activeShot = gallery[safeActive];
   const related = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
 
-  // Teclado en el zoom: Esc cierra, flechas navegan.
+  const goPrev = useCallback(
+    () => setActive((i) => (i - 1 + gallery.length) % gallery.length),
+    [gallery.length],
+  );
+  const goNext = useCallback(() => setActive((i) => (i + 1) % gallery.length), [gallery.length]);
+
+  /* Deslizar con el dedo para cambiar de foto. `swiped` evita que el gesto
+     termine abriendo el zoom (el click llega después del touchend). */
+  const touchX = useRef<number | null>(null);
+  const swiped = useRef(false);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchX.current = e.touches[0].clientX;
+    swiped.current = false;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const from = touchX.current;
+    touchX.current = null;
+    if (from === null || gallery.length < 2) return;
+    const dx = e.changedTouches[0].clientX - from;
+    if (Math.abs(dx) < 40) return; // un toque, no un desliz
+    swiped.current = true;
+    if (dx < 0) goNext();
+    else goPrev();
+  };
+
+  // Teclado: flechas navegan la galería; en el zoom, Esc además cierra.
   useEffect(() => {
-    if (!zoom) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setZoom(false);
-      else if (e.key === "ArrowRight") setActive((i) => (i + 1) % gallery.length);
-      else if (e.key === "ArrowLeft") setActive((i) => (i - 1 + gallery.length) % gallery.length);
+      if (zoom && e.key === "Escape") setZoom(false);
+      else if (e.key === "ArrowRight") goNext();
+      else if (e.key === "ArrowLeft") goPrev();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [zoom, gallery.length]);
+  }, [zoom, goNext, goPrev]);
 
   function requireSize(): boolean {
     if (!size) {
@@ -122,8 +179,9 @@ export function ProductDetail({ product }: { product: Product }) {
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        {/* galería */}
-        <div>
+        {/* galería — min-w-0 en toda la cadena: sin él, el min-width:auto de
+            grid y flex deja que la tira de miniaturas estire la columna. */}
+        <div className="min-w-0">
           {/* toggle: ver la camisa en modelo Hombre / Mujer */}
           {hasModels && (
             <div className="mb-3 inline-flex items-center gap-2">
@@ -134,7 +192,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 {(["hombre", "mujer"] as const).map((g) => (
                   <button
                     key={g}
-                    onClick={() => setModelGender(g)}
+                    onClick={() => setPickedGender(g)}
                     aria-pressed={modelGender === g}
                     className={cn(
                       "font-mono flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.62rem] font-bold tracking-[0.1em] uppercase transition",
@@ -149,9 +207,13 @@ export function ProductDetail({ product }: { product: Product }) {
             </div>
           )}
 
-          <div className="flex flex-col-reverse gap-4 sm:flex-row">
+          <div className="flex min-w-0 flex-col-reverse gap-4 sm:flex-row">
             {gallery.length > 1 && (
-              <div className="flex gap-3 sm:flex-col">
+              /* En celular la tira va en fila y con 5 miniaturas (3 de modelo +
+                 2 de prenda) se pasaba de los 375px: se desliza. El min-w-0 es
+                 obligatorio — sin él, min-width:auto de flex la deja crecer
+                 hasta el contenido y el overflow-x-auto no recorta nada. */
+              <div className="no-scrollbar flex min-w-0 gap-3 overflow-x-auto sm:flex-col sm:overflow-x-visible">
                 {gallery.map((shot, i) => (
                   <button
                     key={shot.src + i}
@@ -175,38 +237,84 @@ export function ProductDetail({ product }: { product: Product }) {
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={() => setZoom(true)}
-              aria-label="Ampliar foto"
-              className="group relative aspect-[4/5] flex-1 cursor-zoom-in overflow-hidden rounded-2xl bg-[#eceae6]"
+            <div
+              className="relative aspect-[4/5] flex-1 select-none"
+              style={{ touchAction: "pan-y" }}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
             >
-              <Image
-                src={activeShot.src}
-                alt={`${product.name} — ${product.colorway} · ${activeShot.label}`}
-                fill
-                priority
-                sizes="(max-width:1024px) 90vw, 45vw"
-                className={cn(
-                  "transition-transform duration-500 group-hover:scale-[1.03]",
-                  activeShot.fit === "cover" ? "object-cover" : "object-contain p-4",
-                )}
-              />
-              <span className="font-mono pointer-events-none absolute bottom-3 left-3 rounded-full bg-ink/75 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.12em] text-cream uppercase backdrop-blur-sm">
-                {activeShot.label}
-              </span>
-              <span className="pointer-events-none absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-ink/70 text-cream backdrop-blur-sm">
-                <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden>
-                  <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-                  <path d="m20 20-3.2-3.2M11 8.2v5.6M8.2 11h5.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </span>
-              {!available && (
-                <span className="absolute left-5 top-5 rounded-full bg-ink px-4 py-1.5 font-mono text-[0.6rem] font-bold tracking-[0.16em] text-cream uppercase">
-                  Agotado
+              <button
+                type="button"
+                onClick={() => {
+                  if (swiped.current) {
+                    swiped.current = false;
+                    return;
+                  }
+                  setZoom(true);
+                }}
+                aria-label="Ampliar foto"
+                className="group absolute inset-0 cursor-zoom-in overflow-hidden rounded-2xl bg-[#eceae6]"
+              >
+                <Image
+                  src={activeShot.src}
+                  alt={`${product.name} — ${product.colorway} · ${activeShot.label}`}
+                  fill
+                  priority
+                  sizes="(max-width:1024px) 90vw, 45vw"
+                  className={cn(
+                    "transition-transform duration-500 group-hover:scale-[1.03]",
+                    activeShot.fit === "cover" ? "object-cover" : "object-contain p-4",
+                  )}
+                />
+                <span className="font-mono pointer-events-none absolute bottom-3 left-3 rounded-full bg-ink/75 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.12em] text-cream uppercase backdrop-blur-sm">
+                  {activeShot.label}
                 </span>
+                <span className="pointer-events-none absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-ink/70 text-cream backdrop-blur-sm">
+                  <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden>
+                    <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+                    <path d="m20 20-3.2-3.2M11 8.2v5.6M8.2 11h5.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </span>
+                {!available && (
+                  <span className="absolute left-5 top-5 rounded-full bg-ink px-4 py-1.5 font-mono text-[0.6rem] font-bold tracking-[0.16em] text-cream uppercase">
+                    Agotado
+                  </span>
+                )}
+              </button>
+
+              {/* flechas + puntos: deslizar con el dedo o tocar la flecha */}
+              {gallery.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    aria-label="Foto anterior"
+                    className="absolute left-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-xl leading-none text-cream backdrop-blur-sm transition hover:bg-ink/80 active:scale-95"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    aria-label="Foto siguiente"
+                    className="absolute right-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-xl leading-none text-cream backdrop-blur-sm transition hover:bg-ink/80 active:scale-95"
+                  >
+                    ›
+                  </button>
+                  <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+                    {gallery.map((shot, i) => (
+                      <span
+                        key={shot.src + i}
+                        className={cn(
+                          "h-1.5 rounded-full transition-all",
+                          safeActive === i ? "w-4 bg-cream" : "w-1.5 bg-cream/45",
+                        )}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
-            </button>
+            </div>
           </div>
         </div>
 
@@ -229,7 +337,7 @@ export function ProductDetail({ product }: { product: Product }) {
           <div className="mt-3 flex items-center gap-2 text-cream/70">
             <BaboonMark color={edition.accent} className="h-5 w-6" />
             <span className="text-[0.85rem]">
-              {product.colorway} · Territorio {edition.name}
+              {product.colorway} · {linea}
             </span>
           </div>
 
@@ -334,7 +442,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 <li>Fit: {product.fit ?? "Oversize"}</li>
                 <li>Material: {product.composicion ?? "100% algodón 220 g/m²"}</li>
                 <li>Colorway: {product.colorway}</li>
-                <li>Territorio: {edition.name} ({edition.tagline})</li>
+                <li>Línea: {linea}</li>
               </ul>
             </Accordion>
             <Accordion title="Envíos y cambios">
@@ -355,7 +463,7 @@ export function ProductDetail({ product }: { product: Product }) {
           </h2>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
-              <ProductCard key={p.id} product={p} />
+              <ProductCard key={p.id} product={p} viewGenero={modelGender} />
             ))}
           </div>
         </section>
@@ -381,28 +489,60 @@ export function ProductDetail({ product }: { product: Product }) {
               </button>
             </div>
             <p className="mt-1 text-[0.78rem] text-ink/55">
-              Medidas de la prenda en cm (no del cuerpo). Modelo: 1.80 m, usa talla M.
+              Medidas de la prenda estirada plana, en cm (no del cuerpo). Corte{" "}
+              {(product.fit ?? "Oversize").toLowerCase()}.
             </p>
+
+            {/* Solo las tallas que esta pieza tiene de verdad. */}
             <table className="mt-4 w-full border-collapse text-[0.82rem]">
               <thead>
                 <tr className="border-b border-ink/15 text-left font-mono text-[0.6rem] uppercase tracking-[0.1em] text-ink/50">
                   <th className="py-2">Talla</th>
-                  <th className="py-2">Pecho</th>
+                  <th className="py-2">Ancho</th>
                   <th className="py-2">Largo</th>
                   <th className="py-2">Hombro</th>
+                  <th className="py-2">Manga</th>
                 </tr>
               </thead>
               <tbody className="font-mono">
-                {SIZE_GUIDE.map((r) => (
+                {SIZE_GUIDE.filter((r) => product.sizes.some((s) => s.size === r.size)).map((r) => (
                   <tr key={r.size} className="border-b border-ink/8">
                     <td className="py-2 font-bold">{r.size}</td>
-                    <td className="py-2">{r.pecho}</td>
+                    <td className="py-2">{r.ancho}</td>
                     <td className="py-2">{r.largo}</td>
                     <td className="py-2">{r.hombro}</td>
+                    <td className="py-2">{r.manga}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            {/* La versión crop de mujer es más corta que la tabla. */}
+            {/Crop/i.test(product.fit ?? "") && (
+              <p className="mt-3 text-[0.78rem] text-ink/60">
+                La versión de mujer va en corte crop: el largo es menor al de la tabla.
+              </p>
+            )}
+
+            <p className="mt-4 text-[0.75rem] leading-relaxed text-ink/50">
+              Referencia de oversize estándar, tolerancia ±2 cm. ¿Quieres la medida exacta de tu
+              talla antes de comprar? Escríbenos.
+            </p>
+            <a
+              href={
+                process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
+                  ? buildWaLink(
+                      process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
+                      buildSizeMessage(product.name, product.colorway),
+                    )
+                  : "#"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono mt-3 flex w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-5 py-3 text-[0.72rem] font-bold tracking-[0.1em] text-white uppercase transition hover:brightness-95"
+            >
+              <IconWhatsApp className="h-4 w-4" /> Preguntar medida exacta
+            </a>
           </div>
         </div>
       )}
@@ -423,7 +563,10 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <div
             className="relative h-[82vh] w-full max-w-3xl"
+            style={{ touchAction: "pan-y" }}
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           >
             <Image
               src={activeShot.src}
@@ -439,7 +582,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setActive((i) => (i - 1 + gallery.length) % gallery.length);
+                  goPrev();
                 }}
                 aria-label="Anterior"
                 className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-cream/20 text-2xl leading-none text-cream hover:bg-cream/10"
@@ -449,7 +592,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setActive((i) => (i + 1) % gallery.length);
+                  goNext();
                 }}
                 aria-label="Siguiente"
                 className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-cream/20 text-2xl leading-none text-cream hover:bg-cream/10"
