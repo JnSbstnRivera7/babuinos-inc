@@ -9,8 +9,9 @@
    v5: pieza 16 (Guardián Navy) + tema nuevo + privacidad + compra unificada.
    v6: pieza 17 (Green Afro Tiki) + color de filtro Celeste.
    v7: Guns & Roses con prenda sola por corte (oversize H / crop M).
-   v8: pieza 18 (Eternal Beauty) + música al primer gesto también en celular. */
-const CACHE = "babuinos-v8";
+   v8: pieza 18 (Eternal Beauty) + música al primer gesto también en celular.
+   v9: fotos de modelo nuevas de Free Palestine (mismo nombre, contenido nuevo). */
+const CACHE = "babuinos-v9";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.
