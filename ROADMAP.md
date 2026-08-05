@@ -106,10 +106,11 @@ Salidos de probar la tienda en el celular, no de la auditoría.
 
 ## ✅ Fase 3e — Eternal Beauty + música al primer gesto (hecho · 2026-08-05)
 
-- [x] **Pieza 18 — "Eternal Beauty"** (Colección Fundadores): negra con un hada madrina de alas de mariposa
+- [x] **Pieza 18 — "Eternal Beauty"** (Colección Fundadores): negra con un querubín alado
       a toda la espalda (*Eternal Beauty · Chasing Dreams*), 'You Want Something' al frente. Nombre
-      dado por Juan. Su lámina de prenda tenía un ratio atípico (1.33), así que se procesó forzando
-      el rol prenda/grilla en vez de dejar que el auto-clasificador por proporción decidiera.
+      dado por Juan (del propio print). Su lámina de prenda tenía un ratio atípico (1.33), así que se
+      procesó forzando el rol prenda/grilla en vez de dejar que el auto-clasificador decidiera. El
+      diseño se actualizó el 5-ago (antes era un hada; ahora el querubín).
 - [x] **Música al primer gesto en CUALQUIER parte, también en celular** (toque/click/scroll), a
       pedido de Juan. Se quitó la guarda de móvil del autostart. Revierte la Fase 3b en ese punto:
       baja por streaming, así que no bloquea la primera vista.

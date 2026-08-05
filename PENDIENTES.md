@@ -88,7 +88,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       filtro Azul + tema nuevo (Eminem — Ass Like That, 9 en total).
 - [x] **Pieza 17 "Green Afro Tiki"** (5-ago): celeste con tiki verde; nuevo color de filtro Celeste.
       Además Guns & Roses ahora muestra la prenda sola por corte (oversize hombre / crop mujer).
-- [x] **Pieza 18 "Eternal Beauty"** (5-ago): negra, hada a la espalda. Y música al primer gesto en
+- [x] **Pieza 18 "Eternal Beauty"** (5-ago): negra, querubín a la espalda. Y música al primer gesto en
       cualquier parte, también en celular (a pedido de Juan).
 - [x] **Auditoría de UI/UX aplicada** (4-ago) — ver [AUDITORIA-UX.md](AUDITORIA-UX.md):
       footer sin enlaces muertos (12 → 0), tope de stock en el carrito, contraste AA (5 fallas → 0),

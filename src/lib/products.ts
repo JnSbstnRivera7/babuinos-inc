@@ -551,9 +551,9 @@ const FUNDADORES: Product[] = [
     genero: "unisex",
     edition: "midnight",
     color: "negro",
-    desc: "Negra con el hada madrina a toda la espalda bajo el lettering Eternal Beauty. 'You Want Something' al frente.",
+    desc: "Negra con un querubín alado a toda la espalda bajo el lettering Eternal Beauty. 'You Want Something' al frente.",
     descLong:
-      "Negro absoluto con una ilustración de hada madrina de alas de mariposa a toda la espalda, bajo el lettering gótico Eternal Beauty y el remate Chasing Dreams. Al frente, 'You Want Something' en script fino con rosas; babuino troquelado en el ruedo y BABUINOS en la nuca.",
+      "Negro absoluto con una ilustración de querubín alado sobre las nubes a toda la espalda, bajo el lettering gótico Eternal Beauty y el remate Chasing Dreams. Al frente, 'You Want Something' en script fino con rosas; babuino troquelado en el ruedo y BABUINOS en la nuca.",
     fit: "Oversize",
     composicion: ALGODON,
     image: "/brand/products/eternal-beauty-frente.webp",
