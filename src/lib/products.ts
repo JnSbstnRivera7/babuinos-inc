@@ -92,6 +92,7 @@ export const COLORES: ColorDef[] = [
   { key: "lila", label: "Lila", hex: "#c3a9e6" },
   { key: "verde", label: "Verde", hex: "#1f3d2b" },
   { key: "navy", label: "Azul", hex: "#1b2f5c" },
+  { key: "celeste", label: "Celeste", hex: "#a9cce3" },
 ];
 
 export function getColor(key: string): ColorDef | undefined {
@@ -149,6 +150,12 @@ export interface Product {
   composicion?: string;
   image: string; // foto principal (carrito, thumbnails)
   images: string[]; // prenda sola para la PDP
+  /**
+   * Prenda sola DISTINTA por género, para las piezas con dos cortes reales
+   * (hoy solo Guns & Roses: oversize en hombre, crop en mujer). Si existe, la
+   * galería usa el corte del toggle H/M en vez de `images`.
+   */
+  imagesByGender?: { hombre: string[]; mujer: string[] };
   models?: ModelGallery; // camisa puesta, por género
   colorway: string;
   sizes: SizeStock[];
@@ -320,6 +327,12 @@ const FUNDADORES: Product[] = [
     composicion: ALGODON,
     image: "/brand/products/guns-roses-red-frente.webp",
     images: flatSet("guns-roses-red"),
+    // Dos cortes: oversize (hombre) y crop (mujer). La galería muestra el que
+    // corresponda al toggle H/M.
+    imagesByGender: {
+      hombre: flatSet("guns-roses-red-h"),
+      mujer: flatSet("guns-roses-red-m"),
+    },
     models: modelSet("guns-roses-red"),
     colorway: "Rojo",
     sizes: TALLAS_STD,
@@ -505,6 +518,27 @@ const FUNDADORES: Product[] = [
     images: flatSet("guardian-navy"),
     models: modelSet("guardian-navy"),
     colorway: "Azul Marino / Rojo",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    id: "green-afro-tiki",
+    slug: "green-afro-tiki",
+    name: "Green Afro Tiki",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "original",
+    color: "celeste",
+    desc: "Celeste con un tótem tiki verde al costado y la figura afro. 'Beatus' al frente, BABUINOS en la nuca.",
+    descLong:
+      "Celeste suave con una ilustración tiki en verde teal bajando por el costado: máscaras tótem y una figura afro entre las llamas. Al frente, 'Beatus' en script; en la nuca, el sello BABUINOS. La más fresca de la colección.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/green-afro-tiki-frente.webp",
+    images: flatSet("green-afro-tiki"),
+    models: modelSet("green-afro-tiki"),
+    colorway: "Celeste / Tiki Verde",
     sizes: TALLAS_STD,
     badge: "new",
   },

@@ -6,8 +6,10 @@
    v4: catálogo nuevo (15 piezas) + wallpaper nuevo. Los wallpapers conservan el
        nombre de archivo con contenido distinto, así que sin subir versión el
        celular seguiría mostrando el viejo.
-   v5: pieza 16 (Guardián Navy) + tema nuevo + privacidad + compra unificada. */
-const CACHE = "babuinos-v5";
+   v5: pieza 16 (Guardián Navy) + tema nuevo + privacidad + compra unificada.
+   v6: pieza 17 (Green Afro Tiki) + color de filtro Celeste.
+   v7: Guns & Roses con prenda sola por corte (oversize H / crop M). */
+const CACHE = "babuinos-v7";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.

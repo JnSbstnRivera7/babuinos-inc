@@ -95,6 +95,15 @@ Salidos de probar la tienda en el celular, no de la auditoría.
 - [x] **Nuevo color de filtro: Azul** (`navy`, `#1b2f5c`) — antes no existía azul en la paleta del PLP.
 - [x] **Tema nuevo**: Eminem — Ass Like That (9 temas en total, a 96 kbps como los demás).
 
+## ✅ Fase 3d — Green Afro Tiki + cortes de Guns & Roses (hecho · 2026-08-05)
+
+- [x] **Pieza 17 — "Green Afro Tiki"** (Colección Fundadores): celeste con un tótem tiki verde al
+      costado y figura afro; "Beatus" al frente, BABUINOS en la nuca. Nombre dado por Juan.
+- [x] **Nuevo color de filtro: Celeste** (`celeste`, `#a9cce3`).
+- [x] **Guns & Roses con prenda sola por corte**: `imagesByGender` (oversize `-h` / crop `-m`). La
+      galería de la PDP muestra el corte del toggle H/M. Es el único producto con dos cortes reales;
+      el resto sigue con una sola prenda (verificado sin regresión).
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.

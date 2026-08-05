@@ -92,13 +92,16 @@ export function ProductDetail({ product }: { product: Product }) {
           { src: m.espalda, fit: "cover" as const, label: "Espalda" },
         ]
       : [];
-    const flat = (product.images.length ? product.images : [product.image]).map((src) => ({
+    // Prenda sola: si la pieza tiene dos cortes (Guns & Roses), la del género
+    // del toggle; si no, la única.
+    const flatSrc = product.imagesByGender?.[modelGender] ?? product.images;
+    const flat = (flatSrc.length ? flatSrc : [product.image]).map((src) => ({
       src,
       fit: "contain" as const,
       label: "Prenda",
     }));
     return [...worn, ...flat];
-  }, [product.models, product.images, product.image, modelGender]);
+  }, [product.models, product.images, product.imagesByGender, product.image, modelGender]);
 
   const safeActive = Math.min(active, gallery.length - 1);
   const activeShot = gallery[safeActive];
