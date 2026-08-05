@@ -104,6 +104,16 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       galería de la PDP muestra el corte del toggle H/M. Es el único producto con dos cortes reales;
       el resto sigue con una sola prenda (verificado sin regresión).
 
+## ✅ Fase 3e — Eternal Beauty + música al primer gesto (hecho · 2026-08-05)
+
+- [x] **Pieza 18 — "Eternal Beauty"** (Colección Fundadores): negra con un hada madrina de alas de mariposa
+      a toda la espalda (*Eternal Beauty · Chasing Dreams*), 'You Want Something' al frente. Nombre
+      dado por Juan. Su lámina de prenda tenía un ratio atípico (1.33), así que se procesó forzando
+      el rol prenda/grilla en vez de dejar que el auto-clasificador por proporción decidiera.
+- [x] **Música al primer gesto en CUALQUIER parte, también en celular** (toque/click/scroll), a
+      pedido de Juan. Se quitó la guarda de móvil del autostart. Revierte la Fase 3b en ese punto:
+      baja por streaming, así que no bloquea la primera vista.
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.

@@ -14,7 +14,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 17 piezas.** Hoy TODAS usan el mismo tallaje provisional (`TALLAS_STD` en
+- [ ] **STOCK REAL de las 18 piezas.** Hoy TODAS usan el mismo tallaje provisional (`TALLAS_STD` en
       `src/lib/products.ts`: S-2XL con 6/8/8/6/4). Qué tallas existen de verdad por pieza y cuántas.
       Talla en 0 sale tachada como agotada.
 - [ ] **Medir el inventario** para la guía de tallas. `SIZE_GUIDE` en `ProductDetail.tsx` usa
@@ -88,6 +88,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       filtro Azul + tema nuevo (Eminem — Ass Like That, 9 en total).
 - [x] **Pieza 17 "Green Afro Tiki"** (5-ago): celeste con tiki verde; nuevo color de filtro Celeste.
       Además Guns & Roses ahora muestra la prenda sola por corte (oversize hombre / crop mujer).
+- [x] **Pieza 18 "Eternal Beauty"** (5-ago): negra, hada a la espalda. Y música al primer gesto en
+      cualquier parte, también en celular (a pedido de Juan).
 - [x] **Auditoría de UI/UX aplicada** (4-ago) — ver [AUDITORIA-UX.md](AUDITORIA-UX.md):
       footer sin enlaces muertos (12 → 0), tope de stock en el carrito, contraste AA (5 fallas → 0),
       áreas de toque (146 bajo 44 px → 0),

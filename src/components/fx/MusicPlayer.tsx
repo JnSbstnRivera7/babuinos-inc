@@ -26,13 +26,14 @@ const TRACKS: Track[] = [
  * Colapsado = botón redondo chico en la esquina inferior izquierda; se ABRE al
  * hacer clic para mostrar los controles.
  *
- * En ESCRITORIO la música arranca sola en el primer gesto. En CELULAR **no**:
- * un tema son ~2.5 MB y arrancarlo justo en el primer toque le robaba el ancho
- * de banda a la navegación (el tap a Hombre/Mujer parecía no responder) además
- * de sumar dos tercios del peso de la página.
+ * La música arranca sola en el PRIMER GESTO del usuario (toque/click/scroll en
+ * cualquier parte), tanto en escritorio como en celular — así lo pidió Juan.
+ * Los navegadores solo permiten `audio.play()` dentro de un gesto, por eso se
+ * engancha a los eventos globales una sola vez.
  *
- * Pero en móvil arranca con UN SOLO TOQUE: el botón colapsado abre el panel Y
- * pone música a la vez. Antes hacían falta dos toques (abrir, luego play).
+ * (Hubo una etapa en que en celular NO autoarrancaba, para no robarle ancho de
+ * banda a la navegación con los ~2.5 MB del tema; se revirtió a pedido de Juan.
+ * El tema baja por streaming —206 Partial— así que no bloquea la primera vista.)
  */
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -59,12 +60,10 @@ export function MusicPlayer() {
     return n;
   }, []);
 
-  // Autostart en el primer gesto (re-arma si el navegador lo bloquea).
-  // Solo en escritorio: ver la nota del componente. Misma consulta que usa el
-  // hero — cubre teléfonos y ventanas angostas, no solo pantallas táctiles.
+  // Autostart en el primer gesto, en cualquier dispositivo (re-arma si el
+  // navegador lo bloquea).
   useEffect(() => {
     if (started) return;
-    if (window.matchMedia("(max-width: 700px), (pointer: coarse)").matches) return;
     const events = ["touchend", "pointerup", "click", "keydown", "pointerdown", "touchstart", "wheel", "scroll"];
     let done = false;
     const cleanup = () => events.forEach((e) => window.removeEventListener(e, onFirst));

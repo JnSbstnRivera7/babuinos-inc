@@ -542,6 +542,27 @@ const FUNDADORES: Product[] = [
     sizes: TALLAS_STD,
     badge: "new",
   },
+  {
+    id: "eternal-beauty",
+    slug: "eternal-beauty",
+    name: "Eternal Beauty",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "midnight",
+    color: "negro",
+    desc: "Negra con el hada madrina a toda la espalda bajo el lettering Eternal Beauty. 'You Want Something' al frente.",
+    descLong:
+      "Negro absoluto con una ilustración de hada madrina de alas de mariposa a toda la espalda, bajo el lettering gótico Eternal Beauty y el remate Chasing Dreams. Al frente, 'You Want Something' en script fino con rosas; babuino troquelado en el ruedo y BABUINOS en la nuca.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/eternal-beauty-frente.webp",
+    images: flatSet("eternal-beauty"),
+    models: modelSet("eternal-beauty"),
+    colorway: "Negro",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
 ];
 
 export const PRODUCTS: Product[] = [...BASICAS, ...FUNDADORES];

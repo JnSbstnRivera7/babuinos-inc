@@ -7,7 +7,7 @@
 - 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
 - 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
 
-**Estado:** 17 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+**Estado:** 18 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
@@ -26,7 +26,7 @@ Dos líneas, definidas en `src/lib/products.ts` (fuente única):
 | Línea | Piezas | Qué es |
 | --- | --- | --- |
 | **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
-| **Colección Fundadores** | 12 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki. |
+| **Colección Fundadores** | 13 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty. |
 
 El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
 
@@ -47,7 +47,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
 - **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: la ficha no abre WhatsApp directo, todo entra a la mochila y el pedido se cierra desde ahí con los datos del cliente. **Topa el stock de cada talla**: `add()` devuelve `false` al llegar al máximo, avisa por toast y el `+` se apaga. Cada línea guarda su `max`.
-- **Globales en toda la página:** reproductor "Babuinos Radio" (el botón mini abre el panel **y pone música en el mismo toque**; en celular no autoarranca, ver Rendimiento), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
+- **Globales en toda la página:** reproductor "Babuinos Radio" (**arranca sola al primer gesto en cualquier parte** —toque/click/scroll—, en celular y escritorio), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
@@ -87,7 +87,7 @@ Estado tras la [auditoría del 4-ago](AUDITORIA-UX.md):
 
 El home pasó de **3.8 MB a 1.19 MB**. Lo que lo logró, por si se quiere revertir algo:
 
-- **La música no autoarranca en celular.** Un tema son ~2.5 MB y arrancarlo en el primer toque le robaba el ancho de banda a la navegación — el tap a Hombre/Mujer parecía no responder. En escritorio sigue arrancando sola.
+- **La música arranca al primer gesto** (toque/click/scroll) también en celular, a pedido de Juan. Baja por streaming (206 Partial), así que no bloquea la primera vista. _(Antes no autoarrancaba en móvil para ahorrar datos; se revirtió.)_
 - **Intro estática en celular** (y con `prefers-reduced-motion`): la versión animada recalculaba 7 valores por cada frame de scroll. De paso el hero pasó de 135vh a una pantalla, así que las puertas quedan a un desliz.
 - **Adornos fuera en celular:** `PageVines` no se renderiza (8 SVG de ~87 hojas cada uno) y `CssLeaves` tampoco. Ocultarlos por CSS mataba la animación pero el markup seguía viajando.
 - `baboon.png` 174 KB → `baboon.webp` **18 KB** (la máscara CSS solo usa el alfa).
