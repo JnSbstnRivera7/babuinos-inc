@@ -14,7 +14,7 @@ import { BaboonMark } from "@/components/ui/BaboonMark";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
-import { buildProductMessage, buildSizeMessage, buildWaLink } from "@/lib/whatsapp";
+import { buildSizeMessage, buildWaLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { IconWhatsApp, IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
 import { GeneroMark } from "@/components/ui/GeneroMark";
@@ -159,16 +159,6 @@ export function ProductDetail({ product }: { product: Product }) {
     openCart();
   }
 
-  function buyWhatsApp() {
-    if (!available || !requireSize()) return;
-    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-    if (!num) {
-      addToBag();
-      return;
-    }
-    const msg = buildProductMessage(product.name, product.colorway, size);
-    window.open(buildWaLink(num, msg), "_blank", "noopener,noreferrer");
-  }
 
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-8 md:px-8 md:pt-12">
@@ -398,44 +388,57 @@ export function ProductDetail({ product }: { product: Product }) {
             )}
           </div>
 
-          {/* CTAs */}
-          <div className="mt-7 flex flex-col gap-3">
+          {/**
+           * UN SOLO camino de compra: todo entra a la mochila y el pedido se
+           * cierra desde ahí. Antes había un "Comprar por WhatsApp" que abría
+           * el chat con UNA pieza y saltándose el carrito, así que quien quería
+           * dos camisas terminaba con dos conversaciones y sin sus datos.
+           */}
+          <div className="mt-7 flex gap-3">
             <button
-              onClick={buyWhatsApp}
+              onClick={addToBag}
               disabled={!available}
-              className="font-mono flex w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 py-4 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase shadow-[0_4px_18px_rgba(37,211,102,.32)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-cream/10 disabled:text-cream/35 disabled:shadow-none"
+              className="font-mono flex min-h-14 flex-1 items-center justify-center gap-2 rounded-md px-6 text-[0.82rem] font-bold tracking-[0.1em] uppercase shadow-[0_4px_18px_rgba(0,0,0,.28)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-cream/10 disabled:text-cream/35 disabled:shadow-none"
+              style={
+                available
+                  ? { backgroundColor: "var(--accent)", color: "var(--accent-ink)" }
+                  : undefined
+              }
             >
-              <IconWhatsApp className="h-5 w-5" /> Comprar por WhatsApp
+              <IconPlus className="h-5 w-5" />
+              {available ? "Agregar a la mochila" : "Agotado"}
             </button>
-            <div className="flex gap-3">
-              <button
-                onClick={addToBag}
-                disabled={!available}
-                className="font-mono flex flex-1 items-center justify-center gap-2 rounded-md border border-cream/25 px-6 py-4 text-[0.8rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:border-cream hover:bg-cream/5 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <IconPlus className="h-4 w-4" /> Agregar a la mochila
-              </button>
-              <button
-                onClick={() => toggleWish(product.slug)}
-                aria-label={saved ? "Quitar de favoritos" : "Guardar en favoritos"}
-                aria-pressed={saved}
-                className={cn(
-                  "grid w-14 shrink-0 place-items-center rounded-md border transition",
-                  saved ? "border-[#c0392b] bg-[#c0392b]/15" : "border-cream/25 text-cream hover:border-cream hover:bg-cream/5",
-                )}
-              >
-                <IconHeart
-                  className="h-5 w-5"
-                  style={{ color: saved ? "#e05a48" : undefined }}
-                  fill={saved ? "currentColor" : "none"}
-                />
-              </button>
-            </div>
+            <button
+              onClick={() => toggleWish(product.slug)}
+              aria-label={saved ? "Quitar de favoritos" : "Guardar en favoritos"}
+              aria-pressed={saved}
+              className={cn(
+                "grid min-h-14 w-14 shrink-0 place-items-center rounded-md border transition",
+                saved
+                  ? "border-[#c0392b] bg-[#c0392b]/15"
+                  : "border-cream/25 text-cream hover:border-cream hover:bg-cream/5",
+              )}
+            >
+              <IconHeart
+                className="h-5 w-5"
+                style={{ color: saved ? "#e05a48" : undefined }}
+                fill={saved ? "currentColor" : "none"}
+              />
+            </button>
           </div>
 
-          <div className="mt-5 flex items-center gap-2 text-cream/55">
+          {/* Que quede claro cómo se cierra la compra, sin sacarlo de la ficha. */}
+          <p className="mt-3 flex items-start gap-2 text-[0.8rem] leading-relaxed text-cream/70">
+            <IconWhatsApp className="mt-0.5 h-4 w-4 shrink-0 text-[#25D366]" />
+            <span>
+              Arma tu mochila con todo lo que quieras y desde ahí cierras el pedido por WhatsApp:
+              precio, pago y envío se coordinan en el chat.
+            </span>
+          </p>
+
+          <div className="mt-5 flex items-center gap-2 text-cream/70">
             <IconLeaf className="h-4 w-4 text-teal-light" />
-            <span className="text-[0.78rem]">Algodón sostenible · Envío a todo el país</span>
+            <span className="text-[0.8rem]">Algodón sostenible · Envío a todo el país</span>
           </div>
 
           {/* acordeones */}

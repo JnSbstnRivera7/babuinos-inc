@@ -66,6 +66,26 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)** · hallazgos medidos 
 **Quedó fuera** porque necesita datos o decisión tuya: links reales de redes, señal de precio,
 Sacos/Medias/Accesorios, y las páginas de Envíos/Cambios/FAQ (se sacaron del footer hasta tenerlas).
 
+## ✅ Fase 3b — Ajustes de uso real (hecho · 2026-08-04)
+
+Salidos de probar la tienda en el celular, no de la auditoría.
+
+- [x] **Música a un solo toque en celular**: el botón mini abre el panel Y arranca la música en el
+      mismo handler (los navegadores solo permiten `play()` dentro del gesto del usuario). Antes
+      hacían falta dos toques.
+- [x] **Un solo camino de compra**: se quitó "Comprar por WhatsApp" de la ficha. Abría el chat con
+      UNA pieza saltándose el carrito, así que quien quería dos camisas acababa con dos
+      conversaciones y sin sus datos. Ahora todo entra a la mochila y el pedido se cierra desde ahí.
+- [x] **Básicas/Estampadas en pestañas**: como píldoras los tres necesitaban 363 px y solo hay 335 en
+      un celular, así que "Estampadas" caía a una segunda fila y se veía apilado. Con pestañas de
+      `flex-1` siempre entran en una fila (verificado a 320 y 375) y ya no se confunden con el
+      segmentado Hombre/Mujer de abajo.
+- [x] **Home sin vitrina** y **Drop movido al 4-sep-2026**.
+- [x] **Protección de datos (Ley 1581/2012)**: página `/privacidad` con el fondo de la marca y un
+      check obligatorio (sin premarcar) antes de enviar el pedido; la autorización queda como prueba
+      en el mensaje de WhatsApp y en la nota del pedido.
+- [x] **Música solo la de la carpeta**: 8 temas (se quitaron los 2 que no estaban en `MATERIAL`).
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.

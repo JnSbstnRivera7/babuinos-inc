@@ -12,8 +12,6 @@ interface Track {
 const TRACKS: Track[] = [
   { src: "/music/2pac-hit-em-up.mp3", title: "2Pac — Hit 'Em Up" },
   { src: "/music/50cent-in-da-club.mp3", title: "50 Cent — In Da Club" },
-  { src: "/music/house-of-pain-back-from-the-dead.mp3", title: "House of Pain — Back From the Dead" },
-  { src: "/music/six-days-remix.mp3", title: "Six Days (Remix)" },
   { src: "/music/vico-c-desahogo.mp3", title: "Vico C — Desahogo" },
   { src: "/music/shaggy-luv-me-up.mp3", title: "Shaggy — Luv Me Up" },
   { src: "/music/dmx-party-up-in-here.mp3", title: "DMX — Party Up In Here" },
@@ -30,8 +28,10 @@ const TRACKS: Track[] = [
  * En ESCRITORIO la música arranca sola en el primer gesto. En CELULAR **no**:
  * un tema son ~2.5 MB y arrancarlo justo en el primer toque le robaba el ancho
  * de banda a la navegación (el tap a Hombre/Mujer parecía no responder) además
- * de sumar dos tercios del peso de la página. En móvil suena solo si el usuario
- * toca el botón.
+ * de sumar dos tercios del peso de la página.
+ *
+ * Pero en móvil arranca con UN SOLO TOQUE: el botón colapsado abre el panel Y
+ * pone música a la vez. Antes hacían falta dos toques (abrir, luego play).
  */
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -103,6 +103,19 @@ export function MusicPlayer() {
     playTrack(randomOther(index)).catch(() => {});
   };
 
+  /**
+   * Un solo toque = panel abierto + música sonando. El play va en el MISMO
+   * handler del toque porque los navegadores solo permiten audio.play() dentro
+   * del gesto del usuario; si se hiciera en un efecto posterior lo bloquearían.
+   */
+  const abrirYSonar = () => {
+    setOpen(true);
+    if (!started) {
+      setStarted(true);
+      playTrack(Math.floor(Math.random() * TRACKS.length)).catch(() => {});
+    }
+  };
+
   return (
     <>
       <audio ref={audioRef} onEnded={next} preload="metadata" playsInline />
@@ -114,8 +127,8 @@ export function MusicPlayer() {
         {!open ? (
           /* Colapsado: botón redondo — se abre al hacer clic */
           <button
-            onClick={() => setOpen(true)}
-            aria-label="Abrir Babuinos Radio"
+            onClick={abrirYSonar}
+            aria-label={started ? "Abrir Babuinos Radio" : "Poner Babuinos Radio"}
             className="relative grid h-12 w-12 place-items-center rounded-full border border-[var(--accent)]/45 bg-ink/85 shadow-[0_8px_28px_rgba(0,0,0,.45)] backdrop-blur-md transition hover:scale-105"
           >
             <BaboonMark color="var(--accent)" className={`h-6 w-7 ${playing ? "" : started ? "" : "anim-pulse"}`} />

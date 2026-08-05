@@ -81,12 +81,17 @@ export function Footer() {
           </div>
         ))}
       </div>
-      <div className="mx-auto mt-5 flex max-w-6xl flex-wrap items-center justify-between gap-3">
+      <div className="mx-auto mt-5 flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <p className="font-mono text-[0.68rem] tracking-[0.06em] text-cream/55">
           © {BRAND.est} {BRAND.nombre}. — {BRAND.ciudadReal}, {BRAND.pais}. Todos los derechos
           reservados.
         </p>
-        <p className="font-mono text-[0.68rem] text-cream/55">Streetwear Cult · Est. {BRAND.est}</p>
+        <Link
+          href="/privacidad"
+          className="font-mono inline-flex min-h-11 items-center text-[0.68rem] tracking-[0.06em] text-cream/55 underline-offset-2 transition hover:text-cream hover:underline"
+        >
+          Tratamiento de datos
+        </Link>
       </div>
     </footer>
   );

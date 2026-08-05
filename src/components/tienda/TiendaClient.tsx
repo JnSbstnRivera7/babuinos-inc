@@ -89,25 +89,41 @@ export function TiendaClient({
         La <span className="shine-gold">manada</span>
       </h1>
 
-      {/* Básicas vs Estampadas a la vista: es la decisión principal del cliente,
-          así que va en la barra y no escondida dentro del panel de Filtros. */}
-      <div className="mt-5 flex flex-wrap items-center gap-2">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.key}
-            onClick={() => pickCategory(c.key)}
-            aria-pressed={category === c.key}
-            className={cn(
-              "font-condensed inline-flex min-h-11 items-center rounded-full border px-5 text-[1.05rem] leading-none uppercase transition",
-              category === c.key
-                ? "border-transparent bg-[var(--accent)] text-[var(--accent-ink)]"
-                : "border-cream/25 text-cream/70 hover:border-cream hover:text-cream",
-            )}
-          >
-            {c.label}
-            <span className="font-mono ml-2 text-[0.6rem] opacity-70">{countBy(c.key, genero)}</span>
-          </button>
-        ))}
+      {/**
+       * Básicas vs Estampadas: la decisión principal del cliente, así que va a
+       * la vista y no dentro del panel de Filtros.
+       *
+       * Son PESTAÑAS, no píldoras. Como píldoras los tres necesitaban 363px y
+       * solo hay 335 en un celular, así que "Estampadas" caía a una segunda fila
+       * y se veía apilado. Con flex-1 cada una toma un tercio y el clamp encoge
+       * el texto, así que siempre entran en UNA fila. De paso ya no se confunden
+       * con el segmentado Hombre/Mujer de abajo, que sí es de píldoras.
+       */}
+      <div role="tablist" aria-label="Tipo de prenda" className="mt-6 flex border-b border-cream/15">
+        {CATEGORIES.map((c) => {
+          const activa = category === c.key;
+          return (
+            <button
+              key={c.key}
+              role="tab"
+              aria-selected={activa}
+              onClick={() => pickCategory(c.key)}
+              className={cn(
+                "font-condensed relative flex min-h-12 flex-1 items-center justify-center gap-1.5 px-1 text-[clamp(0.95rem,3.6vw,1.25rem)] leading-none uppercase transition",
+                activa ? "text-cream" : "text-cream/60 hover:text-cream",
+              )}
+            >
+              {c.label}
+              <span className="font-mono text-[0.55rem] opacity-70">{countBy(c.key, genero)}</span>
+              {activa && (
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 -bottom-px h-[3px] rounded-full bg-[var(--accent)]"
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* barra slim: género (contexto) + conteo + botón Filtros */}
@@ -115,7 +131,7 @@ export function TiendaClient({
           280 disponibles y con justify-between + nowrap el botón de Filtros
           quedaba CORTADO por el borde. Ahora el género puede encogerse y
           deslizarse, y el botón nunca se encoge. */}
-      <div className="sticky top-14 z-[80] mt-4 flex items-center justify-between gap-2 border-y border-cream/10 bg-ink/90 py-3 sm:gap-3 sm:bg-ink/55 sm:backdrop-blur-md">
+      <div className="sticky top-14 z-[80] mt-3 flex items-center justify-between gap-2 border-b border-cream/10 bg-ink/90 py-3 sm:gap-3 sm:bg-ink/55 sm:backdrop-blur-md">
         <div className="no-scrollbar flex min-w-0 items-center gap-1 overflow-x-auto rounded-full border border-cream/15 p-1">
           {GENERO_SEG.map((g) => (
             <button

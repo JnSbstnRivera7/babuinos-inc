@@ -36,6 +36,13 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       escribir esas páginas.
 - [ ] **Música con licencia.** Los 10 temas son comerciales (2Pac, 50 Cent, House of Pain, Six Days,
       Vico C, Shaggy, DMX, Eminem ×2, Snoop Dogg) y dos son versiones explícitas.
+- [ ] ⚖️ **Datos legales para `/privacidad`.** `src/lib/privacidad.ts` tiene campos `PENDIENTE`:
+      razón social, NIT y un correo de atención de solicitudes. **Revisar la política con un abogado**
+      antes de operar en serio — hoy está inspirada en la Ley 1581/2012 pero no validada.
+- [ ] **Columna `privacy_accepted` en la tabla `orders`.** Hoy el consentimiento se guarda dentro de
+      la nota y en el mensaje de WhatsApp. Para tenerlo como booleano aparte, agregar la columna y
+      luego descomentar el campo en `api/checkout/route.ts` (si se mete sin crearla, PostgREST rompe
+      TODO insert de pedidos en silencio).
 - [ ] **Rotar credenciales** compartidas en desarrollo (GitHub PAT `ghp_…`, token Vercel `vcp_…`,
       service key de Supabase) y **cambiar `ADMIN_PASSWORD`** (env var en Vercel).
 
@@ -70,6 +77,13 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 - [x] **Copy de Tábogo** en una sola fuente (`src/lib/brand.ts`).
 - [x] **Wallpaper nuevo** + 10 temas de música.
 - [x] **Pipeline de fotos** guardado en el repo (`scripts/`).
+- [x] **Ajustes de uso real** (4-ago): música a un toque en celular, un solo camino de compra (todo
+      por la mochila, sin WhatsApp directo desde la ficha), Básicas/Estampadas en pestañas de una
+      sola fila, home sin vitrina y Drop al 4-sep.
+- [x] **Consentimiento de datos** (Ley 1581): página `/privacidad` con el wallpaper de la marca +
+      check obligatorio en el checkout, con la autorización guardada como prueba.
+- [x] **Música alineada a la carpeta de Juan**: quedan los 8 temas de `MATERIAL/Babuinos music`
+      (se quitaron House of Pain y Six Days, que no estaban).
 - [x] **Auditoría de UI/UX aplicada** (4-ago) — ver [AUDITORIA-UX.md](AUDITORIA-UX.md):
       footer sin enlaces muertos (12 → 0), tope de stock en el carrito, contraste AA (5 fallas → 0),
       áreas de toque (146 bajo 44 px → 0),

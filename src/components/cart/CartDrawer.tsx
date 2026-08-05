@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/store";
 import { useToast } from "@/lib/toast";
@@ -15,6 +16,12 @@ export function CartDrawer() {
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [note, setNote] = useState("");
+  /**
+   * Autorización de tratamiento de datos (Ley 1581 de 2012). Arranca en FALSE a
+   * propósito: la ley exige autorización previa y expresa, así que no puede
+   * venir premarcada ni deducirse del hecho de comprar.
+   */
+  const [aceptaDatos, setAceptaDatos] = useState(false);
 
   async function checkout() {
     if (!lines.length) return;
@@ -22,12 +29,18 @@ export function CartDrawer() {
       showToast("⚠️ Escribe tu nombre para el pedido");
       return;
     }
+    if (!aceptaDatos) {
+      showToast("⚠️ Acepta el tratamiento de datos para continuar");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lines, name, phone, city, note }),
+        // `privacyAccepted` queda guardado con el pedido: es la prueba de la
+        // autorización que el titular puede pedirnos (art. 8, literal b).
+        body: JSON.stringify({ lines, name, phone, city, note, privacyAccepted: true }),
       });
       const data = (await res.json()) as { url?: string };
       if (data.url) {
@@ -182,19 +195,50 @@ export function CartDrawer() {
                       />
                     </Campo>
                   </div>
+
+                  {/* Autorización expresa y previa (Ley 1581 de 2012) */}
+                  <label
+                    htmlFor="cart-datos"
+                    className="mt-4 flex cursor-pointer items-start gap-3 rounded-md border border-ink/15 bg-cream/40 p-3"
+                  >
+                    <input
+                      id="cart-datos"
+                      type="checkbox"
+                      checked={aceptaDatos}
+                      onChange={(e) => setAceptaDatos(e.target.checked)}
+                      className="mt-0.5 h-5 w-5 shrink-0 accent-teal"
+                    />
+                    <span className="text-[0.78rem] leading-relaxed text-ink/80">
+                      Autorizo el tratamiento de mis datos personales para coordinar y despachar este
+                      pedido, conforme a la{" "}
+                      <Link
+                        href="/privacidad"
+                        target="_blank"
+                        className="font-bold text-teal underline underline-offset-2"
+                      >
+                        política de tratamiento de datos
+                      </Link>{" "}
+                      y a la Ley 1581 de 2012.
+                    </span>
+                  </label>
                 </div>
               )}
-              <p className="mb-3 text-center text-[0.78rem] text-ink/55">
+              <p className="mb-3 text-center text-[0.78rem] text-ink/70">
                 Precio, pago y envío se coordinan por WhatsApp.
               </p>
               <button
                 onClick={checkout}
-                disabled={lines.length === 0 || loading}
-                className="font-mono flex w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 py-4 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase shadow-[0_4px_18px_rgba(37,211,102,.35)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink/40 disabled:shadow-none"
+                disabled={lines.length === 0 || loading || !aceptaDatos}
+                className="font-mono flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 text-[0.8rem] font-bold tracking-[0.1em] text-white uppercase shadow-[0_4px_18px_rgba(37,211,102,.35)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink/40 disabled:shadow-none"
               >
                 <IconWhatsApp className="h-5 w-5" />
                 {loading ? "Preparando..." : "Enviar pedido por WhatsApp"}
               </button>
+              {lines.length > 0 && !aceptaDatos && (
+                <p className="font-mono mt-2 text-center text-[0.64rem] tracking-[0.08em] text-ink/60 uppercase">
+                  Marca la autorización para continuar
+                </p>
+              )}
             </footer>
           </motion.aside>
         </>

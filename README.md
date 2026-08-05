@@ -39,19 +39,34 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 **Arquitectura por secciones** (no una sola landing):
 
 - **Home** = SOLO la entrada: intro scroll-reveal (el logo descubre el wallpaper fijo) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**. Nada de catálogo: es una puerta, no una vitrina. El `<h1>` va en `sr-only` porque el título visual es el logo.
-- **`/tienda`** (PLP): grid de producto. **Básicas / Estampadas visible en la barra** con conteos, segmentado Todos/Hombre/Mujer, y **Color** en el panel glass (dropdown en PC / bottom-sheet en móvil). Siempre arranca desde arriba.
-- **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer**, **flechas y deslizar con el dedo**, y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **"Comprar por WhatsApp" pre-llenado**, "combina con". Entrar por la línea Mujer mantiene el modelo mujer en la ficha (`?g=`, leído con `useSyncExternalStore` para no perder el prerender).
-- **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist).
+- **`/tienda`** (PLP): grid de producto. **Básicas / Estampadas en pestañas** (una fila, ancho repartido en tres, con conteos), segmentado Todos/Hombre/Mujer, y **Color** en el panel glass (dropdown en PC / bottom-sheet en móvil). Siempre arranca desde arriba.
+- **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer**, **flechas y deslizar con el dedo**, y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **un solo CTA — "Agregar a la mochila"** — y "combina con". Entrar por la línea Mujer mantiene el modelo mujer en la ficha (`?g=`, leído con `useSyncExternalStore` para no perder el prerender).
+- **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist) · **`/privacidad`** (tratamiento de datos).
 
 **Transversal:**
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
-- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Topa el stock de cada talla**: `add()` devuelve `false` al llegar al máximo, avisa por toast y el `+` se apaga. Cada línea guarda su `max`.
-- **Globales en toda la página:** reproductor "Babuinos Radio" (botón mini que abre al clic), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
+- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: la ficha no abre WhatsApp directo, todo entra a la mochila y el pedido se cierra desde ahí con los datos del cliente. **Topa el stock de cada talla**: `add()` devuelve `false` al llegar al máximo, avisa por toast y el `+` se apaga. Cada línea guarda su `max`.
+- **Globales en toda la página:** reproductor "Babuinos Radio" (el botón mini abre el panel **y pone música en el mismo toque**; en celular no autoarranca, ver Rendimiento), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
 - **Efectos:** **wallpaper fijo art-directed** (mural BABUINOS INC sobre el skyline — **vertical en móvil / horizontal en escritorio** vía `<picture>`, se descarga solo la que aplica), lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios.
+
+## ⚖️ Datos personales (Ley 1581 de 2012)
+
+- **Página `/privacidad`** dentro del `Shell` (mismo wallpaper de la marca), con el texto en
+  `src/lib/privacidad.ts` para editarlo sin tocar la maquetación. Cubre responsable, datos, finalidades,
+  derechos del titular, plazos, autorización, datos sensibles/menores, seguridad y vigencia.
+- **Check de autorización en el checkout**, sin premarcar (la ley exige autorización previa y expresa).
+  Sin marcarlo, el botón de enviar queda deshabilitado. Enlaza a `/privacidad`.
+- La autorización queda como **prueba** en dos lados: en el mensaje de WhatsApp
+  (`✅ Autoricé el tratamiento…`) y en la nota que se guarda en Supabase.
+- ⚠️ **Pendiente legal:** `src/lib/privacidad.ts` tiene campos `PENDIENTE` (razón social, NIT, correo
+  de atención) y conviene revisarlo con un abogado. Para guardar el consentimiento como booleano
+  aparte hay que **agregar la columna `privacy_accepted` a la tabla `orders`** — hoy NO se inserta
+  porque PostgREST falla el insert entero si la columna no existe (ver el comentario en
+  `api/checkout/route.ts`).
 
 ## 🔎 SEO y accesibilidad
 
@@ -174,7 +189,7 @@ src/
 public/        brand/ (logos, baboon.webp [máscara], genero/{hombre,mujer}.svg,
                products/<slug>-{espalda,frente}.webp [prenda sola],
                models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
-               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/, og.png, sw.js
+               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/ (8 temas), og.png, sw.js
 scripts/       models.mjs · models_convert.py · models_grid.py · ingest_camisas.py
 ```
 

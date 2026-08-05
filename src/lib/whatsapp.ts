@@ -6,10 +6,19 @@ export interface OrderPayload {
   phone?: string;
   city?: string;
   note?: string;
+  /** El cliente marcó la autorización de datos (Ley 1581). */
+  privacyAccepted?: boolean;
 }
 
 /** Builds the order summary sent to WhatsApp (no prices — coordinated in chat). */
-export function buildOrderMessage({ lines, name, phone, city, note }: OrderPayload): string {
+export function buildOrderMessage({
+  lines,
+  name,
+  phone,
+  city,
+  note,
+  privacyAccepted,
+}: OrderPayload): string {
   const header = "🦍 *PEDIDO — BABUINOS INC*\n_Colección Fundadores 2026_\n";
   const items = lines
     .map((l, i) => `${i + 1}. *${l.name}* — ${l.colorway}\n   Talla ${l.size} · x${l.qty}`)
@@ -23,17 +32,13 @@ export function buildOrderMessage({ lines, name, phone, city, note }: OrderPaylo
     .filter(Boolean)
     .join("\n");
   const datosBlock = datos ? `\n\n${datos}` : "";
+  // Deja constancia en el propio chat de que autorizó el tratamiento de datos.
+  const consentimiento = privacyAccepted
+    ? "\n\n✅ _Autoricé el tratamiento de mis datos (Ley 1581/2012)._"
+    : "";
   const footer =
     "\n\n_Quiero coordinar precio, pago y envío de estas piezas. ¡Listo para entrar a la manada!_ 🌿";
-  return `${header}\n${items}${datosBlock}${footer}`;
-}
-
-/** Builds a single-product WhatsApp message, pre-filled from the PDP selection. */
-export function buildProductMessage(name: string, colorway: string, size?: string): string {
-  const header = "🦍 *BABUINOS INC*\n_Colección Fundadores 2026_\n";
-  const item = `Quiero esta pieza:\n*${name}* — ${colorway}${size ? `\nTalla ${size}` : ""}`;
-  const footer = "\n\n_¿Me ayudas a coordinar precio, pago y envío? ¡Listo para la manada!_ 🌿";
-  return `${header}\n${item}${footer}`;
+  return `${header}\n${items}${datosBlock}${consentimiento}${footer}`;
 }
 
 /** Consulta de talla: mientras no haya tabla de medidas, se resuelve en el chat. */

@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tienda?tipo=estampada`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/nosotros`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/club`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/privacidad`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const fichas: MetadataRoute.Sitemap = PRODUCTS.map((p) => ({
