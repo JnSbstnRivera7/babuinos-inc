@@ -86,6 +86,15 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       en el mensaje de WhatsApp y en la nota del pedido.
 - [x] **Música solo la de la carpeta**: 8 temas (se quitaron los 2 que no estaban en `MATERIAL`).
 
+## ✅ Fase 3c — Guardián Navy (hecho · 2026-08-05)
+
+- [x] **Pieza 16 — "Guardián Navy"** (Colección Fundadores): azul marino con el ángel guardián a la
+      espalda y el lettering *Guardian* en rojo; monograma SG al pecho. Procesada desde
+      `MATERIAL/Camisas/Coleccion Fundadores/11*.png` reutilizando `scripts/ingest_camisas.py`.
+      Nombre elegido según el print + color, en línea con el resto del catálogo.
+- [x] **Nuevo color de filtro: Azul** (`navy`, `#1b2f5c`) — antes no existía azul en la paleta del PLP.
+- [x] **Tema nuevo**: Eminem — Ass Like That (9 temas en total, a 96 kbps como los demás).
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.

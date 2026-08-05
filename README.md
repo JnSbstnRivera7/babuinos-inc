@@ -7,7 +7,7 @@
 - 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
 - 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
 
-**Estado:** 15 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+**Estado:** 16 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
@@ -26,7 +26,7 @@ Dos líneas, definidas en `src/lib/products.ts` (fuente única):
 | Línea | Piezas | Qué es |
 | --- | --- | --- |
 | **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
-| **Colección Fundadores** | 10 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid. |
+| **Colección Fundadores** | 11 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy. |
 
 El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
 
@@ -72,7 +72,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 Estado tras la [auditoría del 4-ago](AUDITORIA-UX.md):
 
-- **`sitemap.xml`** (`src/app/sitemap.ts`, 21 URLs: estáticas + las 15 fichas) y **`robots.txt`** (`robots.ts`, bloquea `/admin` y `/api/`, referencia el sitemap).
+- **`sitemap.xml`** (`src/app/sitemap.ts`: rutas estáticas + una por ficha de producto) y **`robots.txt`** (`robots.ts`, bloquea `/admin` y `/api/`, referencia el sitemap).
 - **`schema.org/Product`** en cada ficha (`producto/[slug]/page.tsx`): nombre, marca, color, material, fotos, tallas disponibles y `availability`. **Sin precio no se declara oferta** — no se inventa lo que no hay.
 - **Jerarquía de encabezados** correcta: `<h1>` en el home y en cada página; en `/tienda` un `<h2>` en `sr-only` describe el filtro activo para no saltar de `h1` a los `h3` de las piezas.
 - **Página 404 propia** (`not-found.tsx`) con marca y salida a la tienda.
@@ -189,7 +189,7 @@ src/
 public/        brand/ (logos, baboon.webp [máscara], genero/{hombre,mujer}.svg,
                products/<slug>-{espalda,frente}.webp [prenda sola],
                models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
-               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/ (8 temas), og.png, sw.js
+               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/ (9 temas), og.png, sw.js
 scripts/       models.mjs · models_convert.py · models_grid.py · ingest_camisas.py
 ```
 

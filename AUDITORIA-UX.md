@@ -206,7 +206,7 @@ checkout —el paso donde menos se puede dudar— eso cuesta pedidos.
 |---|---|
 | **5 componentes muertos** | `Destacados`, `Lookbook`, `BaboonStrip`, `FeaturesStrip`, `AdminChat` están en el repo sin que nadie los importe. `Destacados` vale la pena **enchufarlo** (ver 3.1); los otros 4, borrarlos. |
 | **JS ~740 KB** | framer-motion (222 KB) lo usan 7 componentes, incluido el Navbar, así que está en todas las páginas. Sacarlo es un refactor de toda la app, no un ajuste. Es la palanca grande que queda. |
-| **Música 30 MB** | 10 temas a 96 kb/s en el repo. No autoarrancan en celular y se bajan de a uno, pero **los 10 son comerciales** y dos son versiones explícitas. |
+| **Música ~27 MB** | 9 temas a 96 kb/s en el repo. No autoarrancan en celular y se bajan de a uno, pero **todos son comerciales** y varios son versiones explícitas. |
 | **Guía de tallas de referencia** | Números de oversize de mercado, marcados como referencia ±2 cm. Reemplazar al medir el inventario. |
 | **Drop 02 — Expedición · 15-ago-2026** | Verificar que la fecha y el nombre sean los reales. |
 

@@ -48,3 +48,7 @@ CREDENCIALES.local.md
 next-env.d.ts
 
 .vercel
+
+# python
+__pycache__/
+*.pyc

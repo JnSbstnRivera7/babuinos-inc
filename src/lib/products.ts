@@ -91,6 +91,7 @@ export const COLORES: ColorDef[] = [
   { key: "rojo", label: "Rojo", hex: "#c8102e" },
   { key: "lila", label: "Lila", hex: "#c3a9e6" },
   { key: "verde", label: "Verde", hex: "#1f3d2b" },
+  { key: "navy", label: "Azul", hex: "#1b2f5c" },
 ];
 
 export function getColor(key: string): ColorDef | undefined {
@@ -485,6 +486,27 @@ const FUNDADORES: Product[] = [
     models: modelSet("california-rasta-kid"),
     colorway: "Verde Bosque",
     sizes: TALLAS_STD,
+  },
+  {
+    id: "guardian-navy",
+    slug: "guardian-navy",
+    name: "Guardián Navy",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "nautical",
+    color: "navy",
+    desc: "Azul marino con el ángel guardián a toda la espalda y el lettering Guardian en rojo. Monograma SG al pecho.",
+    descLong:
+      "Azul marino profundo con la estatua del ángel guardián ilustrada a toda la espalda, atravesada por rayos, bajo el lettering Guardian en rojo gótico. Al frente, el monograma SG bordado en rojo; etiqueta tejida en el ruedo. Edición limitada.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/guardian-navy-frente.webp",
+    images: flatSet("guardian-navy"),
+    models: modelSet("guardian-navy"),
+    colorway: "Azul Marino / Rojo",
+    sizes: TALLAS_STD,
+    badge: "new",
   },
 ];
 

@@ -17,6 +17,7 @@ const TRACKS: Track[] = [
   { src: "/music/dmx-party-up-in-here.mp3", title: "DMX — Party Up In Here" },
   { src: "/music/eminem-without-me.mp3", title: "Eminem — Without Me" },
   { src: "/music/eminem-shake-that.mp3", title: "Eminem ft. Nate Dogg — Shake That" },
+  { src: "/music/eminem-ass-like-that.mp3", title: "Eminem — Ass Like That" },
   { src: "/music/snoop-dogg-gin-and-juice.mp3", title: "Snoop Dogg — Gin and Juice" },
 ];
 

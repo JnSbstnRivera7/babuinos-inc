@@ -5,8 +5,9 @@
        autoarranca en teléfono.
    v4: catálogo nuevo (15 piezas) + wallpaper nuevo. Los wallpapers conservan el
        nombre de archivo con contenido distinto, así que sin subir versión el
-       celular seguiría mostrando el viejo. */
-const CACHE = "babuinos-v4";
+       celular seguiría mostrando el viejo.
+   v5: pieza 16 (Guardián Navy) + tema nuevo + privacidad + compra unificada. */
+const CACHE = "babuinos-v5";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.

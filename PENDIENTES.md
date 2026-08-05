@@ -14,7 +14,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 15 piezas.** Hoy TODAS usan el mismo tallaje provisional (`TALLAS_STD` en
+- [ ] **STOCK REAL de las 16 piezas.** Hoy TODAS usan el mismo tallaje provisional (`TALLAS_STD` en
       `src/lib/products.ts`: S-2XL con 6/8/8/6/4). Qué tallas existen de verdad por pieza y cuántas.
       Talla en 0 sale tachada como agotada.
 - [ ] **Medir el inventario** para la guía de tallas. `SIZE_GUIDE` en `ProductDetail.tsx` usa
@@ -34,8 +34,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       serían ~790 m). Si la quieres en pies es un renglón: `altura` en `src/lib/brand.ts`.
 - [ ] **Contenido para Envíos / Cambios / FAQ** — necesito tus tiempos y condiciones reales para
       escribir esas páginas.
-- [ ] **Música con licencia.** Los 10 temas son comerciales (2Pac, 50 Cent, House of Pain, Six Days,
-      Vico C, Shaggy, DMX, Eminem ×2, Snoop Dogg) y dos son versiones explícitas.
+- [ ] **Música con licencia.** Los 9 temas son comerciales (2Pac, 50 Cent, Vico C, Shaggy, DMX,
+      Eminem ×3, Snoop Dogg) y varios son versiones explícitas.
 - [ ] ⚖️ **Datos legales para `/privacidad`.** `src/lib/privacidad.ts` tiene campos `PENDIENTE`:
       razón social, NIT y un correo de atención de solicitudes. **Revisar la política con un abogado**
       antes de operar en serio — hoy está inspirada en la Ley 1581/2012 pero no validada.
@@ -84,6 +84,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       check obligatorio en el checkout, con la autorización guardada como prueba.
 - [x] **Música alineada a la carpeta de Juan**: quedan los 8 temas de `MATERIAL/Babuinos music`
       (se quitaron House of Pain y Six Days, que no estaban).
+- [x] **Pieza 16 "Guardián Navy"** (5-ago): azul marino, ángel guardián a la espalda; nuevo color de
+      filtro Azul + tema nuevo (Eminem — Ass Like That, 9 en total).
 - [x] **Auditoría de UI/UX aplicada** (4-ago) — ver [AUDITORIA-UX.md](AUDITORIA-UX.md):
       footer sin enlaces muertos (12 → 0), tope de stock en el carrito, contraste AA (5 fallas → 0),
       áreas de toque (146 bajo 44 px → 0),
