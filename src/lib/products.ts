@@ -93,6 +93,8 @@ export const COLORES: ColorDef[] = [
   { key: "verde", label: "Verde", hex: "#1f3d2b" },
   { key: "navy", label: "Azul", hex: "#1b2f5c" },
   { key: "celeste", label: "Celeste", hex: "#a9cce3" },
+  // Lavado a la piedra: no es el negro plano de las básicas, se ve jaspeado.
+  { key: "lavado", label: "Negro lavado", hex: "#3a3a3c" },
 ];
 
 export function getColor(key: string): ColorDef | undefined {
@@ -560,6 +562,27 @@ const FUNDADORES: Product[] = [
     images: flatSet("eternal-beauty"),
     models: modelSet("eternal-beauty"),
     colorway: "Negro",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    id: "doberman-sangre",
+    slug: "doberman-sangre",
+    name: "Doberman Sangre",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "regal",
+    color: "lavado",
+    desc: "Lavada a la piedra, con un doberman de facetas y ojos rojos a toda la espalda bajo BABUINOS en death metal.",
+    descLong:
+      "Negro lavado a la piedra: jaspeado, con ese desgaste que hace que no haya dos exactamente iguales. A toda la espalda, un doberman ilustrado en facetas geométricas con los ojos en rojo, bajo BABUINOS en lettering de death metal. Al frente el sello SOMOS GRANDES en el mismo trazo espinado, babuino troquelado en el ruedo, etiqueta tejida al costado y BABUINOS en la nuca.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/doberman-sangre-frente.webp",
+    images: flatSet("doberman-sangre"),
+    models: modelSet("doberman-sangre"),
+    colorway: "Negro Lavado",
     sizes: TALLAS_STD,
     badge: "new",
   },

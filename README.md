@@ -7,7 +7,7 @@
 - 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
 - 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
 
-**Estado:** 18 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+**Estado:** 19 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
@@ -26,7 +26,7 @@ Dos líneas, definidas en `src/lib/products.ts` (fuente única):
 | Línea | Piezas | Qué es |
 | --- | --- | --- |
 | **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
-| **Colección Fundadores** | 13 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty. |
+| **Colección Fundadores** | 14 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty, Doberman Sangre. |
 
 El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
 
@@ -124,7 +124,7 @@ Copia `.env.example` → `.env.local` (no se sube a git):
 ## 🔐 Panel de administración
 
 `/admin` — login con usuario y clave (env `ADMIN_USER` / `ADMIN_PASSWORD`). Muestra:
-- **Inventario editable:** el tallaje de las 18 piezas, sin tocar código (ver abajo).
+- **Inventario editable:** el tallaje de las 19 piezas, sin tocar código (ver abajo).
 - **Gráficas:** pedidos por día (14 días), productos más pedidos, pedidos por ciudad.
 - **Tablas:** pedidos (cliente, teléfono → WhatsApp, ciudad, productos, nota) y Club (correos).
 - No indexable (`robots: noindex`). Cambia la clave en las env vars.

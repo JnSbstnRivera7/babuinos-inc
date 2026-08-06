@@ -3,7 +3,7 @@
 Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)** · hallazgos medidos en
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
-Estado: **en vivo** en https://babuinos-inc.vercel.app con las 18 piezas del catálogo.
+Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del catálogo.
 
 > **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin, WhatsApp)
 > en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`. Para pushear ojo con la cuenta:
@@ -28,7 +28,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 18 piezas del cat
       env vars de producción del proyecto `babuinos-inc` en Vercel. Yo no puedo crearlo: hace falta
       un PAT de Management API de tu cuenta.
 
-- [ ] **STOCK REAL de las 18 piezas** — ya **no necesita código**: se edita en `/admin` → Inventario.
+- [ ] **STOCK REAL de las 19 piezas** — ya **no necesita código**: se edita en `/admin` → Inventario.
       Un paso único antes: correr [`supabase/schema.sql`](supabase/schema.sql) en el
       SQL Editor de tu Supabase (el panel lo dice y te deja copiar el SQL si falta). Casilla vacía =
       la talla no existe · `0` = agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir
@@ -75,12 +75,16 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 18 piezas del cat
 - [ ] **Reseñas / estrellas** con reseñas reales o captura por WhatsApp tras la compra.
 - [ ] **Analítica "lo más visto"** (vistas en Supabase + vista en `/admin`).
 - [ ] **Email del Club** a un proveedor + dominio propio.
-- [ ] Sacar **framer-motion** del bundle base (222 KB, en 7 componentes incluido el Navbar).
 
 ---
 
 ## ✅ Cerrado
 
+- [x] **Pieza 19 "Doberman Sangre"** (6-ago): lavada a la piedra, doberman de facetas con ojos rojos
+      a la espalda bajo BABUINOS en death metal; nuevo color de filtro **Negro lavado**.
+- [x] **framer-motion fuera del marco de la página** (6-ago): la librería venía en TODAS las páginas
+      por el Navbar y solo se le pedían fades y slides. Ahora eso es CSS (`usePresence` +
+      `data-abierto`) y la librería queda únicamente en la intro del home.
 - [x] **Mochila en dos pasos** (6-ago): el formulario de datos sumaba 596 px en el footer fijo y en
       un teléfono de 667 no dejaba ver las camisas. Ahora paso 1 = solo prendas (329 px de lista,
       antes ~0), paso 2 = los datos cuando ya se decidió comprar. Stepper de cantidad legible

@@ -69,6 +69,7 @@ FUNDADORES = {
     11: "guardian-navy",
     12: "green-afro-tiki",
     13: "eternal-beauty",
+    14: "doberman-sangre",
 }
 
 GENEROS = ["hombre", "mujer"]

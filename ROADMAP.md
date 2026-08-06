@@ -131,6 +131,27 @@ Salidos de probar la tienda en el celular, no de la auditoría.
 - [x] `persist` del carrito → v2 (descarta carritos guardados antes de los precios para no mostrar
       totales NaN).
 
+## ✅ Fase 3g — Mochila, inventario y peso (hecho · 2026-08-06)
+
+- [x] **Mochila en dos pasos.** El formulario de datos vivía en el footer fijo: 596 px de footer en un
+      panel de 667 dejaban la lista de camisas en ~0 px, y por eso "los datos tapaban las camisas".
+      Paso 1 = solo prendas (329 px de lista), paso 2 = los datos cuando ya se decidió comprar, con
+      resumen que devuelve a la mochila. Stepper legible (glifo 14 → 18 px, trazo 1.75 → 2.75) y
+      talla/género como etiquetas en vez de una línea de mono apretada.
+- [x] **Inventario editable en `/admin`.** El tallaje salió del código a la tabla `product_stock` de
+      Supabase: casilla vacía = la talla no existe · `0` = agotada · `n` = unidades. La tienda, las
+      fichas y favoritos lo leen en el servidor y se revalidan al guardar (verificado en producción:
+      `X-Vercel-Cache: REVALIDATED` y el JSON-LD siguiendo el stock).
+- [x] **Hidratación del nav.** Los contadores de mochila y favoritos salen de localStorage y rompían
+      la hidratación de todo el nav en cada carga de quien ya tenía prendas guardadas.
+- [x] **framer-motion fuera del marco de la página** (−222 KB por vista). Venía en TODAS las páginas
+      por el Navbar y solo se usaba para fades y slides: ahora eso es CSS (`usePresence` +
+      `data-abierto`) y la librería queda solo en la intro del home.
+- [x] **Pieza 19 "Doberman Sangre"**: lavada a la piedra, doberman de facetas con ojos rojos a la
+      espalda bajo BABUINOS en death metal. Nuevo color de filtro **Negro lavado**.
+- [x] **Frente nuevo de Eternal Beauty** ('Our Bond is Forever') y el script de ingesta reparado
+      (mapa hasta la 14, láminas por corte `N H`/`N M`, y `--solo <pieza>` para rehacer una sola).
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.
