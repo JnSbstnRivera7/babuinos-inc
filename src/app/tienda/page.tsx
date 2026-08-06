@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Shell } from "@/components/layout/Shell";
 import { TiendaClient } from "@/components/tienda/TiendaClient";
+import { getStockMap } from "@/lib/stock";
 import type { Category, Genero } from "@/lib/products";
 
 export const metadata: Metadata = {
@@ -22,6 +23,10 @@ export default async function TiendaPage({
     ? (tipo as Category | "all")
     : "all";
 
+  // Tallaje real desde Supabase (lo que Juan edita en /admin). Si la tabla aún
+  // no existe llega vacío y el catálogo usa su tallaje provisional.
+  const stockMap = await getStockMap();
+
   return (
     <Shell>
       {/* key remonta al cambiar los params para que los filtros sigan a la URL */}
@@ -29,6 +34,7 @@ export default async function TiendaPage({
         key={`${initial}-${initialTipo}`}
         initialGenero={initial}
         initialTipo={initialTipo}
+        stockMap={stockMap}
       />
     </Shell>
   );

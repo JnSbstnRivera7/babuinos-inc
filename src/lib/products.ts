@@ -167,7 +167,7 @@ export interface Product {
  * Tallaje provisional, igual para toda la colección hasta tener el inventario
  * real. Cambiar acá se refleja en las 15 piezas.
  */
-const TALLAS_STD: SizeStock[] = [
+export const TALLAS_STD: SizeStock[] = [
   { size: "S", stock: 6 },
   { size: "M", stock: 8 },
   { size: "L", stock: 8 },
@@ -622,6 +622,41 @@ export function matchesGenero(product: Product, genero: Genero | "all"): boolean
 
 export function inStock(product: Product): boolean {
   return product.sizes.some((s) => s.stock > 0);
+}
+
+/* ─── Stock real (editable desde /admin) ─────────────────────────────
+   El catálogo (nombres, fotos, copy) vive en este archivo porque cambia
+   poco y se versiona con el código. El TALLAJE cambia todos los días y no
+   puede depender de un despliegue: vive en la tabla `product_stock` de
+   Supabase y se pega acá arriba en tiempo de petición.
+   Mientras una pieza no tenga filas en la tabla, se queda con el tallaje
+   provisional de `TALLAS_STD` — así nada se rompe antes de cargar el
+   inventario.                                                          */
+
+/** Todas las tallas que puede tener una pieza, en orden de exhibición. */
+export const TALLAS_POSIBLES = ["S", "M", "L", "XL", "2XL", "3XL"] as const;
+
+/** `{ [product_id]: { [talla]: unidades } }` — lo que devuelve `getStockMap()`. */
+export type StockMap = Record<string, Record<string, number>>;
+
+/**
+ * Pega el stock real sobre una pieza. Una talla que NO está en el mapa no
+ * existe para esa pieza (no se muestra); una talla en 0 existe pero está
+ * agotada (se muestra tachada). Sin filas → tallaje provisional.
+ */
+export function withStock(product: Product, map?: StockMap | null): Product {
+  const real = map?.[product.id];
+  if (!real) return product;
+  const sizes: SizeStock[] = TALLAS_POSIBLES.filter((t) => t in real).map((t) => ({
+    size: t,
+    stock: Math.max(0, Math.trunc(real[t]) || 0),
+  }));
+  // Una fila vacía no debería dejar la pieza sin tallas: mejor lo provisional.
+  return sizes.length ? { ...product, sizes } : product;
+}
+
+export function withStockAll(list: Product[], map?: StockMap | null): Product[] {
+  return map ? list.map((p) => withStock(p, map)) : list;
 }
 
 export function totalStock(product: Product): number {

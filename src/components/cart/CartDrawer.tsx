@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -29,7 +29,7 @@ export function CartDrawer() {
   const { lines, isOpen, close, remove, changeQty } = useCart();
   const totales = cartTotals(lines);
   const showToast = useToast((s) => s.show);
-  const [paso, setPaso] = useState<Paso>("mochila");
+  const [pasoElegido, setPaso] = useState<Paso>("mochila");
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -44,16 +44,19 @@ export function CartDrawer() {
 
   const unidades = lines.reduce((a, l) => a + l.qty, 0);
 
-  // Al cerrar la mochila se vuelve al paso 1: quien la reabre espera ver sus
-  // camisas, no el formulario a medio llenar.
-  useEffect(() => {
-    if (!isOpen) setPaso("mochila");
-  }, [isOpen]);
+  // Si se queda vacía (quitó la última prenda) no tiene sentido pedir datos: el
+  // paso se DERIVA en vez de sincronizarse con un efecto.
+  const paso: Paso = lines.length ? pasoElegido : "mochila";
 
-  // Si se queda vacía (quitó la última prenda) no tiene sentido pedir datos.
-  useEffect(() => {
-    if (!lines.length) setPaso("mochila");
-  }, [lines.length]);
+  /**
+   * Cerrar devuelve a la mochila: quien la reabre espera ver sus camisas, no el
+   * formulario a medio llenar. Lo que sí se conserva son los datos escritos
+   * (el componente no se desmonta), para no hacerle llenar todo otra vez.
+   */
+  const cerrar = useCallback(() => {
+    setPaso("mochila");
+    close();
+  }, [close]);
 
   async function checkout() {
     if (!lines.length) return;
@@ -96,7 +99,7 @@ export function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={close}
+            onClick={cerrar}
             className="fixed inset-0 z-[110] bg-ink/60 backdrop-blur-sm"
           />
           <motion.aside
@@ -131,7 +134,7 @@ export function CartDrawer() {
                 </h2>
               )}
               <button
-                onClick={close}
+                onClick={cerrar}
                 aria-label="Cerrar"
                 className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-cream/10 text-cream transition hover:bg-cream/20"
               >
@@ -153,7 +156,7 @@ export function CartDrawer() {
                       </p>
                       <Link
                         href="/tienda"
-                        onClick={close}
+                        onClick={cerrar}
                         className="font-mono inline-flex min-h-11 items-center rounded-md bg-ink px-5 text-[0.72rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:bg-ink/85"
                       >
                         Ver camisas
@@ -244,7 +247,7 @@ export function CartDrawer() {
                     </button>
                     <Link
                       href="/tienda"
-                      onClick={close}
+                      onClick={cerrar}
                       className="font-mono mt-1 flex min-h-11 items-center justify-center text-[0.68rem] font-bold tracking-[0.08em] text-ink/70 uppercase transition hover:text-ink"
                     >
                       Seguir viendo camisas

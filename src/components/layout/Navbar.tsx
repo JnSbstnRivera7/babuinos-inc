@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
@@ -53,22 +53,25 @@ function Swatches({ onPick }: { onPick?: () => void }) {
   );
 }
 
+/**
+ * Los dos contadores viven en localStorage (zustand persist): el servidor pinta
+ * 0 y el cliente el número real, y ese desajuste rompía la hidratación de TODO
+ * el nav en cada carga de quien ya tenía prendas guardadas. Con el snapshot de
+ * servidor en 0, la hidratación coincide y React actualiza al valor real
+ * enseguida — mismo patrón que `useLinkGender` en la ficha.
+ */
+function useContador(store: { subscribe: (f: () => void) => () => void }, leer: () => number) {
+  return useSyncExternalStore(store.subscribe, leer, () => 0);
+}
+
 export function Navbar() {
-  const count = useCart((s) => s.count());
+  const count = useContador(useCart, () => useCart.getState().count());
+  const wishCount = useContador(useWishlist, () => useWishlist.getState().ids.length);
   const open = useCart((s) => s.open);
-  const wishCount = useWishlist((s) => s.ids.length);
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   const [shop, setShop] = useState(false);
   const [theme, setThemeOpen] = useState(false);
-  /**
-   * Los dos contadores viven en localStorage (zustand persist): el servidor
-   * pinta 0 y el cliente el número real, y ese desajuste rompía la hidratación
-   * de TODO el nav en cada carga de quien ya tenía prendas en la mochila. Se
-   * pintan solo después de montar.
-   */
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -196,7 +199,7 @@ export function Navbar() {
             className="relative grid h-11 w-11 place-items-center rounded-md text-cream/80 transition hover:text-cream"
           >
             <IconHeart className="h-[20px] w-[20px]" />
-            {hydrated && wishCount > 0 && (
+            {wishCount > 0 && (
               <span className="font-mono absolute right-0.5 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--accent)] px-1 text-[0.55rem] font-bold text-[var(--accent-ink)]">
                 {wishCount}
               </span>
@@ -211,7 +214,7 @@ export function Navbar() {
           >
             <IconBag className="h-[18px] w-[18px]" />
             <span className="font-mono grid h-5 min-w-5 place-items-center rounded-full bg-ink px-1 text-[0.62rem] font-bold text-cream">
-              {hydrated ? count : 0}
+              {count}
             </span>
           </button>
 

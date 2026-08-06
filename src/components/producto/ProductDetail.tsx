@@ -9,7 +9,9 @@ import {
   inStock,
   PROMOS,
   PRODUCTS,
+  withStockAll,
   type Product,
+  type StockMap,
 } from "@/lib/products";
 import { ProductCard } from "@/components/producto/ProductCard";
 import { BaboonMark } from "@/components/ui/BaboonMark";
@@ -54,7 +56,14 @@ function useLinkGender(): string | null {
   );
 }
 
-export function ProductDetail({ product }: { product: Product }) {
+export function ProductDetail({
+  product,
+  stockMap,
+}: {
+  product: Product;
+  /** Ya viene aplicado en `product`; acá sirve para el "combina con". */
+  stockMap?: StockMap;
+}) {
   const add = useCart((s) => s.add);
   const openCart = useCart((s) => s.open);
   const showToast = useToast((s) => s.show);
@@ -108,7 +117,10 @@ export function ProductDetail({ product }: { product: Product }) {
 
   const safeActive = Math.min(active, gallery.length - 1);
   const activeShot = gallery[safeActive];
-  const related = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
+  const related = withStockAll(
+    PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3),
+    stockMap,
+  );
 
   const goPrev = useCallback(
     () => setActive((i) => (i - 1 + gallery.length) % gallery.length),

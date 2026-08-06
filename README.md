@@ -124,9 +124,38 @@ Copia `.env.example` → `.env.local` (no se sube a git):
 ## 🔐 Panel de administración
 
 `/admin` — login con usuario y clave (env `ADMIN_USER` / `ADMIN_PASSWORD`). Muestra:
+- **Inventario editable:** el tallaje de las 18 piezas, sin tocar código (ver abajo).
 - **Gráficas:** pedidos por día (14 días), productos más pedidos, pedidos por ciudad.
 - **Tablas:** pedidos (cliente, teléfono → WhatsApp, ciudad, productos, nota) y Club (correos).
 - No indexable (`robots: noindex`). Cambia la clave en las env vars.
+
+## 📦 Inventario (tallaje real, sin desplegar)
+
+El catálogo —nombres, fotos, copy— vive en `src/lib/products.ts` porque cambia poco y se
+versiona con el código. **El tallaje cambia todos los días y no puede depender de un
+despliegue**, así que vive en la tabla `product_stock` de Supabase y se edita en `/admin`.
+
+Regla de la casilla, que es lo único que hay que entender:
+
+| Casilla | Qué significa | Cómo se ve en la tienda |
+|---|---|---|
+| vacía | esa talla no existe para la pieza | no se muestra |
+| `0` | existe pero agotada | pill tachada |
+| `n` | `n` unidades | se puede pedir hasta `n` |
+
+- **Paso único de instalación:** correr [`supabase/product_stock.sql`](supabase/product_stock.sql)
+  en el SQL Editor del proyecto. Si no está creada, el panel lo dice y ofrece el SQL para copiar.
+- **Nada se rompe antes de cargarlo:** una pieza sin filas usa el tallaje provisional
+  (`TALLAS_STD`), y el panel la marca como "Sin cargar".
+- **Dónde se aplica:** `getStockMap()` (server) → `withStock()` (puro) en `/tienda`,
+  `/producto/[slug]` y `/favoritos`. Las fichas y favoritos siguen prerenderizados con
+  `revalidate = 30`; al guardar, el endpoint hace `revalidatePath` de la tienda y de las fichas
+  tocadas, así que el cambio se ve de una.
+- **Quién escribe:** solo `POST /api/admin/stock`, con la misma cookie del panel. La tabla tiene
+  RLS prendido y sin políticas: desde el navegador no se lee ni se escribe, solo entra el
+  servidor con la service role.
+- Vaciar **todas** las casillas de una pieza la devuelve al tallaje provisional; para marcarla
+  agotada de verdad, poner las tallas en `0`.
 
 ## 🛒 Flujo de compra (WhatsApp)
 
@@ -148,6 +177,8 @@ create table public.waitlist (
   email text unique
 );
 ```
+
+Y el tallaje editable, en [`supabase/product_stock.sql`](supabase/product_stock.sql).
 
 ## ☁️ Deploy (Vercel)
 

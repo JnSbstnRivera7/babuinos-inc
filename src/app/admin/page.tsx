@@ -4,6 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 import { Logo } from "@/components/ui/Logo";
 import { AdminLogin } from "@/components/admin/AdminLogin";
 import { AdminCharts } from "@/components/admin/AdminCharts";
+import { AdminInventario, type PiezaInv } from "@/components/admin/AdminInventario";
+import { PRODUCTS, TALLAS_STD } from "@/lib/products";
+import { readStock, toStockMap } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Panel — Babuinos Inc", robots: { index: false } };
@@ -64,6 +67,21 @@ export default async function AdminPage() {
     dbError = "Supabase no configurado (faltan variables de entorno).";
   }
 
+  // ── inventario (tallaje real, editable acá mismo) ──
+  const { rows: stockRows, error: stockError } = await readStock();
+  const stockMap = toStockMap(stockRows);
+  const piezas: PiezaInv[] = PRODUCTS.map((p) => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    colorway: p.colorway,
+    image: p.image,
+    category: p.category,
+  }));
+  const provisional = TALLAS_STD.map((s) => ({ size: s.size, stock: s.stock }));
+  const piezasCargadas = piezas.filter((p) => stockMap[p.id]).length;
+  const unidadesTotales = stockRows.reduce((a, r) => a + r.stock, 0);
+
   // ── aggregations for charts ──
   const dayCount: Record<string, number> = {};
   for (const o of orders) {
@@ -122,7 +140,7 @@ export default async function AdminPage() {
         )}
 
         {/* stats */}
-        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="glass rounded-xl p-5">
             <div className="font-condensed text-4xl text-[var(--accent)]">{orders.length}</div>
             <div className="font-mono mt-1 text-[0.6rem] tracking-[0.14em] text-cream/55 uppercase">
@@ -135,7 +153,29 @@ export default async function AdminPage() {
               Club (waitlist)
             </div>
           </div>
+          <div className="glass rounded-xl p-5">
+            <div className="font-condensed text-4xl text-[var(--accent)]">
+              {piezasCargadas}
+              <span className="text-cream/40">/{piezas.length}</span>
+            </div>
+            <div className="font-mono mt-1 text-[0.6rem] tracking-[0.14em] text-cream/55 uppercase">
+              Piezas con stock real
+            </div>
+          </div>
+          <div className="glass rounded-xl p-5">
+            <div className="font-condensed text-4xl text-[var(--accent)]">{unidadesTotales}</div>
+            <div className="font-mono mt-1 text-[0.6rem] tracking-[0.14em] text-cream/55 uppercase">
+              Unidades en inventario
+            </div>
+          </div>
         </div>
+
+        <AdminInventario
+          piezas={piezas}
+          guardado={stockMap}
+          provisional={provisional}
+          dbError={stockError}
+        />
 
         {/* charts */}
         <AdminCharts byDay={byDay} topProducts={topProducts} byCity={byCity} />

@@ -3,15 +3,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useWishlist } from "@/lib/wishlist";
-import { PRODUCTS } from "@/lib/products";
+import { PRODUCTS, withStockAll, type StockMap } from "@/lib/products";
 import { ProductCard } from "@/components/producto/ProductCard";
 
-export function FavoritosClient() {
+export function FavoritosClient({ stockMap }: { stockMap?: StockMap }) {
   const ids = useWishlist((s) => s.ids);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const items = PRODUCTS.filter((p) => ids.includes(p.slug));
+  const items = withStockAll(
+    PRODUCTS.filter((p) => ids.includes(p.slug)),
+    stockMap,
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-10 md:px-8 md:pt-16">

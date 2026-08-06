@@ -2,11 +2,19 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/layout/Shell";
 import { ProductDetail } from "@/components/producto/ProductDetail";
-import { PRODUCTS, getProduct, inStock } from "@/lib/products";
+import { PRODUCTS, getProduct, inStock, withStock } from "@/lib/products";
+import { getStockMap } from "@/lib/stock";
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
 }
+
+/**
+ * Las 18 fichas siguen prerenderizadas (van a Google y son las páginas que más
+ * se abren), pero se regeneran cada 30 s para que el tallaje no quede congelado
+ * del build. Al guardar en /admin se revalidan de una, sin esperar.
+ */
+export const revalidate = 30;
 
 export async function generateMetadata({
   params,
@@ -30,8 +38,11 @@ export default async function ProductoPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProduct(slug);
-  if (!product) notFound();
+  const base = getProduct(slug);
+  if (!base) notFound();
+
+  const stockMap = await getStockMap();
+  const product = withStock(base, stockMap);
 
   /**
    * schema.org/Product: es lo que hace que Google muestre foto, marca, precio y
@@ -71,7 +82,7 @@ export default async function ProductoPage({
         // Contenido propio del catálogo, no entrada de usuario.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductDetail product={product} />
+      <ProductDetail product={product} stockMap={stockMap} />
     </Shell>
   );
 }

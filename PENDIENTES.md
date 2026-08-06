@@ -3,7 +3,7 @@
 Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)** · hallazgos medidos en
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
-Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del catálogo.
+Estado: **en vivo** en https://babuinos-inc.vercel.app con las 18 piezas del catálogo.
 
 > **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin, WhatsApp)
 > en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`. Para pushear ojo con la cuenta:
@@ -14,9 +14,11 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 18 piezas.** Hoy TODAS usan el mismo tallaje provisional (`TALLAS_STD` en
-      `src/lib/products.ts`: S-2XL con 6/8/8/6/4). Qué tallas existen de verdad por pieza y cuántas.
-      Talla en 0 sale tachada como agotada.
+- [ ] **STOCK REAL de las 18 piezas** — ya **no necesita código**: se edita en `/admin` → Inventario.
+      Un paso único antes: correr [`supabase/product_stock.sql`](supabase/product_stock.sql) en el
+      SQL Editor de tu Supabase (el panel lo dice y te deja copiar el SQL si falta). Casilla vacía =
+      la talla no existe · `0` = agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir
+      más. Mientras una pieza no se cargue, sigue con el tallaje provisional (`TALLAS_STD`).
 - [ ] **Medir el inventario** para la guía de tallas. `SIZE_GUIDE` en `ProductDetail.tsx` usa
       **medidas de referencia de oversize de mercado**, no las de estas prendas. El modal lo dice
       ("referencia, ±2 cm") y ofrece WhatsApp para la exacta. Ojo: **Guns & Roses** va crop en mujer.
@@ -52,7 +54,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
       me des tiempos y condiciones reales las escribo y vuelven a enlazarse.
 - [ ] **Sacos / Medias / Accesorios**: lanzarlas o sacarlas del menú (3 de 4 categorías del nav están
       vacías con badge "Pronto").
-- [ ] **Catálogo desde Supabase** (CMS) — resuelve de raíz el pendiente del stock.
+- [ ] **Catálogo desde Supabase** (CMS) — el **stock ya salió del código** (tabla `product_stock`
+      editable en `/admin`); faltaría lo demás: nombres, copy, fotos y precios.
 - [ ] **Pasarela de pago** (Wompi / Bold / Mercado Pago) — hoy el precio ya se muestra y el pago se
       cierra por WhatsApp.
 - [ ] **Reseñas / estrellas** con reseñas reales o captura por WhatsApp tras la compra.
@@ -64,6 +67,15 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Mochila en dos pasos** (6-ago): el formulario de datos sumaba 596 px en el footer fijo y en
+      un teléfono de 667 no dejaba ver las camisas. Ahora paso 1 = solo prendas (329 px de lista,
+      antes ~0), paso 2 = los datos cuando ya se decidió comprar. Stepper de cantidad legible
+      (glifo de 14 → 18 px, trazo 1.75 → 2.75), talla y género como etiquetas.
+- [x] **Inventario editable en `/admin`** (6-ago): el tallaje salió del código a la tabla
+      `product_stock`; la tienda, las fichas y favoritos lo leen en el servidor y se revalidan al
+      guardar. Ver [README](README.md#-inventario-tallaje-real-sin-desplegar).
+- [x] **Hidratación del nav** (6-ago): los contadores de mochila y favoritos salen de localStorage y
+      rompían la hidratación de todo el nav en cada carga de quien ya tenía prendas guardadas.
 - [x] **Catálogo completo** (4-ago): 15 piezas — 5 Básicas + 10 Colección Fundadores, con 90 fotos de
       modelo y 30 de prenda sola procesadas desde `MATERIAL/Camisas`. Las 5 piezas viejas salieron.
 - [x] **Básicas vs Estampadas** con el filtro visible en la barra y conteos, más filtro de Color.
@@ -120,4 +132,4 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
   por nombre** (~1.25 = grilla de modelos 3×2, ~1.78 = prenda sola) y el lado frente/espalda va en la
   tabla `ESPALDA_IZQ` de `scripts/ingest_camisas.py` porque no se puede deducir.
 
-_Última actualización: 2026-08-04._
+_Última actualización: 2026-08-06._

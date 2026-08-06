@@ -14,8 +14,10 @@ import {
   formatCOP,
   getColor,
   matchesGenero,
+  withStockAll,
   type Category,
   type Genero,
+  type StockMap,
 } from "@/lib/products";
 import { cn } from "@/lib/utils";
 import { scrollToTop } from "@/lib/scroll";
@@ -30,24 +32,29 @@ const GENERO_SEG: { key: Genero | "all"; label: string }[] = [
 export function TiendaClient({
   initialGenero = "all",
   initialTipo = "all",
+  stockMap,
 }: {
   initialGenero?: Genero | "all";
   initialTipo?: Category | "all";
+  /** Tallaje real desde /admin; sin él manda el provisional del catálogo. */
+  stockMap?: StockMap;
 }) {
   const [genero, setGenero] = useState<Genero | "all">(initialGenero);
   const [category, setCategory] = useState<Category | "all">(initialTipo);
   const [color, setColor] = useState<string | "all">("all");
   const [open, setOpen] = useState(false);
 
+  const catalogo = useMemo(() => withStockAll(PRODUCTS, stockMap), [stockMap]);
+
   const list = useMemo(
     () =>
-      PRODUCTS.filter(
+      catalogo.filter(
         (p) =>
           matchesGenero(p, genero) &&
           (category === "all" || p.category === category) &&
           (color === "all" || p.color === color),
       ),
-    [genero, category, color],
+    [catalogo, genero, category, color],
   );
 
   // El tipo ya se ve en la barra, así que el contador del panel solo cuenta
