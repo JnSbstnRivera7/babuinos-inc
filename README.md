@@ -188,7 +188,7 @@ Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy 
 >
 > Después del push, **verificar que el deploy corresponda al commit** (no basta con que diga READY): comparar `meta.githubCommitSha` en `GET /v6/deployments?projectId=babuinos-inc&limit=1`.
 >
-> En el celular, **cerrar y reabrir la PWA** para bajar la versión nueva (service worker `babuinos-v4`).
+> En el celular, **cerrar y reabrir la PWA** para bajar la versión nueva (service worker `babuinos-v12`, en `public/sw.js`).
 
 ## 🎨 Marca
 

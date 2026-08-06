@@ -138,7 +138,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 18 piezas del cat
   Después, verificar que el deploy corresponda al commit (no basta con que diga READY):
   `GET https://api.vercel.com/v6/deployments?projectId=babuinos-inc&teamId=…&limit=1` → comparar
   `meta.githubCommitSha`.
-- **PWA/caché:** service worker `babuinos-v4`, network-first. Al desplegar, en el celular **cerrar y
+- **PWA/caché:** service worker `babuinos-v12` (`public/sw.js`, network-first). Al desplegar, en el celular **cerrar y
   reabrir** la app para bajar la versión nueva.
 - **Preview headless:** el home cuelga el navegador de pruebas por las animaciones perpetuas;
   verificar por navegación/DOM, no por screenshot.
