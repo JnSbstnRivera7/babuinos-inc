@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { Reveal } from "@/components/fx/Reveal";
 import { Logo } from "@/components/ui/Logo";
 import { LeafCanvas } from "@/components/fx/LeafCanvas";
 import { Lianas } from "@/components/fx/Lianas";
@@ -14,12 +14,8 @@ export function ComingSoon({ category }: { category: string }) {
       <Lianas />
       <LeafCanvas density={0.9} />
 
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex flex-col items-center"
-      >
+      {/* Entra con fade y subida; el Reveal ya trae esa transición en CSS. */}
+      <Reveal className="relative z-10 flex flex-col items-center">
         <Logo tone="cream" priority className="h-auto w-[min(70vw,360px)]" />
         <p className="font-mono mt-8 text-[0.65rem] tracking-[0.3em] text-[var(--accent)] uppercase">
           {category}
@@ -47,7 +43,7 @@ export function ComingSoon({ category }: { category: string }) {
           </Link>
           <SocialButtons variant="icon" />
         </div>
-      </motion.div>
+      </Reveal>
     </main>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { usePresence } from "@/lib/presence";
 import { ProductCard } from "@/components/producto/ProductCard";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 import { IconFilter, IconClose } from "@/components/ui/Icons";
@@ -43,6 +43,7 @@ export function TiendaClient({
   const [category, setCategory] = useState<Category | "all">(initialTipo);
   const [color, setColor] = useState<string | "all">("all");
   const [open, setOpen] = useState(false);
+  const panel = usePresence(open, 240);
 
   const catalogo = useMemo(() => withStockAll(PRODUCTS, stockMap), [stockMap]);
 
@@ -194,27 +195,22 @@ export function TiendaClient({
               )}
             </button>
 
-            {/* panel de filtros — transparente (glass): dropdown en PC, bottom-sheet en móvil */}
-            <AnimatePresence>
-              {open && (
-                <>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setOpen(false)}
-                    className="fixed inset-0 z-[100] bg-ink/60 sm:bg-transparent"
-                  />
-                  <motion.div
-                    initial={{ opacity: 0, y: 28 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 28 }}
-                    transition={{ type: "tween", duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
-                    /* pb con safe-area: sin esto la fila de Limpiar/Ver queda
-                       debajo de la barra de gestos del celular. */
-                    style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
-                    className="glass fixed inset-x-0 bottom-0 z-[101] max-h-[82svh] overflow-y-auto rounded-t-3xl p-6 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-80 sm:rounded-2xl sm:p-5"
-                  >
+            {/* panel de filtros — transparente (glass): dropdown en PC, bottom-sheet en móvil.
+                Entra y sale con CSS (`usePresence` monta y prende data-abierto). */}
+            {panel.render && (
+              <>
+                <div
+                  data-abierto={panel.abierto}
+                  onClick={() => setOpen(false)}
+                  className="fixed inset-0 z-[100] bg-ink/60 opacity-0 transition-opacity duration-240 data-[abierto=true]:opacity-100 sm:bg-transparent"
+                />
+                <div
+                  data-abierto={panel.abierto}
+                  /* pb con safe-area: sin esto la fila de Limpiar/Ver queda
+                     debajo de la barra de gestos del celular. */
+                  style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
+                  className="glass fixed inset-x-0 bottom-0 z-[101] max-h-[82svh] translate-y-7 overflow-y-auto rounded-t-3xl p-6 opacity-0 transition duration-240 ease-[cubic-bezier(.4,0,.2,1)] data-[abierto=true]:translate-y-0 data-[abierto=true]:opacity-100 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-80 sm:rounded-2xl sm:p-5"
+                >
                     <div className="mb-4 flex items-center justify-between sm:hidden">
                       <span className="font-condensed text-2xl text-cream">Filtros</span>
                       <button onClick={() => setOpen(false)} aria-label="Cerrar filtros" className="text-cream/60">
@@ -256,11 +252,10 @@ export function TiendaClient({
                       >
                         Ver {list.length} {list.length === 1 ? "pieza" : "piezas"}
                       </button>
-                    </div>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { usePresence } from "@/lib/presence";
 import { useCart } from "@/lib/store";
 import { useToast } from "@/lib/toast";
 import { cartTotals, formatCOP } from "@/lib/products";
@@ -58,6 +58,8 @@ export function CartDrawer() {
     close();
   }, [close]);
 
+  const presencia = usePresence(isOpen, 350);
+
   async function checkout() {
     if (!lines.length) return;
     if (!name.trim()) {
@@ -91,24 +93,21 @@ export function CartDrawer() {
     }
   }
 
+  if (!presencia.render) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={cerrar}
-            className="fixed inset-0 z-[110] bg-ink/60 backdrop-blur-sm"
-          />
-          <motion.aside
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed inset-y-0 right-0 z-[111] flex w-[min(420px,100vw)] flex-col bg-cream shadow-[-8px_0_40px_rgba(30,32,33,.2)]"
-          >
+    <>
+      {/* Entra y sale con CSS: `usePresence` monta, prende `data-abierto` en el
+          frame siguiente y desmonta cuando la transición terminó. */}
+      <div
+        data-abierto={presencia.abierto}
+        onClick={cerrar}
+        className="fixed inset-0 z-[110] bg-ink/60 opacity-0 backdrop-blur-sm transition-opacity duration-350 data-[abierto=true]:opacity-100"
+      />
+      <aside
+        data-abierto={presencia.abierto}
+        className="fixed inset-y-0 right-0 z-[111] flex w-[min(420px,100vw)] translate-x-full flex-col bg-cream shadow-[-8px_0_40px_rgba(30,32,33,.2)] transition-transform duration-350 ease-[cubic-bezier(.4,0,.2,1)] data-[abierto=true]:translate-x-0"
+      >
             <header className="flex items-center justify-between gap-3 bg-ink px-5 py-4">
               {paso === "datos" ? (
                 <button
@@ -395,11 +394,9 @@ export function CartDrawer() {
                   )}
                 </footer>
               </>
-            )}
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+        )}
+      </aside>
+    </>
   );
 }
 

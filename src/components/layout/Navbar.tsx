@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { usePresence } from "@/lib/presence";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { BaboonMark } from "@/components/ui/BaboonMark";
@@ -18,6 +18,11 @@ const LINKS = [
   { href: "/nosotros", label: "Nosotros" },
   { href: "/club", label: "Club" },
 ];
+
+/** Caja flotante del nav (dropdown de Tienda y de Colorway). El fade+subida
+ *  entra y sale con CSS: `data-abierto` lo prende `usePresence`. */
+const POPOVER =
+  "overflow-hidden rounded-xl border border-cream/10 bg-ink-soft shadow-2xl translate-y-2 opacity-0 transition duration-200 ease-out data-[abierto=true]:translate-y-0 data-[abierto=true]:opacity-100";
 
 const GENERO_COLOR: Record<Genero, string> = {
   hombre: "#00897f",
@@ -72,6 +77,10 @@ export function Navbar() {
   const [menu, setMenu] = useState(false);
   const [shop, setShop] = useState(false);
   const [theme, setThemeOpen] = useState(false);
+  // Montaje + clases de entrada/salida de los tres desplegables.
+  const shopPresencia = usePresence(shop, 200);
+  const temaPresencia = usePresence(theme, 200);
+  const menuPresencia = usePresence(menu, 300);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -105,14 +114,11 @@ export function Navbar() {
             >
               Tienda <IconChevronDown className={cn("h-3.5 w-3.5 transition", shop && "rotate-180")} />
             </Link>
-            <AnimatePresence>
-              {shop && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  className="absolute left-0 top-9 w-60 overflow-hidden rounded-xl border border-cream/10 bg-ink-soft p-1.5 shadow-2xl"
-                >
+            {shopPresencia.render && (
+              <div
+                data-abierto={shopPresencia.abierto}
+                className={cn(POPOVER, "absolute left-0 top-9 w-60 p-1.5")}
+              >
                   <p className="font-mono px-3 pb-1 pt-2 text-[0.5rem] tracking-[0.18em] text-cream/40 uppercase">
                     Líneas
                   </p>
@@ -149,10 +155,9 @@ export function Navbar() {
                         </span>
                       )}
                     </Link>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                ))}
+              </div>
+            )}
           </li>
           {LINKS.map((l) => (
             <li key={l.href}>
@@ -174,21 +179,17 @@ export function Navbar() {
               className="h-7 w-7 rounded-full ring-2 ring-cream/30 transition hover:ring-cream"
               style={{ backgroundColor: "var(--accent)" }}
             />
-            <AnimatePresence>
-              {theme && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  className="absolute right-0 top-10 rounded-xl border border-cream/10 bg-ink-soft p-3 shadow-2xl"
-                >
-                  <p className="font-mono mb-2 text-[0.55rem] tracking-[0.14em] text-cream/50 uppercase">
-                    Colorway
-                  </p>
-                  <Swatches onPick={() => setThemeOpen(false)} />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {temaPresencia.render && (
+              <div
+                data-abierto={temaPresencia.abierto}
+                className={cn(POPOVER, "absolute right-0 top-10 p-3")}
+              >
+                <p className="font-mono mb-2 text-[0.55rem] tracking-[0.14em] text-cream/50 uppercase">
+                  Colorway
+                </p>
+                <Swatches onPick={() => setThemeOpen(false)} />
+              </div>
+            )}
           </div>
 
           <SocialButtons variant="icon" className="hidden lg:flex" />
@@ -228,15 +229,14 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* mobile menu */}
-      <AnimatePresence>
-        {menu && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-cream/10 bg-ink md:hidden"
-          >
+      {/* mobile menu — el alto "auto" se anima con grid-template-rows 0fr→1fr,
+          que es la forma de hacerlo en CSS sin medir el contenido. */}
+      {menuPresencia.render && (
+        <div
+          data-abierto={menuPresencia.abierto}
+          className="grid grid-rows-[0fr] overflow-hidden border-t border-cream/10 bg-ink opacity-0 transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(.4,0,.2,1)] data-[abierto=true]:grid-rows-[1fr] data-[abierto=true]:opacity-100 md:hidden"
+        >
+          <div className="overflow-hidden">
             <div className="px-6 py-4">
               <p className="font-mono mb-2 text-[0.55rem] tracking-[0.16em] text-[var(--accent)] uppercase">
                 Líneas
@@ -298,9 +298,9 @@ export function Navbar() {
                 <SocialButtons variant="ghost" />
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

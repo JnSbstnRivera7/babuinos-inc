@@ -302,6 +302,21 @@ img {
   contain-intrinsic-size: auto 700px;
 }
 
+/* Reveal al entrar en pantalla (componente fx/Reveal, sin framer-motion).
+   El desplazamiento va en `translate` para no pelear con las utilidades de
+   transform de Tailwind. */
+.reveal {
+  opacity: 0;
+  translate: 0 28px;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
 /* Hide scrollbars on horizontal scrollers */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
