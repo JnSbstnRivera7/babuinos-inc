@@ -14,8 +14,22 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 18 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
+- [ ] 🚨 **EL PROYECTO DE SUPABASE YA NO EXISTE** (visto el 6-ago). El host
+      `cmfcgbqpvguihazmrlgs.supabase.co` da **NXDOMAIN** en el DNS público, y desde Vercel las
+      lecturas fallan con `TypeError: fetch failed` (se ve en `/admin`). Los proyectos gratuitos se
+      pausan por inactividad y después se borran.
+      **Qué significa:** los pedidos y los correos del Club **no se están guardando** desde que
+      desapareció. La venta NO se cae —el insert es best-effort y el enlace de WhatsApp sale igual—
+      pero el registro se pierde y `/admin` no tiene nada que mostrar. El inventario nuevo tampoco
+      puede funcionar hasta que haya proyecto.
+      **Qué hacer:** crear (o restaurar) un proyecto en tu cuenta personal de Supabase, correr
+      [`supabase/schema.sql`](supabase/schema.sql) —trae las tres tablas— y actualizar
+      `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` en **dos lados**: `.env.local` y las
+      env vars de producción del proyecto `babuinos-inc` en Vercel. Yo no puedo crearlo: hace falta
+      un PAT de Management API de tu cuenta.
+
 - [ ] **STOCK REAL de las 18 piezas** — ya **no necesita código**: se edita en `/admin` → Inventario.
-      Un paso único antes: correr [`supabase/product_stock.sql`](supabase/product_stock.sql) en el
+      Un paso único antes: correr [`supabase/schema.sql`](supabase/schema.sql) en el
       SQL Editor de tu Supabase (el panel lo dice y te deja copiar el SQL si falta). Casilla vacía =
       la talla no existe · `0` = agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir
       más. Mientras una pieza no se cargue, sigue con el tallaje provisional (`TALLAS_STD`).

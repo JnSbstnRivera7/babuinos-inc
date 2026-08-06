@@ -143,7 +143,7 @@ Regla de la casilla, que es lo único que hay que entender:
 | `0` | existe pero agotada | pill tachada |
 | `n` | `n` unidades | se puede pedir hasta `n` |
 
-- **Paso único de instalación:** correr [`supabase/product_stock.sql`](supabase/product_stock.sql)
+- **Paso único de instalación:** correr [`supabase/schema.sql`](supabase/schema.sql)
   en el SQL Editor del proyecto. Si no está creada, el panel lo dice y ofrece el SQL para copiar.
 - **Nada se rompe antes de cargarlo:** una pieza sin filas usa el tallaje provisional
   (`TALLAS_STD`), y el panel la marca como "Sin cargar".
@@ -178,7 +178,7 @@ create table public.waitlist (
 );
 ```
 
-Y el tallaje editable, en [`supabase/product_stock.sql`](supabase/product_stock.sql).
+Y el tallaje editable, en [`supabase/schema.sql`](supabase/schema.sql).
 
 ## ☁️ Deploy (Vercel)
 
