@@ -61,6 +61,14 @@ export function Navbar() {
   const [menu, setMenu] = useState(false);
   const [shop, setShop] = useState(false);
   const [theme, setThemeOpen] = useState(false);
+  /**
+   * Los dos contadores viven en localStorage (zustand persist): el servidor
+   * pinta 0 y el cliente el número real, y ese desajuste rompía la hidratación
+   * de TODO el nav en cada carga de quien ya tenía prendas en la mochila. Se
+   * pintan solo después de montar.
+   */
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -188,7 +196,7 @@ export function Navbar() {
             className="relative grid h-11 w-11 place-items-center rounded-md text-cream/80 transition hover:text-cream"
           >
             <IconHeart className="h-[20px] w-[20px]" />
-            {wishCount > 0 && (
+            {hydrated && wishCount > 0 && (
               <span className="font-mono absolute right-0.5 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--accent)] px-1 text-[0.55rem] font-bold text-[var(--accent-ink)]">
                 {wishCount}
               </span>
@@ -203,7 +211,7 @@ export function Navbar() {
           >
             <IconBag className="h-[18px] w-[18px]" />
             <span className="font-mono grid h-5 min-w-5 place-items-center rounded-full bg-ink px-1 text-[0.62rem] font-bold text-cream">
-              {count}
+              {hydrated ? count : 0}
             </span>
           </button>
 
