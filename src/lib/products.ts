@@ -551,9 +551,9 @@ const FUNDADORES: Product[] = [
     genero: "unisex",
     edition: "midnight",
     color: "negro",
-    desc: "Negra con un querubín alado a toda la espalda bajo el lettering Eternal Beauty. 'You Want Something' al frente.",
+    desc: "Negra con un querubín alado a toda la espalda bajo el lettering Eternal Beauty. 'Our Bond is Forever' al frente.",
     descLong:
-      "Negro absoluto con una ilustración de querubín alado sobre las nubes a toda la espalda, bajo el lettering gótico Eternal Beauty y el remate Chasing Dreams. Al frente, 'You Want Something' en script fino con rosas; babuino troquelado en el ruedo y BABUINOS en la nuca.",
+      "Negro absoluto con una ilustración de querubín alado sobre las nubes a toda la espalda, bajo el lettering gótico Eternal Beauty y el remate Chasing Dreams. Al frente, 'Our Bond is Forever' en script fino entre tres rosas; babuino troquelado en el ruedo y BABUINOS en la nuca.",
     fit: "Oversize",
     composicion: ALGODON,
     image: "/brand/products/eternal-beauty-frente.webp",

@@ -17,10 +17,17 @@ una ingesta de UNA vez, el lado va en la tabla ESPALDA_IZQ, revisado a ojo sobre
 las láminas.
 
     py scripts/ingest_camisas.py [--dry-run]
+
+Cuando Juan cambia UN diseño, rehacer solo esa pieza (correr todo pisaría los
+re-cortes que se hicieron a mano en otras láminas):
+
+    py scripts/ingest_camisas.py --solo eternal-beauty --parte plana
+    py scripts/ingest_camisas.py --solo 13 --dry-run
 """
 
 import glob
 import os
+import re
 import sys
 
 from PIL import Image
@@ -59,6 +66,9 @@ FUNDADORES = {
     8: "offline-pleasure",
     9: "asian-tengu-mask",
     10: "california-rasta-kid",
+    11: "guardian-navy",
+    12: "green-afro-tiki",
+    13: "eternal-beauty",
 }
 
 GENEROS = ["hombre", "mujer"]
@@ -111,12 +121,25 @@ def normalizar(tile, w, h, dest):
 
 
 def clasificar(carpeta):
-    """{numero: {"grilla": ruta, "plana": ruta}} por proporción, no por nombre."""
+    """
+    {numero: {"grilla": ruta, "plana": ruta, "plana_h": ..., "plana_m": ...}}
+
+    El tipo sale de la PROPORCIÓN, no del nombre. Del nombre solo se saca el
+    número y, si lo trae, el corte: `2 H.png` / `2 M.png` son los dos cortes de
+    Guns & Roses (oversize hombre / crop mujer) y salen a `<slug>-h-*` y
+    `<slug>-m-*`, que es lo que espera `imagesByGender` en products.ts.
+    """
     out = {}
     for f in glob.glob(os.path.join(carpeta, "*.png")):
-        num = int(os.path.basename(f).split(".")[0])
+        nombre = os.path.basename(f)
+        m = re.match(r"^(\d+)(?:\.\d+)?(?:\s+([HM]))?\.png$", nombre, re.I)
+        if not m:
+            print(f"  ~ me salto «{nombre}»: no sigue el patrón N.png / N.5.png / N H.png")
+            continue
+        num, corte = int(m.group(1)), (m.group(2) or "").lower()
         with Image.open(f) as im:
-            tipo = "plana" if im.width / im.height > 1.5 else "grilla"
+            plana = im.width / im.height > 1.5
+        tipo = ("plana" + (f"_{corte}" if corte else "")) if plana else "grilla"
         out.setdefault(num, {})[tipo] = f
     return out
 
@@ -147,7 +170,8 @@ def cortar_grilla(src, slug, dry):
         return f"6 fotos de modelo, {min(pesos)}-{max(pesos)} KB{aviso}"
 
 
-def cortar_plana(src, slug, dry):
+def cortar_plana(src, slug, dry, base=None):
+    """`slug` nombra los archivos; `base` decide el lado (para los cortes -h/-m)."""
     if not dry:
         os.makedirs(OUT_PRODUCTS, exist_ok=True)
     with Image.open(src) as im:
@@ -159,7 +183,7 @@ def cortar_plana(src, slug, dry):
             aviso += " [mitades iguales]"
         izq = im.crop((cx[0][0], 0, cx[0][1], im.height))
         der = im.crop((cx[1][0], 0, cx[1][1], im.height))
-        lado = "izq" if slug in ESPALDA_IZQ else "der"
+        lado = "izq" if (base or slug) in ESPALDA_IZQ else "der"
         espalda, frente = (izq, der) if lado == "izq" else (der, izq)
         if dry:
             return f"espalda={lado}{aviso}"
@@ -168,31 +192,85 @@ def cortar_plana(src, slug, dry):
         return f"prenda sola: espalda {a} KB ({lado}) + frente {b} KB{aviso}"
 
 
+def arg(nombre, defecto=None):
+    """Lee `--nombre valor` de la línea de comandos."""
+    if nombre in sys.argv:
+        i = sys.argv.index(nombre)
+        if i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+    return defecto
+
+
 def main():
     dry = "--dry-run" in sys.argv
-    print(f"\n  BABUINOS · ingesta de camisas{'  (simulación)' if dry else ''}\n")
+    # Rehacer UNA pieza es lo normal cuando Juan cambia un diseño: correr todo
+    # volvería a generar las 18 y pisaría los re-cortes hechos a mano (p. ej. las
+    # espaldas de free-palestine).
+    solo = arg("--solo")
+    parte = arg("--parte", "todo")
+    if parte not in ("todo", "plana", "grilla"):
+        print("  --parte solo acepta: todo | plana | grilla")
+        return
+    print(f"\n  BABUINOS · ingesta de camisas{'  (simulación)' if dry else ''}")
+    if solo:
+        print(f"  solo la pieza «{solo}» · parte: {parte}")
+    print()
 
-    for carpeta, mapa, etiqueta in [
-        ("BASICAS", BASICAS, "Básicas"),
-        ("Coleccion Fundadores", FUNDADORES, "Fundadores"),
+    hechas = 0
+    for prefijo, mapa, etiqueta in [
+        ("basicas", BASICAS, "Básicas"),
+        ("coleccion fundadores", FUNDADORES, "Fundadores"),
     ]:
-        ruta = os.path.join(FUENTE, carpeta)
-        if not os.path.isdir(ruta):
-            print(f"  falta la carpeta {ruta}")
+        # Por prefijo y sin tildes: la carpeta de básicas se llamó "BASICAS" y
+        # hoy es "Basicas Babuinos".
+        ruta = next(
+            (
+                d
+                for d in sorted(glob.glob(os.path.join(FUENTE, "*")))
+                if os.path.isdir(d) and os.path.basename(d).lower().startswith(prefijo)
+            ),
+            None,
+        )
+        if not ruta:
+            print(f"  no encontré la carpeta de {etiqueta} en {FUENTE}")
             continue
         encontrados = clasificar(ruta)
-        print(f"  ── {etiqueta} ──")
+        cabecera = False
         for num in sorted(mapa):
             slug = mapa[num]
+            if solo and solo not in (slug, str(num)):
+                continue
+            if not cabecera:
+                print(f"  ── {etiqueta} ──")
+                cabecera = True
             par = encontrados.get(num, {})
-            if "grilla" not in par or "plana" not in par:
+            # Las piezas de dos cortes traen `N H`/`N M` en vez de `N`.
+            planas = [(k, v) for k, v in sorted(par.items()) if k.startswith("plana")]
+            falta = []
+            if "grilla" not in par:
+                falta.append("grilla")
+            if not planas:
+                falta.append("plana")
+            # Con --parte solo hace falta la lámina de esa parte.
+            if (parte == "todo" and falta) or (parte != "todo" and parte in falta):
                 print(f"  ! {num:2d} {slug:24s} incompleto: {sorted(par)}")
                 continue
-            g = cortar_grilla(par["grilla"], slug, dry)
-            p = cortar_plana(par["plana"], slug, dry)
-            print(f"  + {num:2d} {slug:24s} {g}")
-            print(f"       {' ':27s}{p}")
-        print()
+            print(f"  + {num:2d} {slug:24s}", end="")
+            if parte in ("todo", "grilla"):
+                print(f" {cortar_grilla(par['grilla'], slug, dry)}")
+            else:
+                print()
+            if parte in ("todo", "plana"):
+                for tipo, ruta in planas:
+                    corte = tipo.split("_")[1] if "_" in tipo else ""
+                    destino = f"{slug}-{corte}" if corte else slug
+                    print(f"       {' ':27s}{cortar_plana(ruta, destino, dry, base=slug)}")
+            hechas += 1
+        if cabecera:
+            print()
+
+    if solo and not hechas:
+        print(f"  no encontré la pieza «{solo}». Slugs: {', '.join(sorted(set(BASICAS.values()) | set(FUNDADORES.values())))}\n")
 
 
 if __name__ == "__main__":
