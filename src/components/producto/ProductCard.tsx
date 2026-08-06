@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getEdition, inStock, type Genero, type Product } from "@/lib/products";
+import { formatCOP, getEdition, inStock, type Genero, type Product } from "@/lib/products";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
@@ -61,7 +61,8 @@ export function ProductCard({
       showToast("Elige una talla primero");
       return;
     }
-    if (!add(product, size)) {
+    // El género del modelo que se está viendo en la card (contexto o el de la pieza).
+    if (!add(product, size, cardGenero)) {
       showToast(`Talla ${size}: no queda más stock`);
       return;
     }
@@ -138,9 +139,16 @@ export function ProductCard({
           <div className="font-mono text-[0.6rem] font-bold tracking-[0.16em] text-teal uppercase">
             {product.tag}
           </div>
-          <h3 className="font-display mt-1.5 text-lg font-black leading-tight text-ink transition group-hover:text-teal">
-            {product.name}
-          </h3>
+          <div className="mt-1.5 flex items-baseline justify-between gap-2">
+            <h3 className="font-display text-lg font-black leading-tight text-ink transition group-hover:text-teal">
+              {product.name}
+            </h3>
+            {typeof product.price === "number" && (
+              <span className="font-mono shrink-0 text-[0.9rem] font-bold text-ink">
+                {formatCOP(product.price)}
+              </span>
+            )}
+          </div>
         </Link>
         {/* /55 daba 3.71:1 — es el copy que vende, tiene que leerse */}
         <p className="mt-1.5 line-clamp-2 text-[0.85rem] leading-relaxed text-ink/75">

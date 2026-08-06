@@ -6,10 +6,12 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/store";
 import { useToast } from "@/lib/toast";
+import { cartTotals, formatCOP } from "@/lib/products";
 import { IconClose, IconPlus, IconMinus, IconWhatsApp, IconBag } from "@/components/ui/Icons";
 
 export function CartDrawer() {
   const { lines, isOpen, close, remove, changeQty } = useCart();
+  const totales = cartTotals(lines);
   const showToast = useToast((s) => s.show);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -40,7 +42,7 @@ export function CartDrawer() {
         headers: { "Content-Type": "application/json" },
         // `privacyAccepted` queda guardado con el pedido: es la prueba de la
         // autorización que el titular puede pedirnos (art. 8, literal b).
-        body: JSON.stringify({ lines, name, phone, city, note, privacyAccepted: true }),
+        body: JSON.stringify({ lines, name, phone, city, note, privacyAccepted: true, totals: totales }),
       });
       const data = (await res.json()) as { url?: string };
       if (data.url) {
@@ -99,18 +101,29 @@ export function CartDrawer() {
                 </div>
               ) : (
                 lines.map((l) => (
-                  <div key={`${l.id}-${l.size}`} className="flex gap-4 border-b border-ink/10 py-4">
+                  <div
+                    key={`${l.id}-${l.size}-${l.genero}`}
+                    className="flex gap-4 border-b border-ink/10 py-4"
+                  >
                     <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-md bg-[#eceae6]">
                       <Image src={l.image} alt={l.name} fill sizes="64px" className="object-contain p-1" />
                     </div>
                     <div className="flex-1">
-                      <div className="font-display text-[0.95rem] font-black text-ink">{l.name}</div>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <div className="font-display text-[0.95rem] font-black text-ink">{l.name}</div>
+                        {typeof l.price === "number" && (
+                          <span className="font-mono shrink-0 text-[0.8rem] font-bold text-ink">
+                            {formatCOP(l.price * l.qty)}
+                          </span>
+                        )}
+                      </div>
                       <div className="font-mono text-[0.68rem] tracking-[0.08em] text-ink/70 uppercase">
                         {l.colorway} · Talla {l.size}
+                        {l.genero ? ` · ${l.genero}` : ""}
                       </div>
                       <div className="mt-2 flex items-center gap-2.5">
                         <button
-                          onClick={() => changeQty(l.id, l.size, -1)}
+                          onClick={() => changeQty(l.id, l.size, l.genero, -1)}
                           aria-label="Quitar una unidad"
                           className="grid h-11 w-11 place-items-center rounded-full bg-ink/10 transition hover:bg-ink hover:text-white"
                         >
@@ -119,7 +132,7 @@ export function CartDrawer() {
                         <span className="font-mono w-5 text-center text-sm font-bold">{l.qty}</span>
                         {/* Tope el stock de la talla: al llegar al máximo el + se apaga. */}
                         <button
-                          onClick={() => changeQty(l.id, l.size, 1)}
+                          onClick={() => changeQty(l.id, l.size, l.genero, 1)}
                           disabled={l.qty >= (l.max ?? 99)}
                           aria-label="Agregar una unidad"
                           className="grid h-11 w-11 place-items-center rounded-full bg-ink/10 transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink/10 disabled:hover:text-ink"
@@ -132,7 +145,7 @@ export function CartDrawer() {
                           </span>
                         )}
                         <button
-                          onClick={() => remove(l.id, l.size)}
+                          onClick={() => remove(l.id, l.size, l.genero)}
                           className="font-mono ml-1 inline-flex min-h-11 items-center text-[0.68rem] tracking-[0.08em] text-umber/80 uppercase transition hover:text-burgundy"
                         >
                           Quitar
@@ -223,8 +236,31 @@ export function CartDrawer() {
                   </label>
                 </div>
               )}
-              <p className="mb-3 text-center text-[0.78rem] text-ink/70">
-                Precio, pago y envío se coordinan por WhatsApp.
+
+              {/* Totales con promo aplicada automáticamente */}
+              {lines.length > 0 && (
+                <div className="mb-3 space-y-1.5 border-t border-ink/10 pt-3 font-mono text-[0.8rem]">
+                  <div className="flex justify-between text-ink/70">
+                    <span>Subtotal</span>
+                    <span>{formatCOP(totales.subtotal)}</span>
+                  </div>
+                  {totales.promos.map((p) => (
+                    <div key={p.category} className="flex justify-between text-teal">
+                      <span>
+                        Promo {p.combos}× {p.cada} {p.category === "basica" ? "básicas" : "estampadas"}
+                      </span>
+                      <span>−{formatCOP(p.ahorro)}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between border-t border-ink/10 pt-1.5 text-[0.95rem] font-black text-ink">
+                    <span>Total</span>
+                    <span>{formatCOP(totales.total)}</span>
+                  </div>
+                </div>
+              )}
+
+              <p className="mb-3 text-center text-[0.72rem] text-ink/60">
+                Pago y envío se coordinan por WhatsApp.
               </p>
               <button
                 onClick={checkout}

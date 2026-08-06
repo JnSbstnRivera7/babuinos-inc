@@ -9,7 +9,9 @@ import { IconFilter, IconClose } from "@/components/ui/Icons";
 import {
   PRODUCTS,
   CATEGORIES,
+  PROMOS,
   coloresEnUso,
+  formatCOP,
   getColor,
   matchesGenero,
   type Category,
@@ -88,6 +90,16 @@ export function TiendaClient({
       <h1 className="font-condensed text-[clamp(2.2rem,6vw,4rem)] text-cream">
         La <span className="shine-gold">manada</span>
       </h1>
+
+      {/* Banner de promos por combo */}
+      <div className="mt-4 flex flex-wrap gap-2">
+        <span className="font-mono inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/45 bg-[var(--accent)]/10 px-3.5 py-1.5 text-[0.62rem] font-bold tracking-[0.06em] text-[var(--accent)] uppercase">
+          🔥 3 básicas {formatCOP(PROMOS.basica.precio)}
+        </span>
+        <span className="font-mono inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/45 bg-[var(--accent)]/10 px-3.5 py-1.5 text-[0.62rem] font-bold tracking-[0.06em] text-[var(--accent)] uppercase">
+          🔥 2 estampadas {formatCOP(PROMOS.estampada.precio)}
+        </span>
+      </div>
 
       {/**
        * Básicas vs Estampadas: la decisión principal del cliente, así que va a

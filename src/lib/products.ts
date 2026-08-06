@@ -565,7 +565,39 @@ const FUNDADORES: Product[] = [
   },
 ];
 
-export const PRODUCTS: Product[] = [...BASICAS, ...FUNDADORES];
+/* ─── Precios (COP) ───────────────────────────────────────────
+   Se inyectan por categoría en un solo lugar, no pieza por pieza, para no
+   repetirlos 18 veces. Una pieza puede traer su propio `price` y este NO lo
+   pisa. */
+export const PRECIO: Record<Category, number> = {
+  basica: 50000,
+  estampada: 75000,
+};
+
+/**
+ * Promos por combo (cualquier pieza del grupo):
+ *  · 3 básicas    → $140.000
+ *  · 2 estampadas → $140.000
+ * `cada` unidades del grupo se cobran a `precio`; el resto, a precio normal.
+ */
+export const PROMOS: Record<Category, { cada: number; precio: number }> = {
+  basica: { cada: 3, precio: 140000 },
+  estampada: { cada: 2, precio: 140000 },
+};
+
+export const PRODUCTS: Product[] = [...BASICAS, ...FUNDADORES].map((p) => ({
+  ...p,
+  price: p.price ?? PRECIO[p.category],
+}));
+
+/** Formato de peso colombiano sin decimales: 50000 → "$ 50.000". */
+export function formatCOP(valor: number): string {
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+  }).format(valor);
+}
 
 /* ─── Helpers ─── */
 export function getProduct(slug: string): Product | undefined {
@@ -600,4 +632,52 @@ export function totalStock(product: Product): number {
 export function coloresEnUso(): ColorDef[] {
   const usados = new Set(PRODUCTS.map((p) => p.color));
   return COLORES.filter((c) => usados.has(c.key));
+}
+
+/* ─── Cálculo del carrito con promos ─── */
+export interface PricedLine {
+  category: Category;
+  price: number;
+  qty: number;
+}
+
+export interface PromoAplicada {
+  category: Category;
+  combos: number;
+  cada: number;
+  precio: number;
+  ahorro: number;
+}
+
+/**
+ * Aplica las promos por combo contando unidades por categoría (cualquier pieza
+ * del grupo cuenta). Asume precio uniforme por categoría —hoy todas las básicas
+ * $50k y las estampadas $75k—, que es lo que hace que el "3x140" sea exacto.
+ */
+export function cartTotals(lines: PricedLine[]): {
+  subtotal: number;
+  ahorro: number;
+  total: number;
+  promos: PromoAplicada[];
+} {
+  const unidades: Record<string, number> = { basica: 0, estampada: 0 };
+  let subtotal = 0;
+  for (const l of lines) {
+    // `?? 0` blinda contra líneas viejas (pre-precios) que se colaran sin price.
+    subtotal += (l.price ?? 0) * l.qty;
+    if (l.category in unidades) unidades[l.category] += l.qty;
+  }
+
+  let ahorro = 0;
+  const promos: PromoAplicada[] = [];
+  (Object.keys(PROMOS) as Category[]).forEach((cat) => {
+    const combos = Math.floor(unidades[cat] / PROMOS[cat].cada);
+    if (combos <= 0) return;
+    const { cada, precio } = PROMOS[cat];
+    const ahorroCombo = (PRECIO[cat] * cada - precio) * combos;
+    ahorro += ahorroCombo;
+    promos.push({ category: cat, combos, cada, precio, ahorro: ahorroCombo });
+  });
+
+  return { subtotal, ahorro, total: subtotal - ahorro, promos };
 }

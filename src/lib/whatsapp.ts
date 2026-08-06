@@ -1,4 +1,12 @@
 import type { CartLine } from "./store";
+import { formatCOP, type PromoAplicada } from "./products";
+
+export interface OrderTotals {
+  subtotal: number;
+  ahorro: number;
+  total: number;
+  promos: PromoAplicada[];
+}
 
 export interface OrderPayload {
   lines: CartLine[];
@@ -8,9 +16,18 @@ export interface OrderPayload {
   note?: string;
   /** El cliente marcó la autorización de datos (Ley 1581). */
   privacyAccepted?: boolean;
+  /** Totales con promo ya calculados en el carrito. */
+  totals?: OrderTotals;
 }
 
-/** Builds the order summary sent to WhatsApp (no prices — coordinated in chat). */
+/** Un guión de género corto para la línea (mayúscula inicial). */
+function generoLabel(g?: string): string {
+  if (g === "hombre") return " · Hombre";
+  if (g === "mujer") return " · Mujer";
+  return "";
+}
+
+/** Builds the order summary sent to WhatsApp. */
 export function buildOrderMessage({
   lines,
   name,
@@ -18,11 +35,28 @@ export function buildOrderMessage({
   city,
   note,
   privacyAccepted,
+  totals,
 }: OrderPayload): string {
   const header = "🦍 *PEDIDO — BABUINOS INC*\n_Colección Fundadores 2026_\n";
   const items = lines
-    .map((l, i) => `${i + 1}. *${l.name}* — ${l.colorway}\n   Talla ${l.size} · x${l.qty}`)
+    .map((l, i) => {
+      const precio = typeof l.price === "number" ? `  ·  ${formatCOP(l.price * l.qty)}` : "";
+      return `${i + 1}. *${l.name}* — ${l.colorway}\n   Talla ${l.size}${generoLabel(l.genero)} · x${l.qty}${precio}`;
+    })
     .join("\n");
+
+  // Totales con la promo ya aplicada.
+  let totalesBlock = "";
+  if (totals) {
+    const lineas = [`\n\n💵 *Subtotal:* ${formatCOP(totals.subtotal)}`];
+    for (const p of totals.promos) {
+      const grupo = p.category === "basica" ? "básicas" : "estampadas";
+      lineas.push(`🔥 *Promo ${p.combos}× ${p.cada} ${grupo}:* −${formatCOP(p.ahorro)}`);
+    }
+    lineas.push(`✅ *Total:* ${formatCOP(totals.total)}`);
+    totalesBlock = lineas.join("\n");
+  }
+
   const datos = [
     name ? `👤 *Nombre:* ${name}` : "",
     phone ? `📱 *Teléfono:* ${phone}` : "",
@@ -36,9 +70,8 @@ export function buildOrderMessage({
   const consentimiento = privacyAccepted
     ? "\n\n✅ _Autoricé el tratamiento de mis datos (Ley 1581/2012)._"
     : "";
-  const footer =
-    "\n\n_Quiero coordinar precio, pago y envío de estas piezas. ¡Listo para entrar a la manada!_ 🌿";
-  return `${header}\n${items}${datosBlock}${consentimiento}${footer}`;
+  const footer = "\n\n_Confirmo mi pedido. Coordinemos pago y envío. ¡Listo para la manada!_ 🌿";
+  return `${header}\n${items}${totalesBlock}${datosBlock}${consentimiento}${footer}`;
 }
 
 /** Consulta de talla: mientras no haya tabla de medidas, se resuelve en el chat. */

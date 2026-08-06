@@ -34,9 +34,8 @@ export default async function ProductoPage({
   if (!product) notFound();
 
   /**
-   * schema.org/Product: es lo que hace que Google muestre foto, marca y
-   * disponibilidad en los resultados. Sin precio se declara solo la
-   * disponibilidad — no se inventa una oferta que no existe.
+   * schema.org/Product: es lo que hace que Google muestre foto, marca, precio y
+   * disponibilidad en los resultados.
    */
   const jsonLd = {
     "@context": "https://schema.org",
@@ -53,6 +52,9 @@ export default async function ProductoPage({
     offers: {
       "@type": "Offer",
       url: `${BASE}/producto/${product.slug}`,
+      ...(typeof product.price === "number"
+        ? { price: product.price, priceCurrency: "COP" }
+        : {}),
       availability: inStock(product)
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",

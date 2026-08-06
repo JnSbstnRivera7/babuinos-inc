@@ -63,8 +63,9 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)** · hallazgos medidos 
 - [x] **Limpieza**: borrados los 5 componentes muertos.
 - [x] Deep links `?tipo=basica` / `?tipo=estampada` para enlazar líneas desde el footer y el sitemap.
 
-**Quedó fuera** porque necesita datos o decisión tuya: links reales de redes, señal de precio,
+**Quedó fuera** porque necesita datos o decisión tuya: links reales de redes,
 Sacos/Medias/Accesorios, y las páginas de Envíos/Cambios/FAQ (se sacaron del footer hasta tenerlas).
+_(La "señal de precio" del punto 3.2 se resolvió el 5-ago — ver Fase 3f.)_
 
 ## ✅ Fase 3b — Ajustes de uso real (hecho · 2026-08-04)
 
@@ -114,6 +115,19 @@ Salidos de probar la tienda en el celular, no de la auditoría.
 - [x] **Música al primer gesto en CUALQUIER parte, también en celular** (toque/click/scroll), a
       pedido de Juan. Se quitó la guarda de móvil del autostart. Revierte la Fase 3b en ese punto:
       baja por streaming, así que no bloquea la primera vista.
+
+## ✅ Fase 3f — Precios y promos (hecho · 2026-08-05)
+
+- [x] **Precios en COP**: básicas $50.000, estampadas $75.000. Inyectados por categoría (`PRECIO`)
+      en un solo lugar, no pieza por pieza. Visibles en tarjeta, ficha y `schema.org/Offer`.
+- [x] **Promos por combo automáticas**: 3 básicas o 2 estampadas *cualesquiera* por $140.000
+      (`PROMOS` + `cartTotals`). El carrito muestra subtotal → ahorro → total, y el banner de la
+      tienda las anuncia. Verificado: 3 básicas = $140k, 2 estampadas = $140k, 4 básicas = $190k.
+- [x] **Género en el pedido de WhatsApp**: cada línea del carrito guarda `genero` (Hombre/Mujer) y
+      sale en el mensaje, junto con precio por línea y totales con la promo aplicada.
+- [x] **"Estampado y detalles bordados, hechos en Tábogo"** en cada ficha.
+- [x] `persist` del carrito → v2 (descarta carritos guardados antes de los precios para no mostrar
+      totales NaN).
 
 ## 🧭 Fase 4 — Tienda real / backend
 

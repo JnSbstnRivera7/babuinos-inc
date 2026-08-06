@@ -48,15 +48,13 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 
 ## 🔵 Siguientes builds (necesitan decisión o backend)
 
-- [ ] **Alguna señal de precio** sin publicar la lista (rango por línea, o "desde $X"). Hoy el
-      cliente no sabe si la camisa vale $60.000 o $300.000 antes de escribir. Es la fricción más
-      grande que queda en el embudo.
 - [ ] **Páginas de Envíos / Cambios / FAQ.** Se sacaron del footer para no prometer en falso; cuando
       me des tiempos y condiciones reales las escribo y vuelven a enlazarse.
 - [ ] **Sacos / Medias / Accesorios**: lanzarlas o sacarlas del menú (3 de 4 categorías del nav están
       vacías con badge "Pronto").
 - [ ] **Catálogo desde Supabase** (CMS) — resuelve de raíz el pendiente del stock.
-- [ ] **Precios + pasarela** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.
+- [ ] **Pasarela de pago** (Wompi / Bold / Mercado Pago) — hoy el precio ya se muestra y el pago se
+      cierra por WhatsApp.
 - [ ] **Reseñas / estrellas** con reseñas reales o captura por WhatsApp tras la compra.
 - [ ] **Analítica "lo más visto"** (vistas en Supabase + vista en `/admin`).
 - [ ] **Email del Club** a un proveedor + dominio propio.
@@ -69,7 +67,8 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 15 piezas del cat
 - [x] **Catálogo completo** (4-ago): 15 piezas — 5 Básicas + 10 Colección Fundadores, con 90 fotos de
       modelo y 30 de prenda sola procesadas desde `MATERIAL/Camisas`. Las 5 piezas viejas salieron.
 - [x] **Básicas vs Estampadas** con el filtro visible en la barra y conteos, más filtro de Color.
-- [x] **Sin precios en la web** (decisión de Juan). Verificado: cero importes en el sitio.
+- [x] **Precios y promos** (5-ago): básicas $50k, estampadas $75k; combos 3x140 y 2x140 automáticos
+      en el carrito; género + precios + total en el mensaje de WhatsApp.
 - [x] **Responsive**: 3 cortes distintos arreglados; verificado sin desbordes en 320 / 375 / 414 px.
 - [x] **Velocidad móvil**: home de 3.8 MB → 1.19 MB.
 - [x] **Bugs de ficha**: corazón simétrico, género que sigue la línea de entrada, galería con flechas

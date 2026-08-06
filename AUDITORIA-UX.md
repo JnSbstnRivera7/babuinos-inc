@@ -40,8 +40,9 @@ El componente `Destacados` queda en el repo. Queda anotado porque el diagnóstic
 (el visitante da un clic más antes de ver mercancía); simplemente se acepta a cambio de la entrada
 limpia que quiere la marca.
 
-**Sigue pendiente** (necesita datos o decisión de Juan): links reales de redes, señal de precio,
+**Sigue pendiente** (necesita datos o decisión de Juan): links reales de redes,
 Sacos/Medias/Accesorios, stock real, medidas del inventario, licencias de terceros y la música.
+_(Señal de precio: RESUELTO el 5-ago — precios COP + promos por combo.)_
 
 El detalle de abajo se conserva como registro de qué se midió y por qué se cambió.
 
@@ -125,7 +126,7 @@ visitante tiene que adivinar y dar un clic más antes de ver una sola camisa.
 Lo bueno: **ya está construido**. `getFeatured()` en `products.ts` devuelve 3 piezas y el componente
 `Destacados.tsx` existe y funciona — solo está **fuera del flujo**. Es enchufarlo.
 
-### 3.2 Sin señal de precio
+### 3.2 Sin señal de precio  ✅ RESUELTO (5-ago: precios COP + promos)
 
 Decisión tomada (no van precios), pero hoy el usuario **no tiene ninguna referencia**: no sabe si la
 camisa vale $60.000 o $300.000 antes de escribir por WhatsApp. Eso filtra a los curiosos y también a

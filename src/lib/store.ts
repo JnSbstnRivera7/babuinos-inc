@@ -2,7 +2,9 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Product } from "./products";
+import type { Category, Product } from "./products";
+
+export type LineGenero = "hombre" | "mujer";
 
 export interface CartLine {
   id: string;
@@ -14,15 +16,25 @@ export interface CartLine {
   qty: number;
   /** Unidades disponibles de ESA talla, para no dejar pedir más de lo que hay. */
   max: number;
+  /** Para las promos por combo (3 básicas / 2 estampadas). */
+  category: Category;
+  /** Precio unitario en COP. */
+  price: number;
+  /** Cómo lo quiere el cliente. En Guns & Roses define el corte (oversize/crop). */
+  genero: LineGenero;
 }
+
+/** Misma pieza + talla + género = misma línea. El género separa (crop vs oversize). */
+const sameLine = (l: CartLine, id: string, size: string, genero: LineGenero) =>
+  l.id === id && l.size === size && l.genero === genero;
 
 interface CartState {
   lines: CartLine[];
   isOpen: boolean;
   /** Devuelve false si ya se alcanzó el stock de esa talla. */
-  add: (product: Product, size: string) => boolean;
-  remove: (id: string, size: string) => void;
-  changeQty: (id: string, size: string, delta: number) => void;
+  add: (product: Product, size: string, genero: LineGenero) => boolean;
+  remove: (id: string, size: string, genero: LineGenero) => void;
+  changeQty: (id: string, size: string, genero: LineGenero, delta: number) => void;
   clear: () => void;
   open: () => void;
   close: () => void;
@@ -39,18 +51,18 @@ export const useCart = create<CartState>()(
        * Tope el stock de la talla. Sin esto se podían pedir 10 unidades de una
        * talla con 3 y el pedido llegaba por WhatsApp imposible de despachar.
        */
-      add: (product, size) => {
+      add: (product, size, genero) => {
         const max = product.sizes.find((s) => s.size === size)?.stock ?? 0;
         if (max <= 0) return false;
 
-        const existing = get().lines.find((l) => l.id === product.id && l.size === size);
+        const existing = get().lines.find((l) => sameLine(l, product.id, size, genero));
         if (existing && existing.qty >= max) return false;
 
         set((state) =>
           existing
             ? {
                 lines: state.lines.map((l) =>
-                  l.id === product.id && l.size === size
+                  sameLine(l, product.id, size, genero)
                     ? { ...l, qty: Math.min(l.qty + 1, max), max }
                     : l,
                 ),
@@ -67,19 +79,22 @@ export const useCart = create<CartState>()(
                     size,
                     qty: 1,
                     max,
+                    category: product.category,
+                    price: product.price ?? 0,
+                    genero,
                   },
                 ],
               },
         );
         return true;
       },
-      remove: (id, size) =>
-        set((state) => ({ lines: state.lines.filter((l) => !(l.id === id && l.size === size)) })),
-      changeQty: (id, size, delta) =>
+      remove: (id, size, genero) =>
+        set((state) => ({ lines: state.lines.filter((l) => !sameLine(l, id, size, genero)) })),
+      changeQty: (id, size, genero, delta) =>
         set((state) => ({
           lines: state.lines
             .map((l) =>
-              l.id === id && l.size === size
+              sameLine(l, id, size, genero)
                 ? // `max ?? 99` cubre las líneas que quedaron en localStorage
                   // antes de que existiera el tope.
                   { ...l, qty: Math.min(l.qty + delta, l.max ?? 99) }
@@ -93,6 +108,13 @@ export const useCart = create<CartState>()(
       toggle: () => set((s) => ({ isOpen: !s.isOpen })),
       count: () => get().lines.reduce((a, l) => a + l.qty, 0),
     }),
-    { name: "babuinos-cart" },
+    {
+      name: "babuinos-cart",
+      // v2: las líneas ganaron category/price/genero. Un carrito guardado antes
+      // de eso daría precios NaN, así que se descarta al migrar (mejor vaciar
+      // que mostrar totales rotos).
+      version: 2,
+      migrate: () => ({ lines: [], isOpen: false }),
+    },
   ),
 );

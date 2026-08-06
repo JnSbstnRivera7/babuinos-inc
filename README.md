@@ -32,7 +32,7 @@ El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Es
 
 Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMOS GRANDES_ (la espalda de Rootwailer lo escribe completo), y **Guns & Roses viene en dos cortes** — oversize en hombre, crop en mujer, cada uno con su propia foto de prenda (`imagesByGender`, único caso; la galería muestra el corte según el toggle H/M).
 
-**Sin precios en la web** por decisión de marca: precio, pago y envío se coordinan por WhatsApp. El campo `price` existe por si algún día se activan.
+**Precios (COP):** básicas $50.000, estampadas $75.000 (`PRECIO` por categoría en `products.ts`, no pieza por pieza). **Promos por combo automáticas:** 3 básicas o 2 estampadas cualesquiera por $140.000 (`PROMOS` + `cartTotals`), aplicadas en el carrito y reflejadas en el total del mensaje de WhatsApp. Pago y envío se coordinan por WhatsApp.
 
 ## 🧩 Arquitectura y características
 
@@ -46,7 +46,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 **Transversal:**
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
-- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: la ficha no abre WhatsApp directo, todo entra a la mochila y el pedido se cierra desde ahí con los datos del cliente. **Topa el stock de cada talla**: `add()` devuelve `false` al llegar al máximo, avisa por toast y el `+` se apaga. Cada línea guarda su `max`.
+- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer), subtotal, promo y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (separa el corte de Guns & Roses). `persist` v2 descarta carritos viejos sin precio.
 - **Globales en toda la página:** reproductor "Babuinos Radio" (**arranca sola al primer gesto en cualquier parte** —toque/click/scroll—, en celular y escritorio), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.

@@ -4,8 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import Image from "next/image";
 import Link from "next/link";
 import {
+  formatCOP,
   getEdition,
   inStock,
+  PROMOS,
   PRODUCTS,
   type Product,
 } from "@/lib/products";
@@ -14,6 +16,7 @@ import { BaboonMark } from "@/components/ui/BaboonMark";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
+import { BRAND } from "@/lib/brand";
 import { buildSizeMessage, buildWaLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { IconWhatsApp, IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
@@ -154,7 +157,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
   function addToBag() {
     if (!available || !requireSize()) return;
-    if (!add(product, size)) {
+    if (!add(product, size, modelGender)) {
       showToast(`Talla ${size}: no queda más stock`);
       return;
     }
@@ -339,12 +342,25 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <p className="mt-5 max-w-prose text-cream/70">{product.descLong ?? product.desc}</p>
 
-          {/* precio / whatsapp */}
-          <p className="font-mono mt-6 text-[0.78rem] text-cream/55">
-            {typeof product.price === "number"
-              ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(product.price)
-              : "Precio, pago y envío se coordinan por WhatsApp."}
+          {/* Estampado y detalles bordados, hechos en Tábogo (todas las piezas). */}
+          <p className="font-mono mt-3 text-[0.72rem] tracking-[0.04em] text-cream/70">
+            Estampado y detalles bordados, hechos en {BRAND.ciudad}.
           </p>
+
+          {/* precio */}
+          {typeof product.price === "number" && (
+            <div className="mt-6">
+              <p className="font-condensed text-[2rem] leading-none text-cream">
+                {formatCOP(product.price)}
+              </p>
+              {/* Promo por combo según la línea */}
+              <p className="font-mono mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/40 px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[var(--accent)] uppercase">
+                {product.category === "basica"
+                  ? `Promo: 3 básicas por ${formatCOP(PROMOS.basica.precio)}`
+                  : `Promo: 2 estampadas por ${formatCOP(PROMOS.estampada.precio)}`}
+              </p>
+            </div>
+          )}
 
           {/* tallas */}
           <div className="mt-6">
