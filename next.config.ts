@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /**
+   * La pieza 05 se llamaba "Rootwailer" (mal escrito) y pasó a "Rottweiler", la
+   * raza. Cambiar el slug rompe cualquier enlace que ya se haya pasado por
+   * WhatsApp, así que la vieja URL redirige permanente (308) a la nueva.
+   */
+  async redirects() {
+    return [
+      {
+        source: "/producto/rootwailer",
+        destination: "/producto/rottweiler",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

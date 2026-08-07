@@ -44,8 +44,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
       `facebook.com/babuinos.inc` son placeholders en `SocialButtons.tsx`.
 - [ ] **Nombre del Drop**: la fecha ya es la real (**4-sep-2026, 8 pm hora Colombia**), pero el nombre
       sigue siendo `Drop 02 — Expedición` en `DropCountdown.tsx`. ¿Se queda así?
-- [ ] **¿"Rootwailer" o "Rottweiler"?** Quedó como lo escribiste. Si fue dedo, cambia en
-      `products.ts` y en el slug.
 - [ ] **¿Altura en metros o pies?** El copy dice **2.600 m** (Bogotá está a 2.600 metros; 2.600 ft
       serían ~790 m). Si la quieres en pies es un renglón: `altura` en `src/lib/brand.ts`.
 - [ ] **Contenido para Envíos / Cambios / FAQ** — necesito tus tiempos y condiciones reales para
@@ -80,6 +78,9 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **"Rootwailer" → "Rottweiler"** (6-ago): el nombre estaba mal escrito. Se corrigió el nombre,
+      el slug, el id y los 8 archivos de fotos; la URL vieja `/producto/rootwailer` redirige
+      permanente (308) a la nueva para no romper enlaces ya compartidos.
 - [x] **Pieza 19 "Doberman Sangre"** (6-ago): lavada a la piedra, doberman de facetas con ojos rojos
       a la espalda bajo BABUINOS en death metal; nuevo color de filtro **Negro lavado**.
 - [x] **framer-motion fuera del marco de la página** (6-ago): la librería venía en TODAS las páginas

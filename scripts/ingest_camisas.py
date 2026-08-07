@@ -60,7 +60,7 @@ FUNDADORES = {
     2: "guns-roses-red",
     3: "the-mills",
     4: "free-palestine",
-    5: "rootwailer",
+    5: "rottweiler",
     6: "brave-dog",
     7: "babuinos-lila",
     8: "offline-pleasure",

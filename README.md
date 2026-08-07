@@ -26,11 +26,11 @@ Dos líneas, definidas en `src/lib/products.ts` (fuente única):
 | Línea | Piezas | Qué es |
 | --- | --- | --- |
 | **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
-| **Colección Fundadores** | 14 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rootwailer, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty, Doberman Sangre. |
+| **Colección Fundadores** | 14 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rottweiler, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty, Doberman Sangre. |
 
 El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
 
-Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMOS GRANDES_ (la espalda de Rootwailer lo escribe completo), y **Guns & Roses viene en dos cortes** — oversize en hombre, crop en mujer, cada uno con su propia foto de prenda (`imagesByGender`, único caso; la galería muestra el corte según el toggle H/M).
+Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMOS GRANDES_ (la espalda de Rottweiler lo escribe completo), y **Guns & Roses viene en dos cortes** — oversize en hombre, crop en mujer, cada uno con su propia foto de prenda (`imagesByGender`, único caso; la galería muestra el corte según el toggle H/M).
 
 **Precios (COP):** básicas $50.000, estampadas $75.000 (`PRECIO` por categoría en `products.ts`, no pieza por pieza). **Promos por combo automáticas:** 3 básicas o 2 estampadas cualesquiera por $140.000 (`PROMOS` + `cartTotals`), aplicadas en el carrito y reflejadas en el total del mensaje de WhatsApp. Pago y envío se coordinan por WhatsApp.
 
