@@ -14,25 +14,20 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] 🚨 **EL PROYECTO DE SUPABASE YA NO EXISTE** (visto el 6-ago). El host
-      `cmfcgbqpvguihazmrlgs.supabase.co` da **NXDOMAIN** en el DNS público, y desde Vercel las
-      lecturas fallan con `TypeError: fetch failed` (se ve en `/admin`). Los proyectos gratuitos se
-      pausan por inactividad y después se borran.
-      **Qué significa:** los pedidos y los correos del Club **no se están guardando** desde que
-      desapareció. La venta NO se cae —el insert es best-effort y el enlace de WhatsApp sale igual—
-      pero el registro se pierde y `/admin` no tiene nada que mostrar. El inventario nuevo tampoco
-      puede funcionar hasta que haya proyecto.
-      **Qué hacer:** crear (o restaurar) un proyecto en tu cuenta personal de Supabase, correr
-      [`supabase/schema.sql`](supabase/schema.sql) —trae las tres tablas— y actualizar
-      `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` en **dos lados**: `.env.local` y las
-      env vars de producción del proyecto `babuinos-inc` en Vercel. Yo no puedo crearlo: hace falta
-      un PAT de Management API de tu cuenta.
-
-- [ ] **STOCK REAL de las 19 piezas** — ya **no necesita código**: se edita en `/admin` → Inventario.
-      Un paso único antes: correr [`supabase/schema.sql`](supabase/schema.sql) en el
-      SQL Editor de tu Supabase (el panel lo dice y te deja copiar el SQL si falta). Casilla vacía =
-      la talla no existe · `0` = agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir
-      más. Mientras una pieza no se cargue, sigue con el tallaje provisional (`TALLAS_STD`).
+- [ ] **STOCK REAL de las 19 piezas** — el único paso que falta es **escribir los números** en
+      `/admin` → Inventario. Ya no necesita código ni SQL: la tabla `product_stock` está creada y
+      probada de punta a punta en producción (6-ago). Casilla vacía = la talla no existe · `0` =
+      agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir más. Mientras una pieza no
+      se cargue, sigue con el tallaje provisional (`TALLAS_STD`), y el panel la marca "Sin cargar".
+- [ ] ⚠️ **Ojo con el Supabase gratis: ya desapareció una vez.** El 6-ago el proyecto
+      `cmfcgbqpvguihazmrlgs` daba NXDOMAIN y desde Vercel las lecturas fallaban con
+      `TypeError: fetch failed`; Juan lo reactivó el mismo día y los datos estaban intactos. Los
+      proyectos gratuitos se pausan por inactividad, y mientras está caído **los pedidos y los
+      correos del Club no se guardan** (la venta no se cae: el insert es best-effort y el enlace de
+      WhatsApp sale igual). Si vuelve a pasar: reactivar, y si hubiera que crear uno nuevo, correr
+      [`supabase/schema.sql`](supabase/schema.sql) y actualizar `NEXT_PUBLIC_SUPABASE_URL` +
+      `SUPABASE_SERVICE_ROLE_KEY` en **dos lados**: `.env.local` y las env vars de producción en
+      Vercel.
 - [ ] **Medir el inventario** para la guía de tallas. `SIZE_GUIDE` en `ProductDetail.tsx` usa
       **medidas de referencia de oversize de mercado**, no las de estas prendas. El modal lo dice
       ("referencia, ±2 cm") y ofrece WhatsApp para la exacta. Ojo: **Guns & Roses** va crop en mujer.
@@ -60,7 +55,23 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
 - [ ] **Rotar credenciales** compartidas en desarrollo (GitHub PAT `ghp_…`, token Vercel `vcp_…`,
       service key de Supabase) y **cambiar `ADMIN_PASSWORD`** (env var en Vercel).
 
+- [ ] **Lámina de modelos de Eternal Beauty** (`13.5.png`): la actual muestra el frente viejo
+      ('Do You Want Something'), así que la ficha enseña dos frentes distintos. Con la lámina nueva:
+      `py scripts/ingest_camisas.py --solo eternal-beauty --parte grilla`.
+- [ ] **¿El frente del Doberman dice SOMOS GRANDES?** El lettering death metal es ilegible a
+      propósito; así quedó escrito en la descripción. Si dice otra cosa, es un renglón.
+
 ## 🔵 Siguientes builds (necesitan decisión o backend)
+
+- [ ] **Dominio propio** (p. ej. babuinos.co): hoy la tienda vive en `babuinos-inc.vercel.app`. Es
+      barato, se conecta en Vercel en diez minutos y cambia por completo cómo se ve el enlace cuando
+      lo pasas por WhatsApp. También es requisito para el correo del Club.
+- [ ] **Saber cuánta gente entra.** No hay analítica: no sabemos visitas, ni qué pieza se mira más,
+      ni de dónde llega la gente. Vercel Analytics es un interruptor; Plausible o Umami si prefieres
+      algo independiente.
+- [ ] **Imagen de compartir POR PIEZA** (`opengraph-image` en la ruta de producto). Hoy compartir
+      cualquier ficha por WhatsApp muestra la misma imagen genérica de la marca; con esto se vería la
+      camisa. Es de las cosas más baratas que suben la conversión.
 
 - [ ] **Páginas de Envíos / Cambios / FAQ.** Se sacaron del footer para no prometer en falso; cuando
       me des tiempos y condiciones reales las escribo y vuelven a enlazarse.
@@ -151,4 +162,4 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
   por nombre** (~1.25 = grilla de modelos 3×2, ~1.78 = prenda sola) y el lado frente/espalda va en la
   tabla `ESPALDA_IZQ` de `scripts/ingest_camisas.py` porque no se puede deducir.
 
-_Última actualización: 2026-08-06._
+_Última actualización: 2026-08-07._
