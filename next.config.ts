@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
         destination: "/producto/rottweiler",
         permanent: true,
       },
+      /**
+       * Piezas retiradas del catálogo (licencias de terceros, 7-ago). Sus fichas
+       * ya no existen: en vez de dejar un 404 —hay enlaces compartidos por
+       * WhatsApp y las URLs estaban en el sitemap— caen en la tienda.
+       */
+      { source: "/producto/guns-roses-red", destination: "/tienda", permanent: true },
+      { source: "/producto/the-mills", destination: "/tienda", permanent: true },
     ];
   },
 

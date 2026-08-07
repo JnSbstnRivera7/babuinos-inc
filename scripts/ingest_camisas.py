@@ -57,8 +57,9 @@ BASICAS = {
 }
 FUNDADORES = {
     1: "wear-your-attitude",
-    2: "guns-roses-red",
-    3: "the-mills",
+    # 2 y 3 (Guns & Roses Red y The Mills) salieron del catálogo el 2026-08-07 por
+    # licencias de terceros. Sus láminas siguen en MATERIAL, pero NO deben volver a
+    # generarse: si se reactivan, también hay que devolverlas a products.ts.
     4: "free-palestine",
     5: "rottweiler",
     6: "brave-dog",

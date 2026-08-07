@@ -3,7 +3,7 @@
 Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)** · hallazgos medidos en
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
-Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del catálogo.
+Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del catálogo.
 
 > **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin, WhatsApp)
 > en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`. Para pushear ojo con la cuenta:
@@ -14,7 +14,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 19 piezas** — el único paso que falta es **escribir los números** en
+- [ ] **STOCK REAL de las 17 piezas** — el único paso que falta es **escribir los números** en
       `/admin` → Inventario. Ya no necesita código ni SQL: la tabla `product_stock` está creada y
       probada de punta a punta en producción (6-ago). Casilla vacía = la talla no existe · `0` =
       agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir más. Mientras una pieza no
@@ -30,11 +30,10 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
       Vercel.
 - [ ] **Medir el inventario** para la guía de tallas. `SIZE_GUIDE` en `ProductDetail.tsx` usa
       **medidas de referencia de oversize de mercado**, no las de estas prendas. El modal lo dice
-      ("referencia, ±2 cm") y ofrece WhatsApp para la exacta. Ojo: **Guns & Roses** va crop en mujer.
-- [ ] ⚠️ **Licencias de terceros.** Tres diseños usan marcas que no son de Babuinos:
-      **Guns & Roses Red** (nombre y el revólver-con-rosas de la banda), **The Mills** (nombre y foto
-      de la banda) y **Offline Pleasure** (MTLS.CORP / Too Fucking Nice Studio). La tienda ya es
-      pública, así que el riesgo está corriendo. Conseguir permiso, rediseñar, o sacarlas.
+      ("referencia, ±2 cm") y ofrece WhatsApp para la exacta.
+- [ ] ⚠️ **Queda UNA licencia de terceros por resolver: Offline Pleasure** (MTLS.CORP / Too
+      Fucking Nice Studio). Guns & Roses Red y The Mills ya salieron del catálogo (7-ago). Con esta:
+      permiso, rediseño, o sacarla también.
 - [ ] **Links reales** de Instagram y Facebook — hoy `instagram.com/babuinos.inc` y
       `facebook.com/babuinos.inc` son placeholders en `SocialButtons.tsx`.
 - [ ] **Nombre del Drop**: la fecha ya es la real (**4-sep-2026, 8 pm hora Colombia**), pero el nombre
@@ -89,6 +88,9 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 19 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Fuera Guns & Roses Red y The Mills** (7-ago, decisión de Juan por las licencias de las
+      bandas): se borraron las fichas **y sus fotos del sitio**, salieron del mapa de ingesta, sus
+      URLs redirigen a `/tienda` y el carrito guardado se descarta (`persist` v3). Quedan 17 piezas.
 - [x] **"Rootwailer" → "Rottweiler"** (6-ago): el nombre estaba mal escrito. Se corrigió el nombre,
       el slug, el id y los 8 archivos de fotos; la URL vieja `/producto/rootwailer` redirige
       permanente (308) a la nueva para no romper enlaces ya compartidos.

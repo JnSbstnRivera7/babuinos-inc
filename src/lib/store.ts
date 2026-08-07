@@ -20,7 +20,7 @@ export interface CartLine {
   category: Category;
   /** Precio unitario en COP. */
   price: number;
-  /** Cómo lo quiere el cliente. En Guns & Roses define el corte (oversize/crop). */
+  /** Cómo lo quiere el cliente; en una pieza de dos cortes define cuál (oversize/crop). */
   genero: LineGenero;
 }
 
@@ -113,7 +113,10 @@ export const useCart = create<CartState>()(
       // v2: las líneas ganaron category/price/genero. Un carrito guardado antes
       // de eso daría precios NaN, así que se descarta al migrar (mejor vaciar
       // que mostrar totales rotos).
-      version: 2,
+      // v3 (7-ago): salieron dos piezas del catálogo y sus fotos del sitio. Un
+      // carrito guardado con ellas mostraría una imagen rota y dejaría pedir algo
+      // que ya no se vende, así que también se descarta.
+      version: 3,
       migrate: () => ({ lines: [], isOpen: false }),
     },
   ),

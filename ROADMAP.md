@@ -104,6 +104,8 @@ Salidos de probar la tienda en el celular, no de la auditoría.
 - [x] **Guns & Roses con prenda sola por corte**: `imagesByGender` (oversize `-h` / crop `-m`). La
       galería de la PDP muestra el corte del toggle H/M. Es el único producto con dos cortes reales;
       el resto sigue con una sola prenda (verificado sin regresión).
+      → **La pieza salió del catálogo el 7-ago** (licencia de la banda). El soporte de dos cortes
+      queda en el código, sin usar.
 
 ## ✅ Fase 3e — Eternal Beauty + música al primer gesto (hecho · 2026-08-05)
 
@@ -151,6 +153,17 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       espalda bajo BABUINOS en death metal. Nuevo color de filtro **Negro lavado**.
 - [x] **Frente nuevo de Eternal Beauty** ('Our Bond is Forever') y el script de ingesta reparado
       (mapa hasta la 14, láminas por corte `N H`/`N M`, y `--solo <pieza>` para rehacer una sola).
+
+## ✅ Fase 3h — Limpieza de licencias (hecho · 2026-08-07)
+
+- [x] **Fuera Guns & Roses Red y The Mills.** Juan decidió retirarlas por las licencias de las
+      bandas (nombre e imagen). No basta con esconderlas: se borraron las fichas **y las fotos del
+      sitio** —el material es justo lo que no puede quedar accesible—, sus números salieron del mapa
+      del script de ingesta para que una corrida completa no las regenere, sus URLs redirigen
+      permanente a `/tienda` (estaban en el sitemap y circulan por WhatsApp) y el carrito guardado se
+      descarta (`persist` v3) para que nadie pida algo que ya no se vende. Quedan **17 piezas**.
+      Las láminas originales siguen en `MATERIAL/`, que es local y no entra ni al repo ni al deploy.
+- [ ] Falta decidir lo mismo con **Offline Pleasure** (MTLS.CORP / Too Fucking Nice Studio).
 
 ## 🧭 Fase 4 — Tienda real / backend
 

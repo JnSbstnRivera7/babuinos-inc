@@ -104,7 +104,7 @@ export function ProductDetail({
           { src: m.espalda, fit: "cover" as const, label: "Espalda" },
         ]
       : [];
-    // Prenda sola: si la pieza tiene dos cortes (Guns & Roses), la del género
+    // Prenda sola: si la pieza tiene dos cortes (hoy ninguna), la del género
     // del toggle; si no, la única.
     const flatSrc = product.imagesByGender?.[modelGender] ?? product.images;
     const flat = (flatSrc.length ? flatSrc : [product.image]).map((src) => ({

@@ -7,7 +7,7 @@
 - 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
 - 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
 
-**Estado:** 19 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+**Estado:** 17 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
@@ -26,11 +26,13 @@ Dos líneas, definidas en `src/lib/products.ts` (fuente única):
 | Línea | Piezas | Qué es |
 | --- | --- | --- |
 | **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
-| **Colección Fundadores** | 14 | Las estampadas: Wear Your Attitude, Guns & Roses Red, The Mills, Free Palestine, Rottweiler, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty, Doberman Sangre. |
+| **Colección Fundadores** | 12 | Las estampadas: Wear Your Attitude, Free Palestine, Rottweiler, Brave Dog, Babuinos Lila, Offline Pleasure, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty, Doberman Sangre. |
 
 El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
 
-Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMOS GRANDES_ (la espalda de Rottweiler lo escribe completo), y **Guns & Roses viene en dos cortes** — oversize en hombre, crop en mujer, cada uno con su propia foto de prenda (`imagesByGender`, único caso; la galería muestra el corte según el toggle H/M).
+Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMOS GRANDES_ (la espalda de Rottweiler lo escribe completo).
+
+> **Piezas retiradas (7-ago):** **Guns & Roses Red** y **The Mills** salieron del catálogo por las licencias de las bandas. Se borraron sus fichas **y sus fotos del sitio**, sus números salieron del mapa del script de ingesta, y `/producto/guns-roses-red` y `/producto/the-mills` redirigen a `/tienda`. El soporte de piezas con **dos cortes** (`imagesByGender`, oversize en hombre / crop en mujer) sigue en el código porque es genérico, pero hoy no lo usa ninguna pieza.
 
 **Precios (COP):** básicas $50.000, estampadas $75.000 (`PRECIO` por categoría en `products.ts`, no pieza por pieza). **Promos por combo automáticas:** 3 básicas o 2 estampadas cualesquiera por $140.000 (`PROMOS` + `cartTotals`), aplicadas en el carrito y reflejadas en el total del mensaje de WhatsApp. Pago y envío se coordinan por WhatsApp.
 
@@ -46,7 +48,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 **Transversal:**
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
-- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer), subtotal, promo y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (separa el corte de Guns & Roses). `persist` v2 descarta carritos viejos sin precio.
+- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer), subtotal, promo y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (así una pieza de dos cortes no se mezcla). `persist` va en **v3**: descarta carritos viejos (sin precio, o con las piezas retiradas).
 - **Globales en toda la página:** reproductor "Babuinos Radio" (**arranca sola al primer gesto en cualquier parte** —toque/click/scroll—, en celular y escritorio), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
@@ -124,7 +126,7 @@ Copia `.env.example` → `.env.local` (no se sube a git):
 ## 🔐 Panel de administración
 
 `/admin` — login con usuario y clave (env `ADMIN_USER` / `ADMIN_PASSWORD`). Muestra:
-- **Inventario editable:** el tallaje de las 19 piezas, sin tocar código (ver abajo).
+- **Inventario editable:** el tallaje de las 17 piezas, sin tocar código (ver abajo).
 - **Gráficas:** pedidos por día (14 días), productos más pedidos, pedidos por ciudad.
 - **Tablas:** pedidos (cliente, teléfono → WhatsApp, ciudad, productos, nota) y Club (correos).
 - No indexable (`robots: noindex`). Cambia la clave en las env vars.

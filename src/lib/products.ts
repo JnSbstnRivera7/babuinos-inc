@@ -154,7 +154,8 @@ export interface Product {
   images: string[]; // prenda sola para la PDP
   /**
    * Prenda sola DISTINTA por género, para las piezas con dos cortes reales
-   * (hoy solo Guns & Roses: oversize en hombre, crop en mujer). Si existe, la
+   * (lo usó Guns & Roses hasta que salió del catálogo: oversize en hombre, crop
+   * en mujer). Hoy no lo usa ninguna pieza, pero el soporte queda. Si existe, la
    * galería usa el corte del toggle H/M en vez de `images`.
    */
   imagesByGender?: { hombre: string[]; mujer: string[] };
@@ -313,53 +314,12 @@ const FUNDADORES: Product[] = [
     sizes: TALLAS_STD,
     badge: "hot",
   },
-  {
-    id: "guns-roses-red",
-    slug: "guns-roses-red",
-    name: "Guns & Roses Red",
-    tag: "Crop en mujer · Estampada",
-    category: "estampada",
-    genero: "unisex",
-    edition: "regal",
-    color: "rojo",
-    desc: "Roja intensa con revólver y rosas a la espalda. En la línea de mujer va en corte crop.",
-    descLong:
-      "Rojo saturado con el revólver y las rosas a la espalda sobre el DON'T CRY, y el monograma SG bordado tono sobre tono al pecho. En la línea de mujer va en corte crop; en hombre, oversize.",
-    fit: "Oversize en hombre · Crop en mujer",
-    composicion: ALGODON,
-    image: "/brand/products/guns-roses-red-frente.webp",
-    images: flatSet("guns-roses-red"),
-    // Dos cortes: oversize (hombre) y crop (mujer). La galería muestra el que
-    // corresponda al toggle H/M.
-    imagesByGender: {
-      hombre: flatSet("guns-roses-red-h"),
-      mujer: flatSet("guns-roses-red-m"),
-    },
-    models: modelSet("guns-roses-red"),
-    colorway: "Rojo",
-    sizes: TALLAS_STD,
-    badge: "new",
-  },
-  {
-    id: "the-mills",
-    slug: "the-mills",
-    name: "The Mills",
-    tag: "Oversize · Estampada",
-    category: "estampada",
-    genero: "unisex",
-    edition: "safari",
-    color: "crema",
-    desc: "Crema con la banda a la espalda y una verdad chiquita al frente: el amor es fácil, las relaciones no.",
-    descLong:
-      "Algodón crema con el retrato de la banda a la espalda en duotono rojo y negro bajo el lettering THE MILLS. Al frente, en letra pequeña: el amor es fácil, las relaciones no. Para los que llevan la música puesta.",
-    fit: "Oversize",
-    composicion: ALGODON,
-    image: "/brand/products/the-mills-frente.webp",
-    images: flatSet("the-mills"),
-    models: modelSet("the-mills"),
-    colorway: "Crema",
-    sizes: TALLAS_STD,
-  },
+  /* Acá vivían "Guns & Roses Red" y "The Mills". Juan las SACÓ del catálogo el
+     2026-08-07 por las licencias de terceros (nombre e imagen de las bandas).
+     Se borraron también sus fotos del sitio —el material es justo lo que no puede
+     quedar público— y sus números salieron del mapa del script de ingesta para
+     que una corrida completa no las vuelva a generar. Las láminas originales
+     siguen en MATERIAL (local, fuera del repo y del deploy). */
   {
     id: "free-palestine",
     slug: "free-palestine",
