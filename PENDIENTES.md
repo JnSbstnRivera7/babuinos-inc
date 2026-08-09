@@ -3,7 +3,7 @@
 Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)** · hallazgos medidos en
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
-Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del catálogo.
+Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del catálogo.
 
 > **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin, WhatsApp)
 > en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`. Para pushear ojo con la cuenta:
@@ -14,7 +14,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 17 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
+- [ ] **STOCK REAL de las 16 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
       camisa y el diseño elegido, así que **no hay stock real que cargar** — el tallaje provisional se
       queda tal cual. Retomar cuando haya inventario físico.)_ Cuando llegue ese momento, el único paso
       es **escribir los números** en `/admin` → Inventario (sin código ni SQL: la tabla
@@ -33,13 +33,12 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 - [ ] **Medir el inventario** para la guía de tallas. `SIZE_GUIDE` en `ProductDetail.tsx` usa
       **medidas de referencia de oversize de mercado**, no las de estas prendas. El modal lo dice
       ("referencia, ±2 cm") y ofrece WhatsApp para la exacta.
-- [ ] ⚠️ **Queda UNA licencia de terceros por resolver: Offline Pleasure** (MTLS.CORP / Too
-      Fucking Nice Studio). Guns & Roses Red y The Mills ya salieron del catálogo (7-ago). Con esta:
-      permiso, rediseño, o sacarla también.
 - [ ] **Contenido para Envíos / Cambios / FAQ** — necesito tus tiempos y condiciones reales para
       escribir esas páginas.
 - [ ] **Música con licencia.** Los 9 temas son comerciales (2Pac, 50 Cent, Vico C, Shaggy, DMX,
-      Eminem ×3, Snoop Dogg) y varios son versiones explícitas.
+      Eminem ×3, Snoop Dogg) y varios son versiones explícitas. _(9-ago, Juan: se dejan por ahora;
+      retomar con royalty-free —Pixabay/Uppbeat gratis o Epidemic/Artlist de pago— antes de promocionar
+      en serio.)_
 - [ ] ⚖️ **Datos legales para `/privacidad`.** `src/lib/privacidad.ts` tiene campos `PENDIENTE`:
       razón social, NIT y un correo de atención de solicitudes. **Revisar la política con un abogado**
       antes de operar en serio — hoy está inspirada en la Ley 1581/2012 pero no validada.
@@ -82,6 +81,11 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Fuera Offline Pleasure** (9-ago, licencia del estudio MTLS.CORP): se borró la ficha de
+      `products.ts` **y sus fotos** (`models/offline-pleasure/` + las dos de prenda sola), salió del
+      mapa del script de ingesta, `/producto/offline-pleasure` redirige a `/tienda` (308) y el carrito
+      guardado se descarta (`persist` v4). **Quedan 16 piezas.** _(Ojo: Juan creía que ya se había
+      quitado con Guns & Roses y The Mills, pero seguía publicada.)_
 - [x] **Decisiones de Juan (9-ago):** el próximo Drop se queda **"Expedición"**; la altura del copy va
       en **metros** (2.600 m = altura de Bogotá); el frente del **Doberman sí dice "SOMOS GRANDES"** (ya
       estaba así en la descripción). El **stock** se difiere a propósito: por ahora se estampa por

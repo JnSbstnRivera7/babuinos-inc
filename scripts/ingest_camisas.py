@@ -64,7 +64,8 @@ FUNDADORES = {
     5: "rottweiler",
     6: "brave-dog",
     7: "babuinos-lila",
-    8: "offline-pleasure",
+    # 8 (Offline Pleasure) salió del catálogo el 2026-08-09 por la licencia del
+    # estudio MTLS.CORP. Su lámina sigue en MATERIAL pero NO debe regenerarse.
     9: "asian-tengu-mask",
     10: "california-rasta-kid",
     11: "guardian-navy",

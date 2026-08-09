@@ -116,7 +116,8 @@ export const useCart = create<CartState>()(
       // v3 (7-ago): salieron dos piezas del catálogo y sus fotos del sitio. Un
       // carrito guardado con ellas mostraría una imagen rota y dejaría pedir algo
       // que ya no se vende, así que también se descarta.
-      version: 3,
+      // v4 (9-ago): salió Offline Pleasure (licencia MTLS.CORP), mismo motivo.
+      version: 4,
       migrate: () => ({ lines: [], isOpen: false }),
     },
   ),

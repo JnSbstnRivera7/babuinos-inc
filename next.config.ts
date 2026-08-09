@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
        */
       { source: "/producto/guns-roses-red", destination: "/tienda", permanent: true },
       { source: "/producto/the-mills", destination: "/tienda", permanent: true },
+      { source: "/producto/offline-pleasure", destination: "/tienda", permanent: true },
     ];
   },
 
