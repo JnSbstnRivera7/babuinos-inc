@@ -196,6 +196,7 @@ Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy 
 
 - **Paleta:** Papiro `#F3E9E2` · Teal `#00736C` · Ocre `#CDA214` · Pardo `#654321` · Tinta `#1E2021`
 - **Tipografía:** Anton (titulares) · Inter (cuerpo) · Space Mono (labels)
+- **Redes (cuentas reales, en `SocialButtons.tsx`):** Instagram [@babuinos_inc_streetwear](https://www.instagram.com/babuinos_inc_streetwear) · [Facebook](https://www.facebook.com/people/Babuinos-inc-streetwear/61593279293595/) · WhatsApp de la tienda.
 - Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand` y música en `/public/music`.
 
 ## 📁 Estructura
