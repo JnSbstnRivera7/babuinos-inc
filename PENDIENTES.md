@@ -14,11 +14,13 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 17 piezas** — el único paso que falta es **escribir los números** en
-      `/admin` → Inventario. Ya no necesita código ni SQL: la tabla `product_stock` está creada y
-      probada de punta a punta en producción (6-ago). Casilla vacía = la talla no existe · `0` =
-      agotada (sale tachada) · `n` = unidades, y el carrito no deja pedir más. Mientras una pieza no
-      se cargue, sigue con el tallaje provisional (`TALLAS_STD`), y el panel la marca "Sin cargar".
+- [ ] **STOCK REAL de las 17 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
+      camisa y el diseño elegido, así que **no hay stock real que cargar** — el tallaje provisional se
+      queda tal cual. Retomar cuando haya inventario físico.)_ Cuando llegue ese momento, el único paso
+      es **escribir los números** en `/admin` → Inventario (sin código ni SQL: la tabla
+      `product_stock` está creada y probada, 6-ago). Casilla vacía = la talla no existe · `0` = agotada
+      (tachada) · `n` = unidades, y el carrito no deja pedir más. Sin cargar, usa `TALLAS_STD` y el
+      panel la marca "Sin cargar".
 - [ ] ⚠️ **Ojo con el Supabase gratis: ya desapareció una vez.** El 6-ago el proyecto
       `cmfcgbqpvguihazmrlgs` daba NXDOMAIN y desde Vercel las lecturas fallaban con
       `TypeError: fetch failed`; Juan lo reactivó el mismo día y los datos estaban intactos. Los
@@ -34,10 +36,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 - [ ] ⚠️ **Queda UNA licencia de terceros por resolver: Offline Pleasure** (MTLS.CORP / Too
       Fucking Nice Studio). Guns & Roses Red y The Mills ya salieron del catálogo (7-ago). Con esta:
       permiso, rediseño, o sacarla también.
-- [ ] **Nombre del Drop**: la fecha ya es la real (**4-sep-2026, 8 pm hora Colombia**), pero el nombre
-      sigue siendo `Drop 02 — Expedición` en `DropCountdown.tsx`. ¿Se queda así?
-- [ ] **¿Altura en metros o pies?** El copy dice **2.600 m** (Bogotá está a 2.600 metros; 2.600 ft
-      serían ~790 m). Si la quieres en pies es un renglón: `altura` en `src/lib/brand.ts`.
 - [ ] **Contenido para Envíos / Cambios / FAQ** — necesito tus tiempos y condiciones reales para
       escribir esas páginas.
 - [ ] **Música con licencia.** Los 9 temas son comerciales (2Pac, 50 Cent, Vico C, Shaggy, DMX,
@@ -55,8 +53,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 - [ ] **Lámina de modelos de Eternal Beauty** (`13.5.png`): la actual muestra el frente viejo
       ('Do You Want Something'), así que la ficha enseña dos frentes distintos. Con la lámina nueva:
       `py scripts/ingest_camisas.py --solo eternal-beauty --parte grilla`.
-- [ ] **¿El frente del Doberman dice SOMOS GRANDES?** El lettering death metal es ilegible a
-      propósito; así quedó escrito en la descripción. Si dice otra cosa, es un renglón.
 
 ## 🔵 Siguientes builds (necesitan decisión o backend)
 
@@ -86,6 +82,10 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Decisiones de Juan (9-ago):** el próximo Drop se queda **"Expedición"**; la altura del copy va
+      en **metros** (2.600 m = altura de Bogotá); el frente del **Doberman sí dice "SOMOS GRANDES"** (ya
+      estaba así en la descripción). El **stock** se difiere a propósito: por ahora se estampa por
+      pedido, no hay inventario físico que cargar (ver el ítem arriba).
 - [x] **Links reales de Instagram y Facebook** (9-ago): Juan pasó las cuentas oficiales. Ahora en
       `SocialButtons.tsx` (Navbar, Footer, "Muy pronto") apuntan a
       `instagram.com/babuinos_inc_streetwear` y al perfil de Facebook `.../61593279293595/`; se
