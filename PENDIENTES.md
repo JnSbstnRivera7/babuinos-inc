@@ -34,8 +34,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 - [ ] ⚠️ **Queda UNA licencia de terceros por resolver: Offline Pleasure** (MTLS.CORP / Too
       Fucking Nice Studio). Guns & Roses Red y The Mills ya salieron del catálogo (7-ago). Con esta:
       permiso, rediseño, o sacarla también.
-- [ ] **Links reales** de Instagram y Facebook — hoy `instagram.com/babuinos.inc` y
-      `facebook.com/babuinos.inc` son placeholders en `SocialButtons.tsx`.
 - [ ] **Nombre del Drop**: la fecha ya es la real (**4-sep-2026, 8 pm hora Colombia**), pero el nombre
       sigue siendo `Drop 02 — Expedición` en `DropCountdown.tsx`. ¿Se queda así?
 - [ ] **¿Altura en metros o pies?** El copy dice **2.600 m** (Bogotá está a 2.600 metros; 2.600 ft
@@ -88,6 +86,10 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Links reales de Instagram y Facebook** (9-ago): Juan pasó las cuentas oficiales. Ahora en
+      `SocialButtons.tsx` (Navbar, Footer, "Muy pronto") apuntan a
+      `instagram.com/babuinos_inc_streetwear` y al perfil de Facebook `.../61593279293595/`; se
+      quitaron los placeholders `babuinos.inc`.
 - [x] **Fuera Guns & Roses Red y The Mills** (7-ago, decisión de Juan por las licencias de las
       bandas): se borraron las fichas **y sus fotos del sitio**, salieron del mapa de ingesta, sus
       URLs redirigen a `/tienda` y el carrito guardado se descarta (`persist` v3). Quedan 17 piezas.

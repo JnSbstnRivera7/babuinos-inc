@@ -3,12 +3,12 @@
 import { IconInstagram, IconWhatsApp, IconFacebook } from "./Icons";
 import { cn } from "@/lib/utils";
 
-// Placeholder links (swap handles when real accounts are ready).
+// Cuentas reales de la marca.
 const WA_MSG = encodeURIComponent("¡Hola Babuinos! Quiero conocer más de la colección 🦍");
 const ITEMS = [
-  { label: "Instagram", Icon: IconInstagram, key: "ig", href: "https://instagram.com/babuinos.inc" },
+  { label: "Instagram", Icon: IconInstagram, key: "ig", href: "https://www.instagram.com/babuinos_inc_streetwear" },
   { label: "WhatsApp", Icon: IconWhatsApp, key: "wa", href: `https://wa.me/573504444668?text=${WA_MSG}` },
-  { label: "Facebook", Icon: IconFacebook, key: "fb", href: "https://facebook.com/babuinos.inc" },
+  { label: "Facebook", Icon: IconFacebook, key: "fb", href: "https://www.facebook.com/people/Babuinos-inc-streetwear/61593279293595/" },
 ];
 
 export function SocialButtons({
