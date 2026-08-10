@@ -163,7 +163,16 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       permanente a `/tienda` (estaban en el sitemap y circulan por WhatsApp) y el carrito guardado se
       descarta (`persist` v3) para que nadie pida algo que ya no se vende. Quedan **17 piezas**.
       Las láminas originales siguen en `MATERIAL/`, que es local y no entra ni al repo ni al deploy.
-- [ ] Falta decidir lo mismo con **Offline Pleasure** (MTLS.CORP / Too Fucking Nice Studio).
+- [x] **Fuera Offline Pleasure** (9-ago, desde casa): la tercera y última con licencia de terceros
+      (bloque MTLS.CORP / Too Fucking Nice Studio). Mismo procedimiento —ficha, fotos, mapa de
+      ingesta, redirect a `/tienda` y `persist` v4—. **Quedan 16 piezas** y el catálogo ya no tiene
+      ninguna marca ajena.
+- [x] **Enlaces reales de redes** (9-ago): `instagram.com/babuinos_inc_streetwear` y el perfil de
+      Facebook. Se fueron los placeholders `babuinos.inc`, que mandaban a un 404 hacia afuera.
+- [x] **Decisiones cerradas** (9-ago): el Drop se queda **"Expedición"**, la altura va en **metros**
+      y el frente del Doberman **sí dice SOMOS GRANDES**. El **stock real se difiere**: por ahora se
+      estampa por pedido, así que no hay inventario físico que cargar — el panel queda listo para
+      cuando lo haya.
 
 ## 🧭 Fase 4 — Tienda real / backend
 
