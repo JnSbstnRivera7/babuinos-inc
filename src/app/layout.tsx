@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Mono, Anton } from "next/font/google";
 import "./globals.css";
 import { InstallPrompt } from "@/components/fx/InstallPrompt";
-import { MusicPlayer } from "@/components/fx/MusicPlayer";
 import { WhatsAppFloat } from "@/components/fx/WhatsAppFloat";
 
 const anton = Anton({
@@ -69,7 +68,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="fx-grain">
         {children}
-        <MusicPlayer />
+        {/* El reproductor "Babuinos Radio" se quitó el 10-ago: los temas eran
+            comerciales. Vuelve cuando haya música con licencia — el componente
+            está en el historial de git (ver ROADMAP, fase de música). */}
         <WhatsAppFloat />
         <InstallPrompt />
       </body>

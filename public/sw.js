@@ -13,8 +13,11 @@
    v9: fotos de modelo nuevas de Free Palestine (mismo nombre, contenido nuevo).
    v10: re-corte de las espaldas de Free Palestine (la lámina 4.5 venía mal).
    v11: Eternal Beauty actualizada (nuevo diseño de querubín, prenda + modelos).
-   v12: precios COP + promos por combo + género en el pedido de WhatsApp. */
-const CACHE = "babuinos-v12";
+   v12: precios COP + promos por combo + género en el pedido de WhatsApp.
+   v13: fuera las tres piezas con licencia de terceros y fuera la música (los 9
+        temas eran comerciales). Subir la versión borra del celular cualquier
+        mp3 o foto retirada que hubiera quedado en el caché de ejecución. */
+const CACHE = "babuinos-v13";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.

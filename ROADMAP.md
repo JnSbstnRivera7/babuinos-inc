@@ -169,6 +169,12 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       ninguna marca ajena.
 - [x] **Enlaces reales de redes** (9-ago): `instagram.com/babuinos_inc_streetwear` y el perfil de
       Facebook. Se fueron los placeholders `babuinos.inc`, que mandaban a un 404 hacia afuera.
+- [x] **Fuera la música y el reproductor** (10-ago). Los 9 temas eran comerciales: se borraron los
+      **27 MB de MP3** y el componente `MusicPlayer`, y se desmontó del layout. Mismo criterio que con
+      las piezas: si el problema es la licencia, el archivo no puede quedar servido. Service worker a
+      **v13** para vaciar lo que hubiera quedado cacheado en los celulares. **Para devolverlo**: los
+      MP3 con licencia en `public/music/` y recuperar el componente del historial de git — su lista de
+      temas es un array al inicio del archivo.
 - [x] **Decisiones cerradas** (9-ago): el Drop se queda **"Expedición"**, la altura va en **metros**
       y el frente del Doberman **sí dice SOMOS GRANDES**. El **stock real se difiere**: por ahora se
       estampa por pedido, así que no hay inventario físico que cargar — el panel queda listo para

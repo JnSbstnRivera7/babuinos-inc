@@ -35,10 +35,11 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
       ("referencia, ±2 cm") y ofrece WhatsApp para la exacta.
 - [ ] **Contenido para Envíos / Cambios / FAQ** — necesito tus tiempos y condiciones reales para
       escribir esas páginas.
-- [ ] **Música con licencia.** Los 9 temas son comerciales (2Pac, 50 Cent, Vico C, Shaggy, DMX,
-      Eminem ×3, Snoop Dogg) y varios son versiones explícitas. _(9-ago, Juan: se dejan por ahora;
-      retomar con royalty-free —Pixabay/Uppbeat gratis o Epidemic/Artlist de pago— antes de promocionar
-      en serio.)_
+- [ ] **Conseguir música sin derechos** y avisarme para devolver el reproductor. El 10-ago se
+      quitaron los 9 temas comerciales **y el reproductor** (ver Cerrado). Dónde buscar: **Pixabay** y
+      **Uppbeat** (gratis, con atribución en algunos casos), **Epidemic Sound** o **Artlist** (de
+      pago, licencia amplia). Con los MP3 en la mano yo devuelvo el reproductor tal cual estaba: está
+      en el historial de git, así que es traerlo de vuelta y poner la lista nueva.
 - [ ] ⚖️ **Datos legales para `/privacidad`.** `src/lib/privacidad.ts` tiene campos `PENDIENTE`:
       razón social, NIT y un correo de atención de solicitudes. **Revisar la política con un abogado**
       antes de operar en serio — hoy está inspirada en la Ley 1581/2012 pero no validada.
@@ -81,6 +82,11 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Fuera la música y el reproductor** (10-ago, decisión de Juan mientras consigue temas sin
+      derechos): borrados los **9 MP3 (27 MB)** de `public/music/` y el componente `MusicPlayer`, y
+      desmontado del layout. Igual que con las piezas retiradas, no basta con esconderlo: los
+      archivos ya no se sirven. Service worker a **v13** para que los celulares que hubieran cacheado
+      un MP3 lo suelten. Vuelve con música con licencia (está en el historial de git).
 - [x] **Fuera Offline Pleasure** (9-ago, licencia del estudio MTLS.CORP): se borró la ficha de
       `products.ts` **y sus fotos** (`models/offline-pleasure/` + las dos de prenda sola), salió del
       mapa del script de ingesta, `/producto/offline-pleasure` redirige a `/tienda` (308) y el carrito
