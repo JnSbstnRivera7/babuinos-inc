@@ -35,11 +35,10 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
       ("referencia, ±2 cm") y ofrece WhatsApp para la exacta.
 - [ ] **Contenido para Envíos / Cambios / FAQ** — necesito tus tiempos y condiciones reales para
       escribir esas páginas.
-- [ ] **Conseguir música sin derechos** y avisarme para devolver el reproductor. El 10-ago se
-      quitaron los 9 temas comerciales **y el reproductor** (ver Cerrado). Dónde buscar: **Pixabay** y
-      **Uppbeat** (gratis, con atribución en algunos casos), **Epidemic Sound** o **Artlist** (de
-      pago, licencia amplia). Con los MP3 en la mano yo devuelvo el reproductor tal cual estaba: está
-      en el historial de git, así que es traerlo de vuelta y poner la lista nueva.
+- [ ] **Guardar por escrito la autorización de M.A.D. Fellaz.** La música ya es legítima (son amigos
+      y dieron permiso), pero hoy eso vive solo de palabra. Un mensaje suyo diciendo que autorizan a
+      Babuinos Inc a usar esos cuatro temas en el sitio, guardado, vale mucho si algún día alguien
+      pregunta. Ideal: que diga qué temas, para qué uso y desde cuándo.
 - [ ] ⚖️ **Datos legales para `/privacidad`.** `src/lib/privacidad.ts` tiene campos `PENDIENTE`:
       razón social, NIT y un correo de atención de solicitudes. **Revisar la política con un abogado**
       antes de operar en serio — hoy está inspirada en la Ley 1581/2012 pero no validada.
@@ -82,6 +81,11 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Vuelve la música, ahora con permiso** (10-ago): cuatro temas de **M.A.D. Fellaz** —amigos de
+      la casa que autorizaron su uso— y el reproductor de vuelta, acreditado en pantalla como
+      **"Babuinos Ft M.A.D. Fellaz"**: Tabogo Zoo, Crimentales, No Diggedy y 23 Celcius (con Achepe).
+      Vienen a 105-137 kb/s, así que se copiaron sin recomprimir; 11 MB en total contra los 27 MB de
+      antes. Service worker a **v14**.
 - [x] **Fuera la música y el reproductor** (10-ago, decisión de Juan mientras consigue temas sin
       derechos): borrados los **9 MP3 (27 MB)** de `public/music/` y el componente `MusicPlayer`, y
       desmontado del layout. Igual que con las piezas retiradas, no basta con esconderlo: los

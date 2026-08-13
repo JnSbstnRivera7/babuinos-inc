@@ -169,6 +169,13 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       ninguna marca ajena.
 - [x] **Enlaces reales de redes** (9-ago): `instagram.com/babuinos_inc_streetwear` y el perfil de
       Facebook. Se fueron los placeholders `babuinos.inc`, que mandaban a un 404 hacia afuera.
+- [x] **Vuelve la música con permiso** (10-ago, el mismo día): **M.A.D. Fellaz**, amigos de la casa,
+      autorizaron cuatro temas — Tabogo Zoo, Crimentales, No Diggedy y 23 Celcius (con Achepe). El
+      reproductor vuelve al layout acreditándolos en pantalla como **"Babuinos Ft M.A.D. Fellaz"**:
+      arriba el tema que suena, abajo el crédito, siempre visible mientras hay música. Los MP3 ya
+      venían a 105-137 kb/s, así que se copiaron **sin recomprimir** (recomprimir dos veces solo
+      degrada). 11 MB contra los 27 MB de la selección anterior. Service worker a **v14**.
+      _Pendiente sano: dejar la autorización por escrito._
 - [x] **Fuera la música y el reproductor** (10-ago). Los 9 temas eran comerciales: se borraron los
       **27 MB de MP3** y el componente `MusicPlayer`, y se desmontó del layout. Mismo criterio que con
       las piezas: si el problema es la licencia, el archivo no puede quedar servido. Service worker a

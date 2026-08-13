@@ -49,7 +49,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
 - **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer), subtotal, promo y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (así una pieza de dos cortes no se mezcla). `persist` va en **v4**: descarta carritos viejos (sin precio, o con las piezas retiradas).
-- **Globales en toda la página:** **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer. _(El reproductor "Babuinos Radio" se quitó el 10-ago: los 9 temas eran comerciales. Vuelve con música con licencia; el componente está en el historial de git.)_
+- **Globales en toda la página:** reproductor **"Babuinos Ft M.A.D. Fellaz"** (arranca al primer gesto en cualquier parte, en celular y escritorio), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
@@ -197,13 +197,13 @@ Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy 
 - **Paleta:** Papiro `#F3E9E2` · Teal `#00736C` · Ocre `#CDA214` · Pardo `#654321` · Tinta `#1E2021`
 - **Tipografía:** Anton (titulares) · Inter (cuerpo) · Space Mono (labels)
 - **Redes (cuentas reales, en `SocialButtons.tsx`):** Instagram [@babuinos_inc_streetwear](https://www.instagram.com/babuinos_inc_streetwear) · [Facebook](https://www.facebook.com/people/Babuinos-inc-streetwear/61593279293595/) · WhatsApp de la tienda.
-- Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand`.
+- Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand` y música en `/public/music`.
 
 ## 📁 Estructura
 
 ```
 src/
-  app/         layout (globales: WhatsAppFloat, InstallPrompt), page (Home),
+  app/         layout (globales: MusicPlayer, WhatsAppFloat, InstallPrompt), page (Home),
                tienda/, producto/[slug]/, nosotros/, club/, favoritos/, admin/,
                sacos|medias|accesorios/ (Muy pronto), not-found (404 propia),
                manifest.ts, sitemap.ts, robots.ts,
@@ -216,14 +216,14 @@ src/
     favoritos/ FavoritosClient
     layout/    Navbar, Footer, Shell (marco de páginas internas)
     cart/      CartDrawer        admin/  AdminLogin, AdminCharts
-    fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, WhatsAppFloat,
+    fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, MusicPlayer, WhatsAppFloat,
                InstallPrompt, SmoothScroll, Reveal
     ui/        Logo, BaboonMark, GeneroMark, Icons, SocialButtons, Toast
   lib/         products, brand (copy), store, wishlist, theme, whatsapp, supabase, toast, scroll, utils
 public/        brand/ (logos, baboon.webp [máscara], genero/{hombre,mujer}.svg,
                products/<slug>-{espalda,frente}.webp [prenda sola],
                models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
-               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), og.png, sw.js
+               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/ (4 temas de M.A.D. Fellaz), og.png, sw.js
 scripts/       models.mjs · models_convert.py · models_grid.py · ingest_camisas.py
 ```
 

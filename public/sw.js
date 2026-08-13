@@ -16,8 +16,10 @@
    v12: precios COP + promos por combo + género en el pedido de WhatsApp.
    v13: fuera las tres piezas con licencia de terceros y fuera la música (los 9
         temas eran comerciales). Subir la versión borra del celular cualquier
-        mp3 o foto retirada que hubiera quedado en el caché de ejecución. */
-const CACHE = "babuinos-v13";
+        mp3 o foto retirada que hubiera quedado en el caché de ejecución.
+   v14: vuelve la música, ahora con los temas de M.A.D. Fellaz (autorizados).
+        Sube versión para que ningún celular conserve los MP3 viejos. */
+const CACHE = "babuinos-v14";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.
