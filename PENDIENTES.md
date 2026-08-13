@@ -48,7 +48,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
       TODO insert de pedidos en silencio).
 - [ ] **Rotar credenciales** compartidas en desarrollo (GitHub PAT `ghp_…`, token Vercel `vcp_…`,
       service key de Supabase) y **cambiar `ADMIN_PASSWORD`** (env var en Vercel).
-
 - [ ] **Lámina de modelos de Eternal Beauty** (`13.5.png`): la actual muestra el frente viejo
       ('Do You Want Something'), así que la ficha enseña dos frentes distintos. Con la lámina nueva:
       `py scripts/ingest_camisas.py --solo eternal-beauty --parte grilla`.
@@ -64,7 +63,6 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
 - [ ] **Imagen de compartir POR PIEZA** (`opengraph-image` en la ruta de producto). Hoy compartir
       cualquier ficha por WhatsApp muestra la misma imagen genérica de la marca; con esto se vería la
       camisa. Es de las cosas más baratas que suben la conversión.
-
 - [ ] **Páginas de Envíos / Cambios / FAQ.** Se sacaron del footer para no prometer en falso; cuando
       me des tiempos y condiciones reales las escribo y vuelven a enlazarse.
 - [ ] **Sacos / Medias / Accesorios**: lanzarlas o sacarlas del menú (3 de 4 categorías del nav están
@@ -180,4 +178,4 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
   por nombre** (~1.25 = grilla de modelos 3×2, ~1.78 = prenda sola) y el lado frente/espalda va en la
   tabla `ESPALDA_IZQ` de `scripts/ingest_camisas.py` porque no se puede deducir.
 
-_Última actualización: 2026-08-07._
+_Última actualización: 2026-08-10._

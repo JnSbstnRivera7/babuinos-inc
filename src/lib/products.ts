@@ -6,8 +6,12 @@
      · Básicas          — algodón pesado sin estampado (la paleta de la casa)
      · Colección Fundadores — las estampadas
 
-   Sin precios por ahora (se coordinan por WhatsApp).
-   ⚠️ El stock es PROVISIONAL hasta que Juan pase el inventario real.
+   Precios en COP por categoría (`PRECIO`), con promos por combo (`PROMOS`).
+   El pago y el envío se coordinan por WhatsApp.
+
+   El TALLAJE ya no vive acá: se edita en /admin y llega desde Supabase
+   (`withStock` + tabla `product_stock`). `TALLAS_STD` es solo el respaldo de
+   las piezas que todavía no se han cargado.
    ════════════════════════════════════════════════════════════ */
 
 /* ─── Territorios — solo dan el color de acento de sellos y badges ─── */
@@ -167,8 +171,9 @@ export interface Product {
 }
 
 /**
- * Tallaje provisional, igual para toda la colección hasta tener el inventario
- * real. Cambiar acá se refleja en las 15 piezas.
+ * Tallaje PROVISIONAL: el que usa una pieza mientras nadie le cargue el suyo en
+ * /admin. Cambiar acá afecta a todas las que sigan sin cargar.
+ * (10-ago: se estampa por pedido, así que hoy están todas así a propósito.)
  */
 export const TALLAS_STD: SizeStock[] = [
   { size: "S", stock: 6 },

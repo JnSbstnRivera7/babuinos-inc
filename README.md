@@ -94,14 +94,13 @@ El home pasó de **3.8 MB a 1.19 MB**. Lo que lo logró, por si se quiere revert
 - **Adornos fuera en celular:** `PageVines` no se renderiza (8 SVG de ~87 hojas cada uno) y `CssLeaves` tampoco. Ocultarlos por CSS mataba la animación pero el markup seguía viajando.
 - `baboon.png` 174 KB → `baboon.webp` **18 KB** (la máscara CSS solo usa el alfa).
 - Logo con `sizes`: pedía un render de 3840 px en un celular.
-- Lenis (scroll suave) apagado en táctil · `touch-action: manipulation` · música a 96 kbps.
-
-Lo que **queda** por hacer: framer-motion son 222 KB y lo usan 7 componentes incluido el Navbar, así que está en todas las páginas.
+- Lenis (scroll suave) apagado en táctil · `touch-action: manipulation`.
+- **framer-motion fuera del marco de la página** (10-ago): venía en TODAS las páginas por culpa del Navbar y solo se usaba para fades y slides. Eso ahora es CSS (`usePresence` + `data-abierto`) y la librería quedó solo en la intro del home. Medido en producción: `/tienda` pasó de **838 KB a 704 KB** en crudo y de **264 KB a 218 KB** comprimidos (−17 %); la ficha, favoritos y nosotros bajaron igual.
 
 ## 🛠️ Stack
 
 - **Next.js 16** (App Router, Turbopack) · **React 19** · **TypeScript**
-- **Tailwind CSS v4** · **Framer Motion** · **Lenis** (solo desktop) · **Zustand** (carrito, wishlist, tema) · **Recharts** (solo `/admin`) · **Supabase**
+- **Tailwind CSS v4** · **Framer Motion** (solo la intro del home; el resto de animaciones son CSS) · **Lenis** (solo desktop) · **Zustand** (carrito, wishlist, tema) · **Recharts** (solo `/admin`) · **Supabase**
 
 ## 🚀 Desarrollo
 
@@ -256,7 +255,17 @@ Para cargar una colección entera desde láminas (lo que se usó el 4-ago con la
 
 ```bash
 py scripts/ingest_camisas.py --dry-run   # revisa qué haría
-py scripts/ingest_camisas.py             # procesa
+py scripts/ingest_camisas.py             # procesa TODO
+```
+
+**Para rehacer UNA sola pieza** —lo normal cuando cambia un diseño— hay que usar `--solo`: correr
+todo regeneraría las 16 y pisaría los re-cortes hechos a mano en otras láminas (las espaldas de
+Free Palestine, por ejemplo).
+
+```bash
+py scripts/ingest_camisas.py --solo eternal-beauty --parte plana    # solo la prenda sola
+py scripts/ingest_camisas.py --solo doberman-sangre                # prenda + modelos
+py scripts/ingest_camisas.py --solo 13 --dry-run                   # por número, sin escribir
 ```
 
 Lee `MATERIAL/Camisas/{BASICAS,Coleccion Fundadores}` donde cada pieza trae **dos** archivos y

@@ -6,6 +6,11 @@ después de cargar el catálogo de 15 piezas.
 Todo lo que dice un número acá está **medido**, no estimado: contraste compuesto sobre el fondo real
 con canvas, áreas de toque con `getBoundingClientRect`, rutas con peticiones HTTP.
 
+> **Es una foto de ese día, no el estado de hoy.** El catálogo eran 15 piezas y hoy son 16 (salieron
+> tres por licencias de terceros y entraron cuatro nuevas). Los dos puntos de deuda técnica que
+> quedaban abiertos —framer-motion y la música— se cerraron el 10-ago; están marcados abajo. El
+> estado vigente vive en **[PENDIENTES.md](PENDIENTES.md)** y **[ROADMAP.md](ROADMAP.md)**.
+
 Accionables en **[PENDIENTES.md](PENDIENTES.md)** · plan por fases en **[ROADMAP.md](ROADMAP.md)**.
 
 ---
@@ -206,8 +211,8 @@ checkout —el paso donde menos se puede dudar— eso cuesta pedidos.
 | Qué | Detalle |
 |---|---|
 | **5 componentes muertos** | `Destacados`, `Lookbook`, `BaboonStrip`, `FeaturesStrip`, `AdminChat` están en el repo sin que nadie los importe. `Destacados` vale la pena **enchufarlo** (ver 3.1); los otros 4, borrarlos. |
-| **JS ~740 KB** | framer-motion (222 KB) lo usan 7 componentes, incluido el Navbar, así que está en todas las páginas. Sacarlo es un refactor de toda la app, no un ajuste. Es la palanca grande que queda. |
-| **Música ~27 MB** | 9 temas a 96 kb/s en el repo. No autoarrancan en celular y se bajan de a uno, pero **todos son comerciales** y varios son versiones explícitas. |
+| ~~**JS ~740 KB**~~ ✅ **resuelto el 10-ago** | framer-motion (222 KB) lo usaban 7 componentes, incluido el Navbar, así que venía en todas las páginas. Se sacó del marco de la página —los fades y slides ahora son CSS (`usePresence`)— y quedó solo en la intro del home. Medido en producción: `/tienda` de **838 → 704 KB** en crudo y de **264 → 218 KB** comprimidos. |
+| ~~**Música ~27 MB**~~ ✅ **resuelto el 10-ago** | Los 9 temas comerciales salieron (archivos borrados, no solo escondidos). Hoy suenan **4 temas de M.A.D. Fellaz**, autorizados por la banda y acreditados en el reproductor: 11 MB a 105-137 kb/s. |
 | **Guía de tallas de referencia** | Números de oversize de mercado, marcados como referencia ±2 cm. Reemplazar al medir el inventario. |
 | **Drop 02 — Expedición · 15-ago-2026** | Verificar que la fecha y el nombre sean los reales. |
 

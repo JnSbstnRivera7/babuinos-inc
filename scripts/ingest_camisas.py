@@ -207,7 +207,7 @@ def arg(nombre, defecto=None):
 def main():
     dry = "--dry-run" in sys.argv
     # Rehacer UNA pieza es lo normal cuando Juan cambia un diseño: correr todo
-    # volvería a generar las 18 y pisaría los re-cortes hechos a mano (p. ej. las
+    # regeneraría las 16 y pisaría los re-cortes hechos a mano (p. ej. las
     # espaldas de free-palestine).
     solo = arg("--solo")
     parte = arg("--parte", "todo")

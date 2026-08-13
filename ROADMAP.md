@@ -190,10 +190,9 @@ Salidos de probar la tienda en el celular, no de la auditoría.
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.
-- [ ] **Catálogo desde Supabase** — editar productos y stock sin tocar código. Resuelve de raíz el pendiente del stock.
+- [ ] **Catálogo desde Supabase** — el **stock ya salió del código** (tabla `product_stock`, editable en `/admin`); faltan nombres, copy, fotos y precios.
 - [ ] **Reseñas / estrellas** (con reseñas reales o captura por WhatsApp tras la compra).
 - [ ] **Analítica "lo más visto"** (tracking de vistas en Supabase + vista en `/admin`).
-- [ ] Sacar **framer-motion** del bundle base (222 KB en 7 componentes, incluido el Navbar).
 
 ## 🧭 Fase 5 — Crecimiento
 
