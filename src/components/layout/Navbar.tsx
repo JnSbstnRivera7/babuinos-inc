@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePresence } from "@/lib/presence";
 import { Logo } from "@/components/ui/Logo";
 import { SocialButtons } from "@/components/ui/SocialButtons";
@@ -18,6 +19,18 @@ const LINKS = [
   { href: "/nosotros", label: "Nosotros" },
   { href: "/club", label: "Club" },
 ];
+
+/**
+ * El easter egg: Babuinos The Video Game, que vive en su propio Vercel. Se
+ * llega desde el icono del babuino en pixel — en el menú de la esquina en
+ * celular, y en la fila de iconos de la esquina en escritorio (donde no hay
+ * menú). El icono es el retrato del juego, sin suavizado para que se vea pixel.
+ */
+const JUEGO = {
+  href: "https://babuinos-the-video-game.vercel.app",
+  label: "Babuinos The Video Game",
+  icono: "/brand/juego-babuino.png",
+};
 
 /** Caja flotante del nav (dropdown de Tienda y de Colorway). El fade+subida
  *  entra y sale con CSS: `data-abierto` lo prende `usePresence`. */
@@ -194,6 +207,22 @@ export function Navbar() {
 
           <SocialButtons variant="icon" className="hidden lg:flex" />
 
+          <a
+            href={JUEGO.href}
+            aria-label={JUEGO.label}
+            title={JUEGO.label}
+            className="hidden h-11 w-11 place-items-center rounded-md transition hover:bg-cream/10 md:grid"
+          >
+            <Image
+              src={JUEGO.icono}
+              alt=""
+              width={26}
+              height={26}
+              unoptimized
+              className="[image-rendering:pixelated]"
+            />
+          </a>
+
           <Link
             href="/favoritos"
             aria-label="Favoritos"
@@ -290,6 +319,24 @@ export function Navbar() {
                   </li>
                 ))}
               </ul>
+              <a
+                href={JUEGO.href}
+                onClick={() => setMenu(false)}
+                className="mb-4 flex items-center gap-3 rounded-lg border border-cream/10 px-3 py-2.5 text-[0.95rem] font-semibold text-cream transition hover:bg-cream/10"
+              >
+                <Image
+                  src={JUEGO.icono}
+                  alt=""
+                  width={28}
+                  height={28}
+                  unoptimized
+                  className="shrink-0 [image-rendering:pixelated]"
+                />
+                <span className="flex-1">{JUEGO.label}</span>
+                <span className="font-mono text-[0.5rem] tracking-[0.1em] text-[var(--accent)] uppercase">
+                  Jugar
+                </span>
+              </a>
               <p className="font-mono mb-2 text-[0.55rem] tracking-[0.16em] text-cream/50 uppercase">
                 Colorway
               </p>
