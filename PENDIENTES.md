@@ -52,6 +52,16 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
       ('Do You Want Something'), así que la ficha enseña dos frentes distintos. Con la lámina nueva:
       `py scripts/ingest_camisas.py --solo eternal-beauty --parte grilla`.
 
+- [ ] **Premio del juego** — _(8-sep, Juan: por ahora **sin premio**, solo mensaje de victoria.)_
+      Cuando quiera prenderlo, son dos datos: el **código de descuento** y **cuántas camisas**
+      hay que juntar para revelarlo (hoy `PREMIO.camisas = 16`, la colección completa). Se
+      cambian en `src/game/config.ts` **del repo del juego** y se pone `activo: true`. El plan
+      era que el código se cobre por WhatsApp, así que conviene que sea uno de un solo uso.
+- [ ] **Probar el juego en celular real** — los controles táctiles están hechos y verificados en
+      emulación (812x375 y 844x390), pero nunca los ha tocado un dedo de verdad. Lo que interesa:
+      si las flechas con arrastre hacia abajo se sienten bien y si los botones le quedan del
+      tamaño correcto para el pulgar.
+
 ## 🔵 Siguientes builds (necesitan decisión o backend)
 
 - [ ] **Dominio propio** (p. ej. babuinos.co): hoy la tienda vive en `babuinos-inc.vercel.app`. Es
@@ -79,6 +89,13 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
 
 ## ✅ Cerrado
 
+- [x] **Easter egg jugable, con entrada desde la tienda** (4-sep al 8-sep):
+      **Babuinos The Video Game** en repo y deploy propios
+      (https://babuinos-the-video-game.vercel.app), con el icono del babuino en pixel
+      en el nav para entrar. Cuatro barrios, las 16 camisas de la tienda como coleccionables,
+      villanos, intro de neón con el letrero de Juan, controles táctiles y arte en WebP
+      (15 MB → 4.7 MB). Detalle que importa acá: **si se agrega o retira una pieza del catálogo**,
+      hay que correr `npm run camisas` en el repo del juego o la colección queda desalineada.
 - [x] **Vuelve la música, ahora con permiso** (10-ago): cuatro temas de **M.A.D. Fellaz** —amigos de
       la casa que autorizaron su uso— y el reproductor de vuelta, acreditado en pantalla como
       **"Babuinos Ft M.A.D. Fellaz"**: Tabogo Zoo, Crimentales, No Diggedy y 23 Celcius (con Achepe).

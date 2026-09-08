@@ -187,6 +187,33 @@ Salidos de probar la tienda en el celular, no de la auditoría.
       estampa por pedido, así que no hay inventario físico que cargar — el panel queda listo para
       cuando lo haya.
 
+## ✅ Fase 3i — El easter egg: Babuinos The Video Game (hecho · 2026-09-04)
+
+Vive en **repo y deploy propios** (privado
+[BABUINOS-THE-VIDEO-GAME](https://github.com/JnSbstnRivera7/BABUINOS-THE-VIDEO-GAME) →
+https://babuinos-the-video-game.vercel.app), no dentro de este Next.js.
+
+- [x] **Plataformas 16-bit con el arte de Juan**: 4 barrios de dificultad
+      creciente, niveles puestos a mano, y **las 16 camisas de la tienda** como
+      coleccionables (frente y espalda, sacadas de `public/brand/products/`).
+      Cada camisa se gana con una habilidad distinta: saltar, romper un muro a
+      puños, deslizarse bajo una viga y pelear con un villano.
+- [x] **La otra manada**: villanos por cambio de paleta del propio babuino
+      (el truco de los 16 bits de verdad), con color según lo que aguantan.
+- [x] **Entrada desde la tienda** (4-sep): icono del babuino en pixel en el nav
+      — menú de la esquina en celular, fila de iconos en escritorio.
+- [x] **Intro de neón** con el letrero que dibujó Juan (`TITULO INICIAL.png`),
+      encendiéndose en dos tiempos.
+- [x] **Celular**: horizontal con botones en pantalla (flechas, saltar, puño;
+      mantener una flecha y arrastrar hacia abajo desliza), aviso de girar el
+      teléfono en vertical, y arte en WebP — de 15 MB a 4.7 MB.
+- [x] **Sin premio, por decisión de Juan** (8-sep): el final es un mensaje de
+      victoria. `PREMIO` sigue en el config del juego, apagado, para cuando
+      defina código de descuento y tope.
+- [x] **Se valida, no se confía**: `npm run revisar` resuelve la parábola del
+      salto y comprueba que todo sea alcanzable; un bot juega solo y hoy termina
+      los cuatro barrios con las 16 camisas.
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.

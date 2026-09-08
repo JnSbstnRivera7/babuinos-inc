@@ -6,6 +6,8 @@
 - 🌐 **En vivo:** https://babuinos-inc.vercel.app
 - 💻 **Repo:** https://github.com/JnSbstnRivera7/babuinos-inc
 - 🔐 **Panel:** https://babuinos-inc.vercel.app/admin
+- 🎮 **Easter egg:** https://babuinos-the-video-game.vercel.app — _Babuinos The Video Game_, repo aparte
+  ([BABUINOS-THE-VIDEO-GAME](https://github.com/JnSbstnRivera7/BABUINOS-THE-VIDEO-GAME), privado)
 
 **Estado:** 16 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
@@ -288,6 +290,32 @@ en partes iguales. Otra disposición: `--grid 2x3`.
 > Motor: **Pillow** (`py -m pip install pillow`), que es el que respeta la altura impar 1125.
 > Sin Pillow cae a `ffmpeg` y la altura sale 1124 — avisa al correr.
 
+## 🎮 El easter egg — Babuinos The Video Game
+
+Un juego de plataformas 16-bit que vive en **su propio repo y su propio deploy**
+(https://babuinos-the-video-game.vercel.app), no dentro de este Next.js: es
+canvas 2D con Vite, pesa ~18 KB de JS y no comparte nada con la tienda salvo la
+marca y las fotos de las camisas.
+
+**Cómo se entra:** el icono del babuino en pixel del nav — en el menú de la
+esquina superior derecha en celular, y en la fila de iconos de la esquina en
+escritorio. El icono es `public/brand/juego-babuino.png` (96x96, generado desde
+el retrato del juego) y se pinta con `image-rendering: pixelated` para que no se
+suavice. Está en `src/components/layout/Navbar.tsx`, en la constante `JUEGO`.
+
+**Qué es:** cuatro barrios de Bogotá (Usaquén, Chapinero, Centro, Cerros
+Orientales) con dificultad creciente, y **las 16 camisas de esta tienda** como
+coleccionables — se recogen del catálogo real, frente y espalda, con
+`tools/extraer_camisas.py` del repo del juego leyendo `public/brand/products/`
+de acá. Por ahora **sin premio**: al terminar sale un mensaje de victoria. El
+código de descuento por WhatsApp está en el juego (`PREMIO` en `config.ts`)
+apagado, esperando que Juan defina código y tope.
+
+**Ojo si se toca el catálogo:** los nombres y slugs de las camisas del juego se
+generan desde `src/lib/products.ts`. Si se agrega o retira una pieza, hay que
+volver a correr `npm run camisas` **en el repo del juego** o la colección queda
+desalineada (el juego reparte 4 camisas por barrio, en el orden del catálogo).
+
 ## 📚 Documentación
 
 | Documento | Para qué |
@@ -295,7 +323,8 @@ en partes iguales. Otra disposición: `--grid 2x3`.
 | **[PENDIENTES.md](PENDIENTES.md)** | Checklist accionable. Empieza acá: lo que solo Juan puede hacer está arriba. |
 | **[ROADMAP.md](ROADMAP.md)** | Qué está hecho y qué sigue, por fases. |
 | **[AUDITORIA-UX.md](AUDITORIA-UX.md)** | Auditoría de UI/UX del 4-ago con mediciones reales y el antes/después de cada arreglo. Ya está **aplicada**; sirve como registro de qué se midió y por qué se cambió. |
-| `CREDENCIALES.local.md` | Tokens y claves. **Local, nunca se sube.** |
+| `CREDENCIALES.local.md` | Tokens y claves. **Local, nunca se sube.** Incluye la sección del juego (URLs, push y deploy). |
+| **[README del juego](https://github.com/JnSbstnRivera7/BABUINOS-THE-VIDEO-GAME)** | El easter egg: niveles, controles, herramientas de assets y el validador de niveles. Repo aparte. |
 
 ## ⚠️ Gotchas que cuestan tiempo
 
