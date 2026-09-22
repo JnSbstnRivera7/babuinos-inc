@@ -19,7 +19,7 @@
         mp3 o foto retirada que hubiera quedado en el caché de ejecución.
    v14: vuelve la música, ahora con los temas de M.A.D. Fellaz (autorizados).
         Sube versión para que ningún celular conserve los MP3 viejos. */
-const CACHE = "babuinos-v14";
+const CACHE = "babuinos-v15";
 const OFFLINE_URLS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 // Pre-cache a minimal app shell so the home opens even without connection.

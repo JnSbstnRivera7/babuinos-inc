@@ -1,11 +1,9 @@
 import type { CartLine } from "./store";
-import { formatCOP, type PromoAplicada } from "./products";
+import { formatCOP } from "./products";
 
 export interface OrderTotals {
   subtotal: number;
-  ahorro: number;
   total: number;
-  promos: PromoAplicada[];
 }
 
 export interface OrderPayload {
@@ -16,7 +14,7 @@ export interface OrderPayload {
   note?: string;
   /** El cliente marcó la autorización de datos (Ley 1581). */
   privacyAccepted?: boolean;
-  /** Totales con promo ya calculados en el carrito. */
+  /** Totales ya calculados en el carrito. */
   totals?: OrderTotals;
 }
 
@@ -45,17 +43,9 @@ export function buildOrderMessage({
     })
     .join("\n");
 
-  // Totales con la promo ya aplicada.
-  let totalesBlock = "";
-  if (totals) {
-    const lineas = [`\n\n💵 *Subtotal:* ${formatCOP(totals.subtotal)}`];
-    for (const p of totals.promos) {
-      const grupo = p.category === "basica" ? "básicas" : "estampadas";
-      lineas.push(`🔥 *Promo ${p.combos}× ${p.cada} ${grupo}:* −${formatCOP(p.ahorro)}`);
-    }
-    lineas.push(`✅ *Total:* ${formatCOP(totals.total)}`);
-    totalesBlock = lineas.join("\n");
-  }
+  // Total del pedido. Desde el 22-sep no hay promos por combo, así que el
+  // subtotal y el total son el mismo número: se manda una sola línea.
+  const totalesBlock = totals ? `\n\n✅ *Total:* ${formatCOP(totals.total)}` : "";
 
   const datos = [
     name ? `👤 *Nombre:* ${name}` : "",

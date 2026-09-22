@@ -16,7 +16,7 @@ export interface CartLine {
   qty: number;
   /** Unidades disponibles de ESA talla, para no dejar pedir más de lo que hay. */
   max: number;
-  /** Para las promos por combo (3 básicas / 2 estampadas). */
+  /** La categoría de la pieza, para agrupar y para el filtro de la tienda. */
   category: Category;
   /** Precio unitario en COP. */
   price: number;

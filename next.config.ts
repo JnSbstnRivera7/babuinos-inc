@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // Las dos básicas que cambiaron de prenda el 22-sep: la teal pasó a
+        // vinotinto y la ocre a beige, así que el slug también cambió. Quien
+        // tenga el enlace viejo cae en la pieza que la reemplaza.
+        source: "/producto/base-teal-expedicion",
+        destination: "/producto/base-vino-cordillera",
+        permanent: true,
+      },
+      {
+        source: "/producto/base-ocre-dorado",
+        destination: "/producto/base-arena-paramo",
+        permanent: true,
+      },
+      {
         source: "/producto/rootwailer",
         destination: "/producto/rottweiler",
         permanent: true,

@@ -400,7 +400,7 @@ export function CartDrawer() {
   );
 }
 
-/** Subtotal + promos por combo + total. Igual en los dos pasos. */
+/** Subtotal y total. Igual en los dos pasos. */
 function Totales({ totales }: { totales: ReturnType<typeof cartTotals> }) {
   return (
     <div className="font-mono space-y-1.5 text-[0.8rem] tabular-nums">
@@ -408,14 +408,6 @@ function Totales({ totales }: { totales: ReturnType<typeof cartTotals> }) {
         <span>Subtotal</span>
         <span>{formatCOP(totales.subtotal)}</span>
       </div>
-      {totales.promos.map((p) => (
-        <div key={p.category} className="flex justify-between font-bold text-teal">
-          <span>
-            Promo {p.combos}× {p.cada} {p.category === "basica" ? "básicas" : "estampadas"}
-          </span>
-          <span>−{formatCOP(p.ahorro)}</span>
-        </div>
-      ))}
       <div className="flex justify-between border-t border-ink/10 pt-1.5 text-[1rem] font-black text-ink">
         <span>Total</span>
         <span>{formatCOP(totales.total)}</span>

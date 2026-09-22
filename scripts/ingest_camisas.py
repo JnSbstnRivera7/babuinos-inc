@@ -49,11 +49,15 @@ MIN_BANDA = 0.04
 
 # número de archivo -> slug
 BASICAS = {
-    1: "base-teal-expedicion",
+    # 1 y 4 cambiaron de prenda el 22-sep: la teal paso a vinotinto y la ocre a
+    # beige. Los archivos de MATERIAL son los nuevos; los slugs, tambien.
+    1: "base-vino-cordillera",
     2: "base-tinta-explorador",
     3: "base-pardo-tostado",
-    4: "base-ocre-dorado",
+    4: "base-arena-paramo",
     5: "base-papiro",
+    # 6 es nueva del 22-sep: hueso, con la marca en negro.
+    6: "base-hueso-neblina",
 }
 FUNDADORES = {
     1: "wear-your-attitude",

@@ -3,7 +3,7 @@
 Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)** · hallazgos medidos en
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
-Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del catálogo.
+Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del catálogo.
 
 > **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin, WhatsApp)
 > en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`. Para pushear ojo con la cuenta:
@@ -14,7 +14,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 16 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
+- [ ] **STOCK REAL de las 17 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
       camisa y el diseño elegido, así que **no hay stock real que cargar** — el tallaje provisional se
       queda tal cual. Retomar cuando haya inventario físico.)_ Cuando llegue ese momento, el único paso
       es **escribir los números** en `/admin` → Inventario (sin código ni SQL: la tabla
@@ -61,6 +61,11 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 16 piezas del cat
       emulación (812x375 y 844x390), pero nunca los ha tocado un dedo de verdad. Lo que interesa:
       si las flechas con arrastre hacia abajo se sienten bien y si los botones le quedan del
       tamaño correcto para el pulgar.
+
+- [ ] **La Hueso Neblina no está en el juego** — el juego reparte 4 barrios × 4 camisas = 16, y
+      el catálogo ya tiene 17. Por ahora queda fuera (no se pierde nada: las otras 16 siguen
+      completables al 100%). Para meterla hay que decidir: o un quinto punto de recogida en
+      Cerros Orientales —hay que ubicarlo y validarlo con `npm run revisar`— o sacar otra pieza.
 
 ## 🔵 Siguientes builds (necesitan decisión o backend)
 

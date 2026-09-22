@@ -9,7 +9,7 @@
 - 🎮 **Easter egg:** https://babuinos-the-video-game.vercel.app — _Babuinos The Video Game_, repo aparte
   ([BABUINOS-THE-VIDEO-GAME](https://github.com/JnSbstnRivera7/BABUINOS-THE-VIDEO-GAME), privado)
 
-**Estado:** 16 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+**Estado:** 17 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
@@ -27,7 +27,7 @@ Dos líneas, definidas en `src/lib/products.ts` (fuente única):
 
 | Línea | Piezas | Qué es |
 | --- | --- | --- |
-| **Básicas** | 5 | Sin estampado. Son la paleta oficial de la marca: Teal Expedición, Tinta Explorador, Pardo Tostado, Ocre Dorado, Papiro. Babuino troquelado en el ruedo y BABUINOS en la nuca. |
+| **Básicas** | 6 | Sin estampado. Son la paleta oficial de la marca: Vino Cordillera, Tinta Explorador, Pardo Tostado, Arena Páramo, Blanco Papiro y Hueso Neblina. Babuino troquelado en el ruedo y BABUINOS en la nuca — en la Hueso Neblina los dos van en **negro**, a contraste; en el resto, tono sobre tono. |
 | **Colección Fundadores** | 11 | Las estampadas: Wear Your Attitude, Free Palestine, Rottweiler, Brave Dog, Babuinos Lila, Asian Tengu Mask, California Rasta Kid, Guardián Navy, Green Afro Tiki, Eternal Beauty, Doberman Sangre. |
 
 El campo `category` es **`basica` | `estampada`** — el filtro Todo/Básicas/Estampadas va **visible en la barra de la tienda** con conteos, no escondido en el panel. Dentro del panel queda el filtro de **Color** (campo `color`, lista `COLORES`); `edition` sobrevive solo como color de acento de sellos y badges.
@@ -36,7 +36,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 > **Piezas retiradas por licencias de terceros:** **Guns & Roses Red** y **The Mills** (7-ago), y **Offline Pleasure** (9-ago, bloque MTLS.CORP). En cada una se borraron la ficha **y sus fotos del sitio**, salieron del mapa del script de ingesta, y `/producto/{guns-roses-red,the-mills,offline-pleasure}` redirigen a `/tienda`. El soporte de piezas con **dos cortes** (`imagesByGender`, oversize en hombre / crop en mujer) sigue en el código porque es genérico, pero hoy no lo usa ninguna pieza.
 
-**Precios (COP):** básicas $50.000, estampadas $75.000 (`PRECIO` por categoría en `products.ts`, no pieza por pieza). **Promos por combo automáticas:** 3 básicas o 2 estampadas cualesquiera por $140.000 (`PROMOS` + `cartTotals`), aplicadas en el carrito y reflejadas en el total del mensaje de WhatsApp. Pago y envío se coordinan por WhatsApp.
+**Precios (COP):** básicas $50.000, estampadas $75.000 (`PRECIO` por categoría en `products.ts`, no pieza por pieza). **Sin promos por combo** desde el 22-sep: se quitaron el banner de la tienda, la píldora de la ficha, el descuento del carrito y la línea del mensaje de WhatsApp; cada pieza se cobra a su precio. `cartTotals` sigue existiendo y hoy devuelve `total === subtotal`, que es donde entraría un descuento si vuelve. Pago y envío se coordinan por WhatsApp.
 
 ## 🧩 Arquitectura y características
 
@@ -50,7 +50,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 **Transversal:**
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
-- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer), subtotal, promo y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (así una pieza de dos cortes no se mezcla). `persist` va en **v4**: descarta carritos viejos (sin precio, o con las piezas retiradas).
+- **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer) y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (así una pieza de dos cortes no se mezcla). `persist` va en **v4**: descarta carritos viejos (sin precio, o con las piezas retiradas).
 - **Globales en toda la página:** reproductor **"Babuinos Ft M.A.D. Fellaz"** (arranca al primer gesto en cualquier parte, en celular y escritorio), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
@@ -127,7 +127,7 @@ Copia `.env.example` → `.env.local` (no se sube a git):
 ## 🔐 Panel de administración
 
 `/admin` — login con usuario y clave (env `ADMIN_USER` / `ADMIN_PASSWORD`). Muestra:
-- **Inventario editable:** el tallaje de las 16 piezas, sin tocar código (ver abajo).
+- **Inventario editable:** el tallaje de las 17 piezas, sin tocar código (ver abajo).
 - **Gráficas:** pedidos por día (14 días), productos más pedidos, pedidos por ciudad.
 - **Tablas:** pedidos (cliente, teléfono → WhatsApp, ciudad, productos, nota) y Club (correos).
 - No indexable (`robots: noindex`). Cambia la clave en las env vars.
@@ -195,7 +195,8 @@ Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy 
 
 ## 🎨 Marca
 
-- **Paleta:** Papiro `#F3E9E2` · Teal `#00736C` · Ocre `#CDA214` · Pardo `#654321` · Tinta `#1E2021`
+- **Paleta:** Papiro `#F3E9E2` · Vinotinto `#6B2233` · Arena `#D9CDB7` · Hueso `#E8E0D0` · Pardo `#654321` · Tinta `#1E2021`
+  _(Ojo: `teal` sigue vivo como color de ACENTO de la interfaz en Tailwind — `text-teal`, `bg-teal` — aunque ya no exista una camisa teal.)_
 - **Tipografía:** Anton (titulares) · Inter (cuerpo) · Space Mono (labels)
 - **Redes (cuentas reales, en `SocialButtons.tsx`):** Instagram [@babuinos_inc_streetwear](https://www.instagram.com/babuinos_inc_streetwear) · [Facebook](https://www.facebook.com/people/Babuinos-inc-streetwear/61593279293595/) · WhatsApp de la tienda.
 - Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand` y música en `/public/music`.

@@ -214,6 +214,24 @@ https://babuinos-the-video-game.vercel.app), no dentro de este Next.js.
       salto y comprueba que todo sea alcanzable; un bot juega solo y hoy termina
       los cuatro barrios con las 16 camisas.
 
+## ✅ Fase 3j — Dos básicas nuevas, una sexta, y fuera las promos (hecho · 2026-09-22)
+
+- [x] **Cambian dos básicas**: la teal pasó a **Vino Cordillera** (vinotinto) y la
+      ocre a **Arena Páramo** (beige). Fotos nuevas de Juan re-ingeridas con
+      `scripts/ingest_camisas.py --solo <slug>` (6 de modelo + 2 de prenda cada
+      una), assets viejos borrados, y `/producto/base-teal-expedicion` y
+      `/producto/base-ocre-dorado` redirigen a las que las reemplazan.
+- [x] **Sexta básica: Hueso Neblina**, con el babuino del ruedo y el BABUINOS de
+      la nuca en **negro** a contraste (las demás los llevan tono sobre tono).
+      El catálogo pasa de 16 a **17 piezas**.
+- [x] **Fuera las promos por combo** (decisión de Juan): sin banner en la tienda,
+      sin píldora en la ficha, sin descuento en el carrito y sin línea en el
+      mensaje de WhatsApp. Cada pieza a su precio.
+- [x] Colores nuevos en `COLORES` (`vino`, `arena`, `hueso`) y service worker a
+      **v15** para que nadie se quede con las fotos viejas en caché.
+- [x] **El juego queda en 16 camisas**: reparte 4 barrios × 4, así que la Hueso
+      Neblina no entra por ahora (ver su README). Las otras dos sí cambiaron ahí.
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.

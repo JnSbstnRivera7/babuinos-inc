@@ -6,7 +6,7 @@
      · Básicas          — algodón pesado sin estampado (la paleta de la casa)
      · Colección Fundadores — las estampadas
 
-   Precios en COP por categoría (`PRECIO`), con promos por combo (`PROMOS`).
+   Precios en COP por categoría (`PRECIO`).
    El pago y el envío se coordinan por WhatsApp.
 
    El TALLAJE ya no vive acá: se edita en /admin y llega desde Supabase
@@ -89,8 +89,9 @@ export const COLORES: ColorDef[] = [
   { key: "negro", label: "Negro", hex: "#1e2021" },
   { key: "blanco", label: "Blanco", hex: "#f5f3f0" },
   { key: "crema", label: "Crema", hex: "#e6dcc6" },
-  { key: "teal", label: "Teal", hex: "#00736c" },
-  { key: "ocre", label: "Ocre", hex: "#cda214" },
+  { key: "vino", label: "Vinotinto", hex: "#6b2233" },
+  { key: "arena", label: "Arena", hex: "#d9cdb7" },
+  { key: "hueso", label: "Hueso", hex: "#e8e0d0" },
   { key: "pardo", label: "Pardo", hex: "#654321" },
   { key: "rojo", label: "Rojo", hex: "#c8102e" },
   { key: "lila", label: "Lila", hex: "#c3a9e6" },
@@ -191,24 +192,25 @@ const ALGODON = "100% algodón 220 g/m²";
 
 const BASICAS: Product[] = [
   {
-    id: "base-teal-expedicion",
-    slug: "base-teal-expedicion",
-    name: "Teal Expedición",
+    id: "base-vino-cordillera",
+    slug: "base-vino-cordillera",
+    name: "Vino Cordillera",
     tag: "Oversize · Básica",
     category: "basica",
     genero: "unisex",
     edition: "original",
-    color: "teal",
-    desc: "Teal profundo, cero estampado. El babuino en el ruedo y BABUINOS en la nuca: lo demás lo pones tú.",
+    color: "vino",
+    desc: "Vinotinto cerrado, cero estampado. El babuino en el ruedo y BABUINOS en la nuca: lo demás lo pones tú.",
     descLong:
-      "El verde expedición de la casa en algodón pesado, sin gráfico que compita. Solo el babuino troquelado en el ruedo y el sello BABUINOS en la nuca. Caída oversize para usarla sola o debajo de todo.",
+      "El vinotinto de la casa en algodón pesado, sin gráfico que compita. Solo el babuino troquelado en el ruedo y el sello BABUINOS en la nuca. Caída oversize para usarla sola o debajo de todo.",
     fit: "Oversize",
     composicion: ALGODON,
-    image: "/brand/products/base-teal-expedicion-frente.webp",
-    images: flatSet("base-teal-expedicion"),
-    models: modelSet("base-teal-expedicion"),
-    colorway: "Teal Expedición",
+    image: "/brand/products/base-vino-cordillera-frente.webp",
+    images: flatSet("base-vino-cordillera"),
+    models: modelSet("base-vino-cordillera"),
+    colorway: "Vino Cordillera",
     sizes: TALLAS_STD,
+    badge: "new",
   },
   {
     id: "base-tinta-explorador",
@@ -252,23 +254,23 @@ const BASICAS: Product[] = [
     sizes: TALLAS_STD,
   },
   {
-    id: "base-ocre-dorado",
-    slug: "base-ocre-dorado",
-    name: "Ocre Dorado",
+    id: "base-arena-paramo",
+    slug: "base-arena-paramo",
+    name: "Arena Páramo",
     tag: "Oversize · Básica",
     category: "basica",
     genero: "unisex",
     edition: "desert",
-    color: "ocre",
-    desc: "Ocre dorado. La única básica que grita sin necesitar estampado.",
+    color: "arena",
+    desc: "Arena claro, tono neutro. La básica que combina con absolutamente todo.",
     descLong:
-      "El dorado de la casa, plano y saturado, en algodón pesado. Sin print: el color hace todo el trabajo. Babuino troquelado en el ruedo y BABUINOS en la nuca.",
+      "Beige arena en algodón pesado, sin print: el tono hace el trabajo y deja pasar cualquier cosa encima. Babuino troquelado en el ruedo y BABUINOS en la nuca, los dos en tono sobre tono.",
     fit: "Oversize",
     composicion: ALGODON,
-    image: "/brand/products/base-ocre-dorado-frente.webp",
-    images: flatSet("base-ocre-dorado"),
-    models: modelSet("base-ocre-dorado"),
-    colorway: "Ocre Dorado",
+    image: "/brand/products/base-arena-paramo-frente.webp",
+    images: flatSet("base-arena-paramo"),
+    models: modelSet("base-arena-paramo"),
+    colorway: "Arena Páramo",
     sizes: TALLAS_STD,
     badge: "new",
   },
@@ -291,6 +293,27 @@ const BASICAS: Product[] = [
     models: modelSet("base-papiro"),
     colorway: "Blanco Papiro",
     sizes: TALLAS_STD,
+  },
+  {
+    id: "base-hueso-neblina",
+    slug: "base-hueso-neblina",
+    name: "Hueso Neblina",
+    tag: "Oversize · Básica",
+    category: "basica",
+    genero: "unisex",
+    edition: "original",
+    color: "hueso",
+    desc: "Hueso cálido con la marca en negro. La básica que sí se deja ver.",
+    descLong:
+      "Blanco hueso en algodón pesado y, a diferencia de la Arena Páramo, acá el babuino del ruedo y el BABUINOS de la nuca van en NEGRO, a contraste. Caída oversize, para cuando el tono neutro no quiere pasar desapercibido.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/base-hueso-neblina-frente.webp",
+    images: flatSet("base-hueso-neblina"),
+    models: modelSet("base-hueso-neblina"),
+    colorway: "Hueso Neblina",
+    sizes: TALLAS_STD,
+    badge: "new",
   },
 ];
 
@@ -542,17 +565,6 @@ export const PRECIO: Record<Category, number> = {
   estampada: 75000,
 };
 
-/**
- * Promos por combo (cualquier pieza del grupo):
- *  · 3 básicas    → $140.000
- *  · 2 estampadas → $140.000
- * `cada` unidades del grupo se cobran a `precio`; el resto, a precio normal.
- */
-export const PROMOS: Record<Category, { cada: number; precio: number }> = {
-  basica: { cada: 3, precio: 140000 },
-  estampada: { cada: 2, precio: 140000 },
-};
-
 export const PRODUCTS: Product[] = [...BASICAS, ...FUNDADORES].map((p) => ({
   ...p,
   price: p.price ?? PRECIO[p.category],
@@ -637,50 +649,24 @@ export function coloresEnUso(): ColorDef[] {
   return COLORES.filter((c) => usados.has(c.key));
 }
 
-/* ─── Cálculo del carrito con promos ─── */
+/* ─── Cálculo del carrito ─────────────────────────────────────
+   Las promos por combo (3 básicas o 2 estampadas por $140.000) se retiraron el
+   22-sep por decisión de Juan: cada pieza se cobra a su precio. Queda esta
+   función igual porque el carrito, la ficha y el mensaje de WhatsApp piden el
+   total por el mismo sitio; si algún día vuelven los combos, el descuento entra
+   acá y nadie más se entera. */
 export interface PricedLine {
   category: Category;
   price: number;
   qty: number;
 }
 
-export interface PromoAplicada {
-  category: Category;
-  combos: number;
-  cada: number;
-  precio: number;
-  ahorro: number;
+export interface CartTotals {
+  subtotal: number;
+  total: number;
 }
 
-/**
- * Aplica las promos por combo contando unidades por categoría (cualquier pieza
- * del grupo cuenta). Asume precio uniforme por categoría —hoy todas las básicas
- * $50k y las estampadas $75k—, que es lo que hace que el "3x140" sea exacto.
- */
-export function cartTotals(lines: PricedLine[]): {
-  subtotal: number;
-  ahorro: number;
-  total: number;
-  promos: PromoAplicada[];
-} {
-  const unidades: Record<string, number> = { basica: 0, estampada: 0 };
-  let subtotal = 0;
-  for (const l of lines) {
-    // `?? 0` blinda contra líneas viejas (pre-precios) que se colaran sin price.
-    subtotal += (l.price ?? 0) * l.qty;
-    if (l.category in unidades) unidades[l.category] += l.qty;
-  }
-
-  let ahorro = 0;
-  const promos: PromoAplicada[] = [];
-  (Object.keys(PROMOS) as Category[]).forEach((cat) => {
-    const combos = Math.floor(unidades[cat] / PROMOS[cat].cada);
-    if (combos <= 0) return;
-    const { cada, precio } = PROMOS[cat];
-    const ahorroCombo = (PRECIO[cat] * cada - precio) * combos;
-    ahorro += ahorroCombo;
-    promos.push({ category: cat, combos, cada, precio, ahorro: ahorroCombo });
-  });
-
-  return { subtotal, ahorro, total: subtotal - ahorro, promos };
+export function cartTotals(lineas: PricedLine[]): CartTotals {
+  const subtotal = lineas.reduce((n, l) => n + l.price * l.qty, 0);
+  return { subtotal, total: subtotal };
 }

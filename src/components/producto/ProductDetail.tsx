@@ -7,7 +7,6 @@ import {
   formatCOP,
   getEdition,
   inStock,
-  PROMOS,
   PRODUCTS,
   withStockAll,
   type Product,
@@ -364,12 +363,6 @@ export function ProductDetail({
             <div className="mt-6">
               <p className="font-condensed text-[2rem] leading-none text-cream">
                 {formatCOP(product.price)}
-              </p>
-              {/* Promo por combo según la línea */}
-              <p className="font-mono mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/40 px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[var(--accent)] uppercase">
-                {product.category === "basica"
-                  ? `Promo: 3 básicas por ${formatCOP(PROMOS.basica.precio)}`
-                  : `Promo: 2 estampadas por ${formatCOP(PROMOS.estampada.precio)}`}
               </p>
             </div>
           )}
