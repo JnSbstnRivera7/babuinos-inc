@@ -298,6 +298,12 @@ Un juego de plataformas 16-bit que vive en **su propio repo y su propio deploy**
 canvas 2D con Vite, pesa ~18 KB de JS y no comparte nada con la tienda salvo la
 marca y las fotos de las camisas.
 
+**Se instala en el teléfono** (23-sep): el juego es una PWA, así que desde el
+celular el navegador ofrece instalarlo y queda con su icono en el lanzador,
+a pantalla completa, en horizontal y jugable sin señal. La tienda no cambia por
+eso; todo vive en el repo del juego (manifiesto, service worker y la fuente de
+pixel, que dejó de venir de Google Fonts para poder abrir sin red).
+
 **Cómo se entra:** el icono del babuino en pixel del nav — en el menú de la
 esquina superior derecha en celular, y en la fila de iconos de la esquina en
 escritorio. El icono es `public/brand/juego-babuino.png` (96x96, generado desde

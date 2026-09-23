@@ -60,7 +60,9 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 - [ ] **Probar el juego en celular real** — los controles táctiles están hechos y verificados en
       emulación (812x375 y 844x390), pero nunca los ha tocado un dedo de verdad. Lo que interesa:
       si las flechas con arrastre hacia abajo se sienten bien y si los botones le quedan del
-      tamaño correcto para el pulgar.
+      tamaño correcto para el pulgar. _(23-sep: **y ahora instalarlo**. El juego ya es PWA; falta
+      ver en un teléfono el diálogo de instalar de Android y el "Añadir a inicio" de iOS, y que
+      abra en modo avión.)_
 
 - [ ] **La Hueso Neblina no está en el juego** — el juego reparte 4 barrios × 4 camisas = 16, y
       el catálogo ya tiene 17. Por ahora queda fuera (no se pierde nada: las otras 16 siguen
