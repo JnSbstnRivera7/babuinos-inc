@@ -42,7 +42,7 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 **Arquitectura por secciones** (no una sola landing):
 
-- **Home** = SOLO la entrada: intro scroll-reveal (el logo descubre el wallpaper fijo) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**. Nada de catálogo: es una puerta, no una vitrina. El `<h1>` va en `sr-only` porque el título visual es el logo.
+- **Home** = SOLO la entrada: intro scroll-reveal **con el spot de la marca de fondo** (ver *El intro en video*) + **"Elige tu territorio"** (puertas Hombre/Mujer con logos reales SVG + Unisex) + **Drop con cuenta regresiva y lista de espera**. Nada de catálogo: es una puerta, no una vitrina. El `<h1>` va en `sr-only` porque el título visual es el logo.
 - **`/tienda`** (PLP): grid de producto. **Básicas / Estampadas en pestañas** (una fila, ancho repartido en tres, con conteos), segmentado Todos/Hombre/Mujer, y **Color** en el panel glass (dropdown en PC / bottom-sheet en móvil). Siempre arranca desde arriba.
 - **`/producto/[slug]`** (PDP): **minigalería con la camisa puesta** (frente/lateral/espalda) + **toggle Hombre/Mujer**, **flechas y deslizar con el dedo**, y **zoom** a pantalla completa; tallas con "agotado", **guía de tallas**, **un solo CTA — "Agregar a la mochila"** — y "combina con". Entrar por la línea Mujer mantiene el modelo mujer en la ficha (`?g=`, leído con `useSyncExternalStore` para no perder el prerender).
 - **`/nosotros`** · **`/club`** (waitlist) · **`/favoritos`** (wishlist) · **`/privacidad`** (tratamiento de datos).
@@ -51,11 +51,56 @@ Detalles útiles: **"SG"** que aparece en varias piezas es el monograma de _SOMO
 
 - **Favoritos / wishlist:** corazón en tarjetas y PDP, contador en el nav, página propia (persistido en localStorage).
 - **Carrito** persistente + formulario del cliente → **checkout por WhatsApp** + guardado en Supabase (`orders`). **Es el ÚNICO camino de compra**: todo entra a la mochila y el pedido se cierra desde ahí. El mensaje lleva **precio por línea, género (Hombre/Mujer) y total**. **Topa el stock por talla** (`add()` devuelve `false` al máximo). Cada línea guarda `max`, `category`, `price` y `genero`; la clave de línea es id+talla+género (así una pieza de dos cortes no se mezcla). `persist` va en **v4**: descarta carritos viejos (sin precio, o con las piezas retiradas).
-- **Globales en toda la página:** reproductor **"Babuinos Ft M.A.D. Fellaz"** (arranca al primer gesto en cualquier parte, en celular y escritorio), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
+- **Globales en toda la página:** reproductor con el tema propio **"La marca del instinto"** (álbum *Cultura de bloque*) y los de **M.A.D. Fellaz** (arranca al primer gesto en cualquier parte, en celular y escritorio; cada tema muestra su propio crédito), **WhatsApp flotante**, botón **"Instalar app"** (PWA) arriba-centrado, **barra de confianza** (envío/cambios/pago) en el footer.
 - **Tarjetas con la camisa puesta** (foto frontal del modelo; **hover → espalda** para ver el gráfico) que respetan el género en contexto (filtro de tienda). **Sello de género** (moño mujer, gorra hombre, babuino unisex) + **selector de colorway** en vivo.
 - **Panel `/admin`** con login temático + gráficas (pedidos por día, top productos, por ciudad) y tablas.
 - **PWA instalable** (manifest + service worker network-first) · **OG image** para compartir.
 - **Efectos:** **wallpaper fijo art-directed** (mural BABUINOS INC sobre el skyline — **vertical en móvil / horizontal en escritorio** vía `<picture>`, se descarga solo la que aplica), lianas/hojas (CSS + Canvas), shine dorado, íconos SVG propios.
+
+## 🎬 El intro en video
+
+Desde el 25-sep-2026 el intro del home lleva **el spot de la marca** (`MATERIAL/babuinos 2.mp4`)
+de fondo: tres personas caminando con la ropa por un puente de selva y ciudad, la cámara sube al
+cielo y el babuino lo cruza hasta formar el letrero. **Siempre mudo** — los archivos van
+**sin pista de audio** (`-an`), así que no hay manera de que se cruce con el reproductor.
+
+**En escritorio** el spot vive DENTRO de la ventana que ya crecía con el scroll: uno baja, la
+ventana se abre con el video adentro, y al llenar la pantalla el video **se desenfoca y se
+deshace** dejando el wallpaper fijo que estaba detrás desde el principio. El mismo deslizar que
+abre la ventana apaga el video y baja a las dos puertas.
+
+**En celular** va a sangre completa pero con una versión **recortada en vertical y cortada a los
+6.8 s**, justo cuando la cámara sube al cielo: queda el cielo de fondo y el logo del sitio encima.
+Dos motivos: el spot es apaisado y a pantalla completa en vertical el letrero del final salía
+partido ("BUINOS"), y recortando el video en el encode todos los píxeles van a lo que se ve, así
+que se ve nítido y pesa menos.
+
+| archivo | qué es | peso |
+| --- | --- | --- |
+| `intro.webm` / `.mp4` | 1280x720, los 10 s completos | 2.0 / 2.5 MB |
+| `intro-movil.webm` / `.mp4` | 406x720 vertical, 6.8 s | 0.47 MB |
+| `intro-cartel*.webp` | el primer cuadro, para que no haya hueco mientras carga | 87 / 22 KB |
+
+Se regeneran con ffmpeg (fuera del PATH, ver `reference-ffmpeg-video-windows`):
+
+```bash
+ffmpeg -i "MATERIAL/babuinos 2.mp4" -an -c:v libvpx-vp9 -crf 32 -b:v 0 -row-mt 1 public/video/intro.webm
+ffmpeg -i "MATERIAL/babuinos 2.mp4" -t 6.8 -an -vf "crop=406:720:(iw-406)/2:0" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 public/video/intro-movil.webm
+```
+
+**Tres decisiones que costaron encontrarse:**
+
+- **La capa del video se QUITA cuando termina de fundirse**, no basta con dejarla en cero.
+  Medido en Chrome: pasado el 0.9 del recorrido, la opacidad que pinta el compositor se despega
+  del scroll y el video **reaparecía a media tinta**, desenfocado, empañando la selva justo
+  cuando uno baja a las puertas. El desenfoque y la escala (que van por el estilo en línea)
+  seguían bien: era sólo la opacidad.
+- **El logo del sitio se aparta a los 6.3 s** (`alPaso` en `VideoIntro`). El letrero del spot es
+  EL MISMO letrero: encimados se leen como un error de impresión. En celular no hace falta,
+  porque ahí el video se corta antes de mostrarlo.
+- **La tarjeta clara del final lleva un velo encima.** El spot cierra disolviendo a una tarjeta
+  casi blanca y esta página es oscura: sin ayuda entra como un flash. Bajada, se lee como una
+  placa cálida dentro de la selva.
 
 ## ⚖️ Datos personales (Ley 1581 de 2012)
 
@@ -93,6 +138,7 @@ El home pasó de **3.8 MB a 1.19 MB**. Lo que lo logró, por si se quiere revert
 
 - **La música arranca al primer gesto** (toque/click/scroll) también en celular, a pedido de Juan. Baja por streaming (206 Partial), así que no bloquea la primera vista. _(Antes no autoarrancaba en móvil para ahorrar datos; se revirtió.)_
 - **Intro estática en celular** (y con `prefers-reduced-motion`): la versión animada recalculaba 7 valores por cada frame de scroll. De paso el hero pasó de 135vh a una pantalla, así que las puertas quedan a un desliz.
+- **El video del intro pesa 0.47 MB en celular y 2 MB en escritorio** (ver *El intro en video*): recortado en vertical para no gastar bits en lo que el teléfono no muestra, y cortado a los 6.8 s. Con `prefers-reduced-motion` no se carga ningún video.
 - **Adornos fuera en celular:** `PageVines` no se renderiza (8 SVG de ~87 hojas cada uno) y `CssLeaves` tampoco. Ocultarlos por CSS mataba la animación pero el markup seguía viajando.
 - `baboon.png` 174 KB → `baboon.webp` **18 KB** (la máscara CSS solo usa el alfa).
 - Logo con `sizes`: pedía un render de 3840 px en un celular.
@@ -199,7 +245,7 @@ Desplegado en https://babuinos-inc.vercel.app — repo conectado, **auto-deploy 
   _(Ojo: `teal` sigue vivo como color de ACENTO de la interfaz en Tailwind — `text-teal`, `bg-teal` — aunque ya no exista una camisa teal.)_
 - **Tipografía:** Anton (titulares) · Inter (cuerpo) · Space Mono (labels)
 - **Redes (cuentas reales, en `SocialButtons.tsx`):** Instagram [@babuinos_inc_streetwear](https://www.instagram.com/babuinos_inc_streetwear) · [Facebook](https://www.facebook.com/people/Babuinos-inc-streetwear/61593279293595/) · WhatsApp de la tienda.
-- Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand` y música en `/public/music`.
+- Assets fuente en `MATERIAL/` (fuera del repo); procesados en `/public/brand`, música en `/public/music` y el spot en `/public/video`.
 
 ## 📁 Estructura
 
@@ -218,14 +264,17 @@ src/
     favoritos/ FavoritosClient
     layout/    Navbar, Footer, Shell (marco de páginas internas)
     cart/      CartDrawer        admin/  AdminLogin, AdminCharts
-    fx/        FixedWallpaper, PageVines, CssLeaves, LeafCanvas, MusicPlayer, WhatsAppFloat,
+    fx/        FixedWallpaper, VideoIntro (el spot del intro), PageVines, CssLeaves,
+               LeafCanvas, MusicPlayer, WhatsAppFloat,
                InstallPrompt, SmoothScroll, Reveal
     ui/        Logo, BaboonMark, GeneroMark, Icons, SocialButtons, Toast
   lib/         products, brand (copy), store, wishlist, theme, whatsapp, supabase, toast, scroll, utils
 public/        brand/ (logos, baboon.webp [máscara], genero/{hombre,mujer}.svg,
                products/<slug>-{espalda,frente}.webp [prenda sola],
                models/<slug>/{hombre,mujer}-{frontal,lateral,espalda}.webp [camisa puesta],
-               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA), music/ (4 temas de M.A.D. Fellaz), og.png, sw.js
+               jungle/{concrete-jungle, concrete-jungle-mobile}.webp), icons/ (PWA),
+               music/ (el tema propio + 4 de M.A.D. Fellaz), video/ (el spot del intro),
+               og.png, sw.js
 scripts/       models.mjs · models_convert.py · models_grid.py · ingest_camisas.py
 ```
 

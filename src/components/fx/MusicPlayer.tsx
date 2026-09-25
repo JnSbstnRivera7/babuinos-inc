@@ -7,6 +7,8 @@ import { IconPlay, IconPause, IconSkip, IconClose } from "@/components/ui/Icons"
 interface Track {
   src: string;
   title: string;
+  /** Quién firma el tema. Si falta, es de M.A.D. Fellaz. */
+  credito?: string;
 }
 
 /**
@@ -17,15 +19,29 @@ interface Track {
  *
  * Los MP3 vienen a 105-137 kb/s desde el original, así que se copian tal cual:
  * recomprimir otra vez solo perdería calidad sin ahorrar peso.
+ *
+ * "La marca del instinto" (25-sep-2026) NO es de ellos: es el tema propio de la
+ * casa, del álbum "Cultura de bloque", y la letra habla de la marca — por eso
+ * va de primero y firma distinto. Es el AAC original sacado del archivo de Juan
+ * sin recomprimir (misma razón que los otros); pesa más que el resto, pero el
+ * navegador lo baja por pedazos mientras suena, no de un tirón.
  */
 const CREDITO = "Babuinos Ft M.A.D. Fellaz";
 
 const TRACKS: Track[] = [
+  {
+    src: "/music/babuinos-la-marca-del-instinto.m4a",
+    title: "La marca del instinto",
+    credito: "Babuinos Inc · Cultura de bloque",
+  },
   { src: "/music/mad-fellaz-tabogo-zoo.mp3", title: "Tabogo Zoo" },
   { src: "/music/mad-fellaz-crimentales.mp3", title: "Crimentales" },
   { src: "/music/mad-fellaz-no-diggedy.mp3", title: "No Diggedy" },
   { src: "/music/achepe-mad-fellaz-23-celcius.mp3", title: "23 Celcius · con Achepe" },
 ];
+
+/** El crédito que se muestra mientras suena `i`. */
+const creditoDe = (i: number) => TRACKS[i].credito ?? CREDITO;
 
 /**
  * Reproductor GLOBAL (en toda la página vía layout) con los temas de
@@ -188,7 +204,7 @@ export function MusicPlayer() {
                 {started && index >= 0 ? TRACKS[index].title : CREDITO}
               </div>
               <div className="font-mono truncate text-[0.6rem] tracking-[0.12em] text-cream/70 uppercase">
-                {started && index >= 0 ? CREDITO : "Toca para la selva"}
+                {started && index >= 0 ? creditoDe(index) : "Toca para la selva"}
               </div>
             </div>
 
