@@ -144,7 +144,16 @@ export function MusicPlayer() {
       <audio ref={audioRef} onEnded={next} preload="metadata" playsInline />
 
       <div
-        className="fixed bottom-4 left-4 z-[80] max-w-[calc(100vw-2rem)]"
+        /*
+         * El tope deja libre el CARRIL DE WHATSAPP. El botón flotante vive
+         * abajo a la derecha (48 px + 16 de margen), así que un tope de
+         * 100vw-2rem dejaba que el reproductor abierto llegara justo encima: en
+         * un teléfono de 390 px terminaba en 336 y el botón empieza en 326, y
+         * la X de cerrar quedaba pegada al de WhatsApp. Con 5.5rem (48 del
+         * botón + los dos márgenes + un respiro) nunca se tocan, y en pantallas
+         * grandes el tope no llega a aplicar.
+         */
+        className="fixed bottom-4 left-4 z-[80] max-w-[calc(100vw-5.5rem)]"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         {!open ? (
@@ -196,7 +205,10 @@ export function MusicPlayer() {
               ))}
             </div>
 
-            <div className="relative min-w-0 max-w-[38vw] sm:max-w-[190px]">
+            {/* En celular el título se corta antes (30vw): es lo que sobra
+                después de los cuatro botones, y con 38vw el reproductor se
+                pasaba del tope y quedaba apretado contra WhatsApp. */}
+            <div className="relative min-w-0 max-w-[30vw] sm:max-w-[190px]">
               {/* Arriba el tema que suena; abajo el crédito de la banda, que
                   queda a la vista todo el tiempo que hay música. Sin sonar aún,
                   arriba va el nombre del reproductor. */}
