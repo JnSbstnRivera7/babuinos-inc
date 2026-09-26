@@ -117,7 +117,12 @@ export const useCart = create<CartState>()(
       // carrito guardado con ellas mostraría una imagen rota y dejaría pedir algo
       // que ya no se vende, así que también se descarta.
       // v4 (9-ago): salió Offline Pleasure (licencia MTLS.CORP), mismo motivo.
-      version: 4,
+      // v5 (26-sep): SUBIERON LOS PRECIOS. Cada línea guarda el precio con el
+      // que se agregó, y el mensaje de WhatsApp se arma con ESE número: un
+      // carrito viejo haría pedir a 50.000 algo que hoy vale 60.000, y el
+      // pedido llegaría con una cifra que ya no se puede cobrar. Se descarta,
+      // igual que en la v2 cuando los precios habrían salido en NaN.
+      version: 5,
       migrate: () => ({ lines: [], isOpen: false }),
     },
   ),
