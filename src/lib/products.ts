@@ -184,7 +184,12 @@ export const TALLAS_STD: SizeStock[] = [
   { size: "2XL", stock: 4 },
 ];
 
-const ALGODON = "100% algodón 220 g/m²";
+/**
+ * La tela, en UN solo lugar. Se exporta porque la ficha de producto también la
+ * muestra: antes repetía el texto a mano y quedaba desincronizada al cambiarlo.
+ * Subió de 220 a 250 g/m² el 26-sep-2026, junto con los precios.
+ */
+export const ALGODON = "100% algodón 250 g/m²";
 
 /* ════════════════ BÁSICAS ════════════════
    Sin estampado. Solo el babuino troquelado en el ruedo y BABUINOS en la nuca.
@@ -223,7 +228,7 @@ const BASICAS: Product[] = [
     color: "negro",
     desc: "Negro absoluto sin una línea de más. La que siempre funciona.",
     descLong:
-      "Negro tinta en algodón pesado de 220 gramos. Sin estampado: el babuino en el ruedo y BABUINOS en la nuca son toda la declaración. La base de cualquier pinta de la manada.",
+      "Negro tinta en algodón pesado de 250 gramos. Sin estampado: el babuino en el ruedo y BABUINOS en la nuca son toda la declaración. La base de cualquier pinta de la manada.",
     fit: "Oversize",
     composicion: ALGODON,
     image: "/brand/products/base-tinta-explorador-frente.webp",
@@ -559,10 +564,15 @@ const FUNDADORES: Product[] = [
 /* ─── Precios (COP) ───────────────────────────────────────────
    Se inyectan por categoría en un solo lugar, no pieza por pieza, para no
    repetirlos 18 veces. Una pieza puede traer su propio `price` y este NO lo
-   pisa. */
+   pisa.
+
+   26-sep-2026: básicas 50.000 -> 60.000 y estampadas 75.000 -> 80.000, con la
+   tela subiendo a 250 g/m² (ver ALGODON). Los pedidos ya guardados en Supabase
+   conservan el precio con el que se cerraron: acá sólo cambia lo que se cobra
+   de ahora en adelante. */
 export const PRECIO: Record<Category, number> = {
-  basica: 50000,
-  estampada: 75000,
+  basica: 60000,
+  estampada: 80000,
 };
 
 export const PRODUCTS: Product[] = [...BASICAS, ...FUNDADORES].map((p) => ({

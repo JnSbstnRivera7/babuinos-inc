@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import Image from "next/image";
 import Link from "next/link";
 import {
+  ALGODON,
   formatCOP,
   getEdition,
   inStock,
@@ -358,11 +359,14 @@ export function ProductDetail({
             Estampado y detalles bordados, hechos en {BRAND.ciudad}.
           </p>
 
-          {/* precio */}
+          {/* precio — con la tela debajo, que es lo que lo sostiene */}
           {typeof product.price === "number" && (
             <div className="mt-6">
               <p className="font-condensed text-[2rem] leading-none text-cream">
                 {formatCOP(product.price)}
+              </p>
+              <p className="font-mono mt-2 text-[0.62rem] tracking-[0.14em] text-cream/60 uppercase">
+                {product.composicion ?? ALGODON}
               </p>
             </div>
           )}
@@ -470,7 +474,7 @@ export function ProductDetail({
             <Accordion title="Detalles">
               <ul className="space-y-1.5">
                 <li>Fit: {product.fit ?? "Oversize"}</li>
-                <li>Material: {product.composicion ?? "100% algodón 220 g/m²"}</li>
+                <li>Material: {product.composicion ?? ALGODON}</li>
                 <li>Colorway: {product.colorway}</li>
                 <li>Línea: {linea}</li>
               </ul>

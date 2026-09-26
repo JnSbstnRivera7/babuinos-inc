@@ -232,6 +232,21 @@ https://babuinos-the-video-game.vercel.app), no dentro de este Next.js.
 - [x] **El juego queda en 16 camisas**: reparte 4 barrios × 4, así que la Hueso
       Neblina no entra por ahora (ver su README). Las otras dos sí cambiaron ahí.
 
+## ✅ Fase 3k — Intro en video, tema propio y precios nuevos (hecho · 2026-09-26)
+
+- [x] **El intro del home lleva el spot de la marca** de fondo, mudo y sin pista
+      de audio. En escritorio va dentro de la ventana que crece con el scroll y
+      se deshace desenfocándose; en celular va a sangre completa, recortado en
+      vertical y cortado cuando la cámara sube al cielo (ver el README).
+- [x] **Entra "La marca del instinto"** (álbum *Cultura de bloque*), el tema
+      propio de la casa, de primero en el reproductor y con su propio crédito.
+      Los créditos pasan a ser por tema.
+- [x] **El reproductor abierto ya no choca con el botón de WhatsApp** en celular:
+      el tope le reserva ese carril y el título se corta antes.
+- [x] **Precios arriba**: básicas **$60.000** y estampadas **$80.000** (venían de
+      $50.000 y $75.000), con la tela pasando a **250 g/m²**. El gramaje se
+      muestra debajo del precio en la ficha, que es donde se decide.
+
 ## 🧭 Fase 4 — Tienda real / backend
 
 - [ ] **Precios** por producto/talla y decisión de **pasarela de pago** (Wompi / Bold / Mercado Pago) o seguir por WhatsApp.
