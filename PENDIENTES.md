@@ -69,6 +69,65 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
       completables al 100%). Para meterla hay que decidir: o un quinto punto de recogida en
       Cerros Orientales —hay que ubicarlo y validarlo con `npm run revisar`— o sacar otra pieza.
 
+## 🟡 Para retomar — 16-oct, fin del día
+
+**Todo lo hecho está EN VIVO** en https://babuinos-inc.vercel.app · commit `105b4c0`,
+verificado en producción (no en local: ver la trampa del final).
+
+### Decisiones tuyas, nada que programar hasta que respondas
+
+- [ ] **Vinland Saga.** Es la única de las cuatro con licencia de terceros que sigue
+      nombrando la obra, y no se puede disimular: la prenda lleva el título impreso al
+      pecho y a toda la espalda, así que cambiarle el nombre en la tienda no descarta
+      nada, sólo lo esconde del catálogo. Las otras tres ya son **Our Lady Doom**,
+      **Survival of the Fittest** (frase de uso común) y **Vuelo Nocturno**.
+- [ ] **La fecha del próximo drop** está en `2026-11-15` (`DropCountdown.tsx`). Dijiste
+      "15 de octubre" pero esa fecha ya había pasado, así que asumí noviembre.
+- [ ] **¿Refrescamos las fotos de Fundadores?** Las láminas nuevas de esa carpeta son
+      las MISMAS prendas re-fotografiadas con otro encuadre (8 de 10 cambiaron;
+      rottweiler y babuinos-lila son idénticas). No las ingesté: el cambio es de escala,
+      no de diseño, y re-correrlas pisaría los recortes hechos a mano. Si las quieres:
+      `py scripts/ingest_camisas.py --solo <slug>`.
+- [ ] **La colaboración con M.A.D. Fellaz** (`MATERIAL/.../Coleccion Expedicion/MAD FELLAS`)
+      sigue SIN ingestar, como pediste.
+
+### Lo siguiente en UI/UX, ya medido en producción
+
+El peso de la tienda hoy: **1.448 KB en 69 peticiones**.
+
+| | peticiones | peso |
+|---|---|---|
+| **JavaScript** | 14 | **870 KB** |
+| CSS | 1 | 81 KB |
+| Imágenes | 17 | 146 KB |
+| Audio | 0 | **0 KB** |
+
+- [ ] **El JS es ahora lo más pesado** (870 KB, el 60 % de la página). Es el siguiente
+      sitio donde hay algo que ganar: mirar qué entra en el bundle de la tienda y qué
+      puede cargarse en diferido.
+- [ ] **Un punto de toque por debajo del mínimo**: el enlace del título de la card mide
+      130×41 y el mínimo accesible son 44. Es el único de toda la página.
+- [ ] Lo que YA está bien y no hay que tocar: 0 imágenes sin `alt`, jerarquía de títulos
+      sin saltos (H1→H2→H3), sin desbordes horizontales, y las 56 imágenes de las cards
+      cargan en diferido.
+
+### La trampa que costó media tarde, para no repetirla
+
+**Verificar SIEMPRE en producción, no en el servidor de desarrollo.** En desarrollo Next
+reutiliza la misma URL para el CSS (`...063c5fx._.css`) aunque el contenido cambie, así
+que el navegador sirve el suyo cacheado y uno ve el sitio viejo con el código nuevo
+delante. A eso se le suma el service worker, que también cachea. Pasó tres veces:
+parecía que los cambios no se aplicaban y estaban perfectos.
+
+Y dos de Tailwind v4, las dos fallando **en silencio** (la clase está en el HTML y no
+hace nada): una regla CSS **sin `@layer`** le gana a todas las utilidades —un
+`img { display: block }` suelto impedía que `hidden` ocultara cualquier imagen—, y las
+utilidades `blur-*` componen `filter` por variable y no se dejan pisar por variantes
+(además `blur-0` ni existe en la v4). Para filtros, valor literal:
+`[filter:blur(12px)]`.
+
+---
+
 ## 🟡 De la Colección Expedición (16-oct)
 
 - [ ] **Licencias.** Cuatro de las siete citan obra ajena. Tres ya NO la nombran en ningún sitio
