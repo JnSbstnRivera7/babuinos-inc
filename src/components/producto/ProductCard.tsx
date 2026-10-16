@@ -55,6 +55,11 @@ export function ProductCard({
       : product.genero === "mujer"
         ? "mujer"
         : "hombre";
+  // En móvil manda la PRENDA, salvo que se haya elegido línea. Las 24 piezas
+  // son unisex: Hombre/Mujer no filtra nada, lo único que cambia es con qué
+  // modelo se ve. Si en móvil siempre se enseña la prenda, esos dos botones no
+  // hacen nada visible y parecen rotos — que es justo lo que pasaba.
+  const lineaElegida = viewGenero === "hombre" || viewGenero === "mujer";
   const shots = product.models?.[cardGenero] ?? product.models?.hombre ?? product.models?.mujer;
   const useModel = Boolean(shots);
   const frontSrc = shots?.frontal ?? product.image;
@@ -76,7 +81,10 @@ export function ProductCard({
   }
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-md)] bg-white shadow-[0_8px_40px_rgba(30,32,33,.12)]">
+    <article
+      data-vuelta={vuelta ? "si" : "no"}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-md)] bg-white shadow-[0_8px_40px_rgba(30,32,33,.12)]"
+    >
       <button
         type="button"
         onClick={() => toggleWish(product.slug)}
@@ -104,42 +112,50 @@ export function ProductCard({
         <IconGirar className={cn("h-[18px] w-[18px] text-ink transition-transform duration-500", vuelta && "rotate-180")} />
       </button>
 
-      <div className="relative aspect-[4/5] w-full shrink-0 [perspective:1200px]">
-        <div
-          className={cn(
-            "relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d]",
-            // En escritorio basta con pasar el mouse. El estilo en línea del
-            // botón gana por especificidad, así que una vez girada a mano se
-            // queda girada aunque el mouse se vaya.
-            "group-hover:[transform:rotateY(180deg)]",
-          )}
-          style={vuelta ? { transform: "rotateY(180deg)" } : undefined}
-        >
+      <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-[#eceae6]">
       <Link
         href={href}
         aria-label={`Ver ${product.name}`}
-        className="absolute inset-0 block overflow-hidden bg-[#eceae6] [backface-visibility:hidden]"
+        className="absolute inset-0 block"
       >
-        {/* EN MÓVIL, LA PRENDA SOLA. A dos columnas la foto de modelo se ve
-            a 157 px: no se distingue el estampado, que es lo único que
-            diferencia una pieza de otra. El modelo queda para la ficha, que
-            es donde hay sitio para mirarlo.
-            El `sizes` de 1px en el que está oculto NO es un adorno: sin eso el
-            navegador se baja las dos versiones y el móvil paga el doble. */}
-        <Image
-          src={product.image}
-          alt={`${product.name} — ${product.colorway}`}
-          fill
-          sizes="(max-width:639px) 46vw, 1px"
-          className="object-contain p-3 sm:hidden"
-        />
-        <Image
-          src={frontSrc}
-          alt={`${product.name} — ${product.colorway}`}
-          fill
-          sizes="(max-width:639px) 1px, (max-width:1024px) 45vw, 30vw"
-          className={cn("hidden sm:block", useModel ? "object-cover" : "object-contain p-2")}
-        />
+        {/* EL CRUCE ES UN DIFUMINADO, no un giro de carta. El giro 3D depende
+            de `backface-visibility` y de la perspectiva, y en los navegadores
+            de teléfono se ve a tirones; el desenfoque cruzado es la misma idea
+            —una cara se va, la otra llega— y se comporta igual en todas
+            partes. Lo maneja `data-vuelta` en el <article>, así el mismo
+            estado sirve para el botón y para el mouse. */}
+        <div
+          className={cn(
+            "absolute inset-0 transition-[opacity,filter,transform] duration-[450ms] ease-out",
+            "group-hover:scale-[1.03] group-hover:opacity-0 group-hover:blur-md",
+            "group-data-[vuelta=si]:scale-[1.03] group-data-[vuelta=si]:opacity-0 group-data-[vuelta=si]:blur-md",
+          )}
+        >
+          {/* En móvil manda la prenda; con línea elegida, el modelo. El `sizes`
+              de 1px en el que queda oculto NO es un adorno: sin eso el
+              navegador se baja las dos versiones y el móvil paga el doble. */}
+          <Image
+            src={product.image}
+            alt={`${product.name} — ${product.colorway}`}
+            fill
+            sizes={lineaElegida ? "1px" : "(max-width:639px) 46vw, 1px"}
+            className={cn("object-contain p-3", lineaElegida ? "hidden" : "sm:hidden")}
+          />
+          <Image
+            src={frontSrc}
+            alt={`${product.name} — ${product.colorway}`}
+            fill
+            sizes={
+              lineaElegida
+                ? "(max-width:639px) 46vw, (max-width:1024px) 45vw, 30vw"
+                : "(max-width:639px) 1px, (max-width:1024px) 45vw, 30vw"
+            }
+            className={cn(
+              lineaElegida ? "block" : "hidden sm:block",
+              useModel ? "object-cover" : "object-contain p-2",
+            )}
+          />
+        </div>
         {badge && (
           <span
             className={cn(
@@ -162,32 +178,40 @@ export function ProductCard({
         )}
       </Link>
 
-          {/* LA ESPALDA. aria-hidden y fuera del tabulador: es la misma pieza
-              y el mismo destino, así que anunciarla dos veces solo estorba. */}
-          <Link
-            href={href}
-            tabIndex={-1}
-            aria-hidden
-            className="absolute inset-0 block overflow-hidden bg-[#eceae6] [backface-visibility:hidden] [transform:rotateY(180deg)]"
-          >
-            <Image
-              src={product.images[0] ?? product.image}
-              alt=""
-              fill
-              sizes="(max-width:639px) 46vw, 1px"
-              className="object-contain p-3 sm:hidden"
-            />
-            <Image
-              src={backSrc}
-              alt=""
-              fill
-              sizes="(max-width:639px) 1px, (max-width:1024px) 45vw, 30vw"
-              className={cn("hidden sm:block", useModel ? "object-cover" : "object-contain p-2")}
-            />
-            <span className="font-mono absolute bottom-3 left-3 rounded-full bg-ink/75 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.12em] text-cream uppercase">
-              Espalda
-            </span>
-          </Link>
+        {/* LA ESPALDA, que es donde vive el gráfico. Llega enfocándose
+            mientras el frente se va. */}
+        <div
+          aria-hidden
+          className={cn(
+            // pointer-events-none: esta capa tapa el enlace, y sin esto, con la
+            // card difuminada el dedo golpea el div y tocar la camisa no lleva
+            // a ninguna parte.
+            "pointer-events-none absolute inset-0 scale-[1.03] opacity-0 blur-md transition-[opacity,filter,transform] duration-[450ms] ease-out",
+            "group-hover:scale-100 group-hover:opacity-100 group-hover:blur-0",
+            "group-data-[vuelta=si]:scale-100 group-data-[vuelta=si]:opacity-100 group-data-[vuelta=si]:blur-0",
+          )}
+        >
+          <Image
+            src={product.images[0] ?? product.image}
+            alt=""
+            fill
+            sizes={lineaElegida ? "1px" : "(max-width:639px) 46vw, 1px"}
+            className={cn("object-contain p-3", lineaElegida ? "hidden" : "sm:hidden")}
+          />
+          <Image
+            src={backSrc}
+            alt=""
+            fill
+            sizes={
+              lineaElegida
+                ? "(max-width:639px) 46vw, (max-width:1024px) 45vw, 30vw"
+                : "(max-width:639px) 1px, (max-width:1024px) 45vw, 30vw"
+            }
+            className={cn(
+              lineaElegida ? "block" : "hidden sm:block",
+              useModel ? "object-cover" : "object-contain p-2",
+            )}
+          />
         </div>
       </div>
 

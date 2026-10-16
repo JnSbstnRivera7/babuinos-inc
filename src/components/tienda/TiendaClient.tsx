@@ -81,8 +81,11 @@ export function TiendaClient({
   }, []);
 
   const pickGenero = (k: Genero | "all") => {
+    // SIN scrollToTop, a diferencia del tipo: las 24 piezas son unisex, así que
+    // elegir línea no cambia la lista — solo con qué modelo se enseña. Saltar
+    // al inicio por un cambio que no mueve la rejilla se siente como un fallo:
+    // tocas el botón, la página pega un brinco y "no pasa nada".
     setGenero(k);
-    scrollToTop();
   };
 
   const pickCategory = (k: Category | "all") => {
