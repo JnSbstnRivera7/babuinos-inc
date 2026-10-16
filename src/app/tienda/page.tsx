@@ -6,7 +6,7 @@ import type { Category, Genero } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Tienda — Babuinos Inc",
-  description: "Explora la Colección Fundadores 2026. Camisas oversize para toda la manada.",
+  description: "Colección Expedición 2026 y las Básicas de la casa. Camisas oversize para toda la manada.",
 };
 
 const VALID: (Genero | "all")[] = ["all", "hombre", "mujer", "unisex"];

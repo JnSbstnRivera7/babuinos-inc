@@ -35,7 +35,7 @@ export function buildOrderMessage({
   privacyAccepted,
   totals,
 }: OrderPayload): string {
-  const header = "🦍 *PEDIDO — BABUINOS INC*\n_Colección Fundadores 2026_\n";
+  const header = "🦍 *PEDIDO — BABUINOS INC*\n_Colección Expedición 2026_\n";
   const items = lines
     .map((l, i) => {
       const precio = typeof l.price === "number" ? `  ·  ${formatCOP(l.price * l.qty)}` : "";

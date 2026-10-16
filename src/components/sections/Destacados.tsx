@@ -13,7 +13,7 @@ export function Destacados() {
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="eyebrow mb-2 text-teal-light">Colección Fundadores 2026</p>
+              <p className="eyebrow mb-2 text-teal-light">Colección Expedición 2026</p>
               <h2 className="font-condensed text-[clamp(2rem,5.5vw,3.6rem)] text-cream">
                 Lo más <span className="shine-gold">buscado</span>
               </h2>

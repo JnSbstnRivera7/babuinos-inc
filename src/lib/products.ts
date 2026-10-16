@@ -78,6 +78,55 @@ export const CATEGORIES: { key: Category | "all"; label: string }[] = [
   { key: "estampada", label: "Estampadas" },
 ];
 
+/* ─── Colección (la tanda con la que salió la pieza) ───────────────
+   No es lo mismo que la categoría: "estampada" dice QUÉ es la prenda y la
+   colección dice CUÁNDO salió. La tienda muestra la colección vigente y deja
+   volver a las anteriores, para que una tanda nueva no entierre a la vieja. */
+export type Coleccion = "basicas" | "fundadores" | "expedicion";
+
+export interface ColeccionDef {
+  key: Coleccion;
+  label: string;
+  /** Lo que se lee bajo el título en la tienda. */
+  tagline: string;
+  /** Para el orden y el sello: la más reciente primero. */
+  anio: number;
+  /** `true` = la tanda vigente; `false` = archivo. Las básicas no caducan. */
+  vigente: boolean;
+  accent: string;
+}
+
+export const COLECCIONES: ColeccionDef[] = [
+  {
+    key: "basicas",
+    label: "Básicas",
+    tagline: "La paleta de la casa. Sin estampado, todo el año.",
+    anio: 2026,
+    vigente: true,
+    accent: "#00897f",
+  },
+  {
+    key: "expedicion",
+    label: "Expedición",
+    tagline: "La tanda nueva. Siete piezas, estampado a toda la espalda.",
+    anio: 2026,
+    vigente: true,
+    accent: "#cda214",
+  },
+  {
+    key: "fundadores",
+    label: "Fundadores",
+    tagline: "Las primeras. El archivo con el que arrancó la marca.",
+    anio: 2026,
+    vigente: false,
+    accent: "#8a6a3a",
+  },
+];
+
+export function getColeccion(key: Coleccion): ColeccionDef {
+  return COLECCIONES.find((c) => c.key === key) ?? COLECCIONES[0];
+}
+
 /* ─── Color de la prenda — es lo que la gente filtra de verdad ─── */
 export interface ColorDef {
   key: string;
@@ -100,6 +149,7 @@ export const COLORES: ColorDef[] = [
   { key: "celeste", label: "Celeste", hex: "#a9cce3" },
   // Lavado a la piedra: no es el negro plano de las básicas, se ve jaspeado.
   { key: "lavado", label: "Negro lavado", hex: "#3a3a3c" },
+  { key: "gris", label: "Gris jaspeado", hex: "#b9bbbd" },
 ];
 
 export function getColor(key: string): ColorDef | undefined {
@@ -147,6 +197,10 @@ export interface Product {
   name: string;
   tag: string;
   category: Category;
+  /** La tanda con la que salió. No se escribe pieza por pieza: lo pone
+   *  `PRODUCTS` según el arreglo del que venga, así no hay forma de que una
+   *  pieza quede con la colección de otra. */
+  coleccion: Coleccion;
   genero: Genero;
   edition: EditionKey;
   /** key de COLORES — alimenta el filtro de color */
@@ -195,7 +249,11 @@ export const ALGODON = "100% algodón 250 g/m²";
    Sin estampado. Solo el babuino troquelado en el ruedo y BABUINOS en la nuca.
    Los cinco colores son la paleta oficial de la marca.                        */
 
-const BASICAS: Product[] = [
+/** Una pieza TAL COMO SE ESCRIBE abajo: sin `coleccion`, que la pone
+ *  `PRODUCTS` según el arreglo. */
+type Pieza = Omit<Product, "coleccion">;
+
+const BASICAS: Pieza[] = [
   {
     id: "base-vino-cordillera",
     slug: "base-vino-cordillera",
@@ -325,7 +383,7 @@ const BASICAS: Product[] = [
 /* ════════════════ COLECCIÓN FUNDADORES ════════════════
    Las estampadas. "SG" que aparece en varias es el monograma de SOMOS GRANDES. */
 
-const FUNDADORES: Product[] = [
+const FUNDADORES: Pieza[] = [
   {
     id: "wear-your-attitude",
     slug: "wear-your-attitude",
@@ -497,27 +555,6 @@ const FUNDADORES: Product[] = [
     badge: "new",
   },
   {
-    id: "green-afro-tiki",
-    slug: "green-afro-tiki",
-    name: "Green Afro Tiki",
-    tag: "Oversize · Estampada",
-    category: "estampada",
-    genero: "unisex",
-    edition: "original",
-    color: "celeste",
-    desc: "Celeste con un tótem tiki verde al costado y la figura afro. 'Beatus' al frente, BABUINOS en la nuca.",
-    descLong:
-      "Celeste suave con una ilustración tiki en verde teal bajando por el costado: máscaras tótem y una figura afro entre las llamas. Al frente, 'Beatus' en script; en la nuca, el sello BABUINOS. La más fresca de la colección.",
-    fit: "Oversize",
-    composicion: ALGODON,
-    image: "/brand/products/green-afro-tiki-frente.webp",
-    images: flatSet("green-afro-tiki"),
-    models: modelSet("green-afro-tiki"),
-    colorway: "Celeste / Tiki Verde",
-    sizes: TALLAS_STD,
-    badge: "new",
-  },
-  {
     id: "eternal-beauty",
     slug: "eternal-beauty",
     name: "Eternal Beauty",
@@ -570,15 +607,220 @@ const FUNDADORES: Product[] = [
    tela subiendo a 250 g/m² (ver ALGODON). Los pedidos ya guardados en Supabase
    conservan el precio con el que se cerraron: acá sólo cambia lo que se cobra
    de ahora en adelante. */
+/* ════════════════ COLECCIÓN EXPEDICIÓN ════════════════
+   La tanda del 15-oct-2026. Siete piezas, todas con el gráfico a toda la
+   espalda y una marca pequeña al frente.
+
+   OJO CON LAS LICENCIAS: cuatro de las siete citan obra ajena —DOOM, Mobb
+   Deep, la escena de la bici contra la luna y Vinland Saga—. Es la misma razón
+   por la que salieron del catálogo Guns & Roses, The Mills y Offline Pleasure
+   (ver la nota en Fundadores). Dos de ellas evitan nombrar la fuente a
+   propósito: la de la luna se llama "Vuelo Nocturno" y no menciona la
+   película. Queda anotado para que la decisión sea de Juan y no un descuido.  */
+
+const EXPEDICION: Pieza[] = [
+  {
+    id: "hanya-mask",
+    slug: "hanya-mask",
+    name: "Hanya Mask",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "regal",
+    color: "negro",
+    desc: "Negra con una máscara hanya a toda la espalda y el proverbio de las siete caídas.",
+    descLong:
+      "Negro en algodón pesado con una máscara hanya —el demonio del teatro nō— ocupando toda la espalda: cuernos, colmillos y peonías en rojo sangre sobre un medallón dorado. A un costado, 七転び八起き: «cae siete veces, levántate ocho». Al frente, el mismo lema en vertical, pequeño, sobre el pecho.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/hanya-mask-frente.webp",
+    images: flatSet("hanya-mask"),
+    models: modelSet("hanya-mask"),
+    colorway: "Negro",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    // Nombre y slug NEUTROS a propósito (16-oct): el gráfico cita a un artista
+    // ajeno, y mientras no haya permiso por escrito la tienda no lo nombra —
+    // ni en el título, ni en la URL, ni en el nombre del archivo.
+    id: "our-lady-doom",
+    slug: "our-lady-doom",
+    name: "Our Lady Doom",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "desert",
+    color: "crema",
+    desc: "Crema con una virgen enmascarada y un halo de rayos dorados a la espalda.",
+    descLong:
+      "Crema en algodón pesado con una estampa devocional a toda la espalda: manto verde, túnica naranja, las manos juntas y una máscara metálica donde iría el rostro, bajo un halo de rayos dorados. Un guiño al villano del rap que nunca se quitó la careta. Al frente, la máscara sola, pequeña, sobre el pecho.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/our-lady-doom-frente.webp",
+    images: flatSet("our-lady-doom"),
+    models: modelSet("our-lady-doom"),
+    colorway: "Crema",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    // Igual que la anterior: el nombre del grupo es la marca más fuerte que
+    // hay aquí, así que no aparece. "Survival of the Fittest" es una frase de
+    // uso común, no una marca.
+    id: "survival-of-the-fittest",
+    slug: "survival-of-the-fittest",
+    name: "Survival of the Fittest",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "midnight",
+    color: "negro",
+    desc: "Negra con un collage de esquina neoyorquina a la espalda y el lettering al pecho.",
+    descLong:
+      "Negro en algodón pesado con un collage a toda la espalda: la esquina, el edificio de ladrillo, los dos del barrio mirando a cámara y el recorte de prensa encima, todo en pegote de afiche rasgado. Al frente, el lettering en arco sobre el pecho. Boom bap de los noventa, puesto.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/survival-of-the-fittest-frente.webp",
+    images: flatSet("survival-of-the-fittest"),
+    models: modelSet("survival-of-the-fittest"),
+    colorway: "Negro",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    // Sale más o menos una al mes en apoyo a Palestina, todas con ese nombre.
+    // Cada una necesita su propio slug: comparten nombre, no archivos.
+    id: "free-palestine-victoria",
+    slug: "free-palestine-victoria",
+    name: "Free Palestine · Victoria",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "midnight",
+    color: "negro",
+    desc: "Negra con el retrato en kufiya haciendo la V y el lettering de graffiti a la espalda.",
+    descLong:
+      "Negro en algodón pesado con un retrato a toda la espalda: kufiya cubriendo el rostro, la mano en señal de victoria y la bandera difuminada detrás en textura de aerosol, bajo el lettering FREE PALESTINE en trazo de graffiti. Al frente, la bandera en tamaño pequeño sobre el pecho. La segunda de la serie; la primera vive en Fundadores.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/free-palestine-victoria-frente.webp",
+    images: flatSet("free-palestine-victoria"),
+    models: modelSet("free-palestine-victoria"),
+    colorway: "Negro",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    id: "football-freedom",
+    slug: "football-freedom",
+    name: "Football Freedom",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "safari",
+    color: "arena",
+    desc: "Arena lavada con una futbolista y el lettering en rojo, dorado y verde a la espalda.",
+    descLong:
+      "Arena lavada a la piedra con una futbolista de rastas a toda la espalda, pisando el balón, y el lettering FOOTBALL FREEDOM escurrido en rojo, dorado y verde. Al frente, la bandera rasta pequeña sobre el pecho. Fútbol de potrero y sound system en la misma prenda.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/football-freedom-frente.webp",
+    images: flatSet("football-freedom"),
+    models: modelSet("football-freedom"),
+    colorway: "Arena lavada",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    id: "luna-bicicleta",
+    slug: "luna-bicicleta",
+    name: "Vuelo Nocturno",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "midnight",
+    color: "lavado",
+    desc: "Negro lavado con una luna llena enorme y una bici cruzándola sobre el pinar.",
+    descLong:
+      "Negro lavado a la piedra —jaspeado, nunca plano— con una luna llena ocupando toda la espalda, la silueta de una bici cruzándola por delante y la línea de pinos recortada abajo. Monocromo, sin una palabra. La estampa está tramada para que el lavado se vea a través.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/luna-bicicleta-frente.webp",
+    images: flatSet("luna-bicicleta"),
+    models: modelSet("luna-bicicleta"),
+    colorway: "Negro lavado",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    id: "vinland-saga",
+    slug: "vinland-saga",
+    name: "Vinland Saga",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "regal",
+    color: "gris",
+    desc: "Gris jaspeada con el guerrero del hacha a toda la espalda y el título en rojo.",
+    descLong:
+      "Gris jaspeado en algodón pesado con una escena de batalla a toda la espalda: el guerrero de melena al hombro, el hacha cruzada y la tropa detrás, en trazo de tinta. El título en rojo bloque arriba. Al frente, el mismo título en pequeño sobre el pecho.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/vinland-saga-frente.webp",
+    images: flatSet("vinland-saga"),
+    models: modelSet("vinland-saga"),
+    colorway: "Gris jaspeado",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+  {
+    id: "all-cats-are-beautiful",
+    slug: "all-cats-are-beautiful",
+    name: "All Cats Are Beautiful",
+    tag: "Oversize · Estampada",
+    category: "estampada",
+    genero: "unisex",
+    edition: "regal",
+    color: "lavado",
+    desc: "Negro lavado con la patrulla ardiendo y los tres gatos encapuchados a la espalda.",
+    descLong:
+      "Negro lavado a la piedra con la escena a toda la espalda: ALL CATS ARE BEAUTIFUL en letras de molde sobre un muro de llamas, la patrulla volcada ardiendo detrás y tres gatos de capucha al frente —el persa, el esfinge y el naranja con la lágrima— mirando a cámara. Al frente, un gato caminando sobre A.C.A.B, pequeño, sobre el pecho. Las siglas de siempre, leídas como toca.",
+    fit: "Oversize",
+    composicion: ALGODON,
+    image: "/brand/products/all-cats-are-beautiful-frente.webp",
+    images: flatSet("all-cats-are-beautiful"),
+    models: modelSet("all-cats-are-beautiful"),
+    colorway: "Negro lavado",
+    sizes: TALLAS_STD,
+    badge: "new",
+  },
+];
+
 export const PRECIO: Record<Category, number> = {
   basica: 60000,
   estampada: 80000,
 };
 
-export const PRODUCTS: Product[] = [...BASICAS, ...FUNDADORES].map((p) => ({
+/** La colección sale del ARREGLO, no de un campo escrito pieza por pieza: así
+ *  no hay manera de que una quede con la etiqueta de otra al copiar y pegar. */
+function conColeccion(lista: Pieza[], coleccion: Coleccion): Product[] {
+  return lista.map((p) => ({ ...p, coleccion }));
+}
+
+export const PRODUCTS: Product[] = [
+  ...conColeccion(BASICAS, "basicas"),
+  ...conColeccion(EXPEDICION, "expedicion"),
+  ...conColeccion(FUNDADORES, "fundadores"),
+].map((p) => ({
   ...p,
   price: p.price ?? PRECIO[p.category],
 }));
+
+/** Las piezas de una colección, en el orden del catálogo. */
+export function porColeccion(key: Coleccion): Product[] {
+  return PRODUCTS.filter((p) => p.coleccion === key);
+}
 
 /** Formato de peso colombiano sin decimales: 50000 → "$ 50.000". */
 export function formatCOP(valor: number): string {
@@ -594,8 +836,67 @@ export function getProduct(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
 
-/** Piezas destacadas para el home: una básica y las dos gráficas más fuertes. */
-export const FEATURED_SLUGS = ["wear-your-attitude", "base-ocre-dorado", "asian-tengu-mask"];
+/* ─── "Combina con" ──────────────────────────────────────────────
+   Antes era `PRODUCTS.filter(...).slice(0, 3)`: las TRES PRIMERAS del
+   catálogo, iguales en las 17 fichas. Parecía una recomendación y no lo era. */
+
+/** Número estable a partir de un texto. Estable importa: si esto fuera
+ *  aleatorio, el servidor y el navegador pintarían fichas distintas y React
+ *  reventaría la hidratación. */
+function semilla(texto: string): number {
+  let h = 0;
+  for (let i = 0; i < texto.length; i++) h = (h * 31 + texto.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+/**
+ * Qué enseñar debajo de una ficha.
+ *
+ * Dos reglas, las dos de vitrina y no de código:
+ *   · una estampada pide BÁSICAS que la dejen respirar, y una básica pide el
+ *     gráfico que le falta — así que primero va la categoría contraria;
+ *   · no se repite color, porque tres piezas del mismo tono no se leen como
+ *     conjunto sino como error.
+ * La rotación por slug es lo que hace que cada ficha recomiende algo distinto.
+ */
+export function relacionados(product: Product, n = 3): Product[] {
+  const otros = PRODUCTS.filter((p) => p.slug !== product.slug && inStock(p));
+  const contrarias = otros.filter((p) => p.category !== product.category);
+  const iguales = otros.filter((p) => p.category === product.category);
+  if (!contrarias.length && !iguales.length) return [];
+
+  // La rotación va DENTRO de cada grupo, no sobre la lista entera: rotando el
+  // concatenado, el corte caía a media lista de estampadas y las básicas se
+  // iban al final, así que una estampada terminaba recomendando tres
+  // estampadas — justo lo contrario de lo que dice la regla de arriba.
+  const rotar = (lista: Product[]) => {
+    if (lista.length < 2) return lista;
+    const g = semilla(product.slug) % lista.length;
+    return [...lista.slice(g), ...lista.slice(0, g)];
+  };
+  const girado = [...rotar(contrarias), ...rotar(iguales)];
+
+  const out: Product[] = [];
+  const colores = new Set([product.color]);
+  for (const p of girado) {
+    if (out.length >= n) break;
+    if (colores.has(p.color)) continue;
+    colores.add(p.color);
+    out.push(p);
+  }
+  // Si lo del color dejó corto (catálogo chico o monocromo), se completa.
+  for (const p of girado) {
+    if (out.length >= n) break;
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
+/** Piezas destacadas para el home: una básica y las dos gráficas más fuertes.
+ *  OJO: `getFeatured` descarta en silencio el slug que no encuentre. Aquí vivía
+ *  "base-ocre-dorado", que dejó de existir al renombrar las básicas el 22-sep,
+ *  y el home llevaba un mes mostrando DOS piezas en vez de tres sin avisar. */
+export const FEATURED_SLUGS = ["hanya-mask", "base-arena-paramo", "our-lady-doom"];
 
 export function getFeatured(): Product[] {
   return FEATURED_SLUGS.map((s) => getProduct(s)).filter((p): p is Product => Boolean(p));

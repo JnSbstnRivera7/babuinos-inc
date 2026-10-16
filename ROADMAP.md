@@ -7,6 +7,24 @@ Checklist accionable en **[PENDIENTES.md](PENDIENTES.md)** · hallazgos medidos 
 
 ---
 
+## ✅ Colección Expedición (hecho · 2026-10-16)
+
+- [x] **8 piezas nuevas**: Hanya Mask · Our Lady Doom · Survival of the Fittest · Free Palestine ·
+      Victoria · Football Freedom · Vuelo Nocturno · Vinland Saga · All Cats Are Beautiful.
+      Ingestadas con `scripts/ingest_camisas.py` (tercer mapa `EXPEDICION`).
+      Catálogo: **24 piezas** = 6 básicas + 8 Expedición + 10 Fundadores.
+- [x] **Fuera de Fundadores**: `green-afro-tiki` (la celeste del tótem tiki). El mapa `FUNDADORES`
+      del script se **renumeró a 1..10** porque Juan reordenó la carpeta: va por número de archivo,
+      así que una carpeta reordenada sin tocar la tabla le pone a cada pieza las fotos de otra.
+- [x] **La colección es un concepto del catálogo** (`Coleccion` en products.ts), no un campo que se
+      escribe pieza por pieza: lo pone `PRODUCTS` según el arreglo del que venga.
+- [x] **Tienda por tandas**: Expedición y Básicas fijas, y Fundadores detrás de un botón con
+      **rebobinado VHS** (`ArchivoRetro`). Sacar algo nuevo deja de enterrar lo viejo.
+- [x] **PLP a dos columnas en móvil** con la **prenda sola** (el modelo queda para la ficha) y la
+      card que **gira** para ver la espalda sin entrar.
+- [x] **"Combina con" de verdad**: antes eran las tres primeras del catálogo en las 17 fichas.
+- [x] **3 temas nuevos** de M.A.D. Fellaz en el reproductor.
+
 ## ✅ Fase 0 — Base inmersiva (hecho)
 
 - [x] Next.js 16 + TS + Tailwind v4 + Framer Motion + Lenis + Zustand + Supabase.

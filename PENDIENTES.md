@@ -69,6 +69,23 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
       completables al 100%). Para meterla hay que decidir: o un quinto punto de recogida en
       Cerros Orientales —hay que ubicarlo y validarlo con `npm run revisar`— o sacar otra pieza.
 
+## 🟡 De la Colección Expedición (16-oct)
+
+- [ ] **Licencias.** Cuatro de las siete citan obra ajena. Tres ya NO la nombran en ningún sitio
+      —ni título, ni URL, ni nombre de archivo— para descartar el problema mientras tanto:
+      **Our Lady Doom**, **Survival of the Fittest** (frase de uso común, no marca) y **Vuelo
+      Nocturno**. Queda **Vinland Saga**, que sí se llama como la obra porque la prenda lo lleva
+      impreso al pecho. Es la misma razón por la que salieron Guns & Roses, The Mills y Offline
+      Pleasure: **decisión tuya**, aquí sólo queda anotado para que no sea un descuido.
+- [ ] **La colaboración con M.A.D. Fellaz**: la carpeta `MATERIAL/Camisas/Coleccion Expedicion/MAD
+      FELLAS` quedó SIN ingestar, como pediste.
+- [ ] **¿Refrescamos las fotos de Fundadores?** Las láminas nuevas de esa carpeta son las MISMAS
+      prendas re-fotografiadas con otro encuadre (8 de 10 cambiaron; rottweiler y babuinos-lila son
+      idénticas). No las ingesté: el cambio es de escala, no de diseño, y re-correrlas pisaría los
+      recortes hechos a mano. Si las quieres, es `py scripts/ingest_camisas.py --solo <slug>`.
+- [ ] **Fecha del próximo drop**: está en `2026-11-15`. Dijiste "15 de octubre" pero esa fecha ya
+      había pasado, así que asumí noviembre. Es un renglón en `DropCountdown.tsx`.
+
 ## 🔵 Siguientes builds (necesitan decisión o backend)
 
 - [ ] **Dominio propio** (p. ej. babuinos.co): hoy la tienda vive en `babuinos-inc.vercel.app`. Es

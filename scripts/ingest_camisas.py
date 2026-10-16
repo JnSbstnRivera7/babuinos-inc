@@ -59,23 +59,42 @@ BASICAS = {
     # 6 es nueva del 22-sep: hueso, con la marca en negro.
     6: "base-hueso-neblina",
 }
+# RENUMERADO el 16-oct-2026: Juan reorganizó la carpeta y ahora va 1..10 sin
+# huecos. Las que habían salido por licencias (Guns & Roses, The Mills, Offline
+# Pleasure) ya no están en MATERIAL, y "green-afro-tiki" la quitó él en esta
+# ronda. El mapa va por NÚMERO DE ARCHIVO: si la carpeta se reordena y esta
+# tabla no, la ingesta le pone a cada pieza las fotos de otra. Verificado pieza
+# por pieza contra las fotos del sitio antes de reescribirlo.
 FUNDADORES = {
     1: "wear-your-attitude",
-    # 2 y 3 (Guns & Roses Red y The Mills) salieron del catálogo el 2026-08-07 por
-    # licencias de terceros. Sus láminas siguen en MATERIAL, pero NO deben volver a
-    # generarse: si se reactivan, también hay que devolverlas a products.ts.
-    4: "free-palestine",
-    5: "rottweiler",
-    6: "brave-dog",
-    7: "babuinos-lila",
-    # 8 (Offline Pleasure) salió del catálogo el 2026-08-09 por la licencia del
-    # estudio MTLS.CORP. Su lámina sigue en MATERIAL pero NO debe regenerarse.
-    9: "asian-tengu-mask",
-    10: "california-rasta-kid",
-    11: "guardian-navy",
-    12: "green-afro-tiki",
-    13: "eternal-beauty",
-    14: "doberman-sangre",
+    2: "free-palestine",
+    3: "rottweiler",
+    4: "brave-dog",
+    5: "babuinos-lila",
+    6: "asian-tengu-mask",
+    7: "california-rasta-kid",
+    8: "guardian-navy",
+    9: "eternal-beauty",
+    10: "doberman-sangre",
+}
+# Coleccion Expedicion (15-oct-2026). Aca el sufijo SI es consistente: `N.png`
+# es la grilla de modelos y `N.1.png` la prenda sola. Igual se clasifica por
+# proporcion, como las otras dos.
+EXPEDICION = {
+    1: "hanya-mask",
+    # 16-oct: los dos renombrados para no citar la marca ajena ni en el titulo
+    # ni en la URL ni en el nombre del archivo.
+    2: "our-lady-doom",
+    3: "survival-of-the-fittest",
+    # OJO: NO es la "free-palestine" de Fundadores. Es otro diseno de apoyo a
+    # Palestina — sale mas o menos uno al mes con ese mismo nombre, asi que
+    # cada uno necesita su propio slug o se pisan las fotos entre ellos (ya
+    # paso: el primer intento le borro las fotos a la de Fundadores).
+    4: "free-palestine-victoria",
+    5: "football-freedom",
+    6: "luna-bicicleta",
+    7: "vinland-saga",
+    8: "all-cats-are-beautiful",
 }
 
 GENEROS = ["hombre", "mujer"]
@@ -145,7 +164,11 @@ def clasificar(carpeta):
             continue
         num, corte = int(m.group(1)), (m.group(2) or "").lower()
         with Image.open(f) as im:
-            plana = im.width / im.height > 1.5
+            # El corte estaba en 1.5 y las planas de Expedicion miden EXACTAMENTE
+            # 1536x1024 = 1.50, asi que se clasificaban como grilla y una pisaba
+            # a la otra. Las grillas andan por 1.25 y las planas de 1.50 arriba:
+            # 1.40 separa las tres colecciones sin ambiguedad.
+            plana = im.width / im.height > 1.40
         tipo = ("plana" + (f"_{corte}" if corte else "")) if plana else "grilla"
         out.setdefault(num, {})[tipo] = f
     return out
@@ -227,6 +250,7 @@ def main():
     for prefijo, mapa, etiqueta in [
         ("basicas", BASICAS, "Básicas"),
         ("coleccion fundadores", FUNDADORES, "Fundadores"),
+        ("coleccion expedicion", EXPEDICION, "Expedición"),
     ]:
         # Por prefijo y sin tildes: la carpeta de básicas se llamó "BASICAS" y
         # hoy es "Basicas Babuinos".

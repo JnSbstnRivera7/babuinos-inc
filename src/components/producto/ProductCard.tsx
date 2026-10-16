@@ -9,7 +9,7 @@ import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
 import { useToast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
-import { IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
+import { IconPlus, IconLeaf, IconHeart, IconGirar } from "@/components/ui/Icons";
 
 const BADGES: Record<string, { label: string; cls: string }> = {
   new: { label: "Nuevo", cls: "bg-teal text-white" },
@@ -31,6 +31,11 @@ export function ProductCard({
   const saved = useWishlist((s) => s.ids.includes(product.slug));
   const toggleWish = useWishlist((s) => s.toggle);
   const [size, setSize] = useState("");
+  // La card GIRA para enseñar la espalda. Hace falta porque el gráfico de
+  // estas piezas vive atrás: una grilla que solo muestra el frente enseña
+  // siete camisas lisas. En escritorio ya giraba al pasar el mouse, pero en
+  // el teléfono no hay mouse y no había forma de ver el estampado sin entrar.
+  const [vuelta, setVuelta] = useState(false);
 
   const available = inStock(product);
   const badge = product.badge ? BADGES[product.badge] : null;
@@ -85,33 +90,56 @@ export function ProductCard({
           fill={saved ? "currentColor" : "none"}
         />
       </button>
+      {/* Botón de girar. Va FUERA del enlace: un button dentro de un link no
+          es HTML válido, y además así el dedo elige — girar o entrar. */}
+      <button
+        type="button"
+        onClick={() => setVuelta((v) => !v)}
+        aria-label={vuelta ? `Ver el frente de ${product.name}` : `Ver la espalda de ${product.name}`}
+        aria-pressed={vuelta}
+        // Abajo a la izquierda: arriba choca con el sello de "Nuevo" y abajo a la
+        // derecha está la marca de género. Es la única esquina libre.
+        className="absolute bottom-2 left-2 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-[0_2px_10px_rgba(30,32,33,.18)] transition hover:scale-110 active:scale-95"
+      >
+        <IconGirar className={cn("h-[18px] w-[18px] text-ink transition-transform duration-500", vuelta && "rotate-180")} />
+      </button>
+
+      <div className="relative aspect-[4/5] w-full shrink-0 [perspective:1200px]">
+        <div
+          className={cn(
+            "relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d]",
+            // En escritorio basta con pasar el mouse. El estilo en línea del
+            // botón gana por especificidad, así que una vez girada a mano se
+            // queda girada aunque el mouse se vaya.
+            "group-hover:[transform:rotateY(180deg)]",
+          )}
+          style={vuelta ? { transform: "rotateY(180deg)" } : undefined}
+        >
       <Link
         href={href}
         aria-label={`Ver ${product.name}`}
-        className="relative block aspect-[4/5] w-full shrink-0 overflow-hidden bg-[#eceae6]"
+        className="absolute inset-0 block overflow-hidden bg-[#eceae6] [backface-visibility:hidden]"
       >
-        {/* frontal (por defecto) */}
+        {/* EN MÓVIL, LA PRENDA SOLA. A dos columnas la foto de modelo se ve
+            a 157 px: no se distingue el estampado, que es lo único que
+            diferencia una pieza de otra. El modelo queda para la ficha, que
+            es donde hay sitio para mirarlo.
+            El `sizes` de 1px en el que está oculto NO es un adorno: sin eso el
+            navegador se baja las dos versiones y el móvil paga el doble. */}
+        <Image
+          src={product.image}
+          alt={`${product.name} — ${product.colorway}`}
+          fill
+          sizes="(max-width:639px) 46vw, 1px"
+          className="object-contain p-3 sm:hidden"
+        />
         <Image
           src={frontSrc}
           alt={`${product.name} — ${product.colorway}`}
           fill
-          sizes="(max-width:640px) 88vw, (max-width:1024px) 45vw, 30vw"
-          className={cn(
-            "transition-all duration-500 group-hover:scale-[1.03]",
-            useModel ? "object-cover group-hover:opacity-0" : "object-contain p-2",
-          )}
+          sizes="(max-width:639px) 1px, (max-width:1024px) 45vw, 30vw"
+          className={cn("hidden sm:block", useModel ? "object-cover" : "object-contain p-2")}
         />
-        {/* espalda (aparece al pasar el mouse — el gráfico va atrás) */}
-        {useModel && (
-          <Image
-            src={backSrc}
-            alt=""
-            aria-hidden
-            fill
-            sizes="(max-width:640px) 88vw, (max-width:1024px) 45vw, 30vw"
-            className="object-cover opacity-0 transition-all duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
-          />
-        )}
         {badge && (
           <span
             className={cn(
@@ -134,28 +162,61 @@ export function ProductCard({
         )}
       </Link>
 
-      <div className="flex flex-1 flex-col p-5">
+          {/* LA ESPALDA. aria-hidden y fuera del tabulador: es la misma pieza
+              y el mismo destino, así que anunciarla dos veces solo estorba. */}
+          <Link
+            href={href}
+            tabIndex={-1}
+            aria-hidden
+            className="absolute inset-0 block overflow-hidden bg-[#eceae6] [backface-visibility:hidden] [transform:rotateY(180deg)]"
+          >
+            <Image
+              src={product.images[0] ?? product.image}
+              alt=""
+              fill
+              sizes="(max-width:639px) 46vw, 1px"
+              className="object-contain p-3 sm:hidden"
+            />
+            <Image
+              src={backSrc}
+              alt=""
+              fill
+              sizes="(max-width:639px) 1px, (max-width:1024px) 45vw, 30vw"
+              className={cn("hidden sm:block", useModel ? "object-cover" : "object-contain p-2")}
+            />
+            <span className="font-mono absolute bottom-3 left-3 rounded-full bg-ink/75 px-2.5 py-1 text-[0.55rem] font-bold tracking-[0.12em] text-cream uppercase">
+              Espalda
+            </span>
+          </Link>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col p-3 sm:p-5">
         <Link href={href} className="block">
-          <div className="font-mono text-[0.6rem] font-bold tracking-[0.16em] text-teal uppercase">
+          <div className="font-mono text-[0.55rem] font-bold tracking-[0.14em] text-teal uppercase sm:text-[0.6rem] sm:tracking-[0.16em]">
             {product.tag}
           </div>
           <div className="mt-1.5 flex items-baseline justify-between gap-2">
-            <h3 className="font-display text-lg font-black leading-tight text-ink transition group-hover:text-teal">
+            <h3 className="font-display text-[0.95rem] leading-tight font-black text-ink transition group-hover:text-teal sm:text-lg">
               {product.name}
             </h3>
             {typeof product.price === "number" && (
-              <span className="font-mono shrink-0 text-[0.9rem] font-bold text-ink">
+              <span className="font-mono shrink-0 text-[0.78rem] font-bold text-ink tabular-nums sm:text-[0.9rem]">
                 {formatCOP(product.price)}
               </span>
             )}
           </div>
         </Link>
         {/* /55 daba 3.71:1 — es el copy que vende, tiene que leerse */}
-        <p className="mt-1.5 line-clamp-2 text-[0.85rem] leading-relaxed text-ink/75">
+        <p className="mt-1.5 line-clamp-2 hidden text-[0.85rem] leading-relaxed text-ink/75 sm:block">
           {product.desc}
         </p>
 
-        <div className="mt-4 flex items-center justify-between">
+        {/* De aquí abajo, NADA en móvil. A 157 px de ancho las cinco tallas de
+            44 px se parten en tres filas y la card se vuelve un formulario;
+            el que compra desde la grilla toca la foto y elige en la ficha, que
+            es donde además ve el modelo. */}
+        <div className="mt-4 hidden items-center justify-between sm:flex">
           {/* /45 daba 2.81:1 a 10px — bajo el mínimo AA de 4.5 */}
           <span className="font-mono text-[0.68rem] font-bold tracking-[0.12em] text-ink/70 uppercase">
             {product.colorway}
@@ -167,7 +228,7 @@ export function ProductCard({
 
         {/* size pills — 44px: son el control con el que se decide la compra
             desde la grilla y estaban en 32, doce por debajo del mínimo */}
-        <div className="mt-4 flex flex-wrap gap-1.5">
+        <div className="mt-4 hidden flex-wrap gap-1.5 sm:flex">
           {product.sizes.map((s) => {
             const soldOut = s.stock === 0;
             return (
@@ -197,10 +258,18 @@ export function ProductCard({
           type="button"
           onClick={handleAdd}
           disabled={!available}
-          className="font-mono mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-ink px-5 text-[0.72rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:-translate-y-0.5 hover:bg-teal active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink/40 disabled:hover:translate-y-0"
+          className="font-mono mt-4 hidden min-h-11 w-full items-center justify-center gap-2 rounded-md bg-ink px-5 text-[0.72rem] font-bold tracking-[0.1em] text-cream uppercase transition hover:-translate-y-0.5 hover:bg-teal active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink/40 disabled:hover:translate-y-0 sm:flex"
         >
           <IconPlus className="h-4 w-4" /> {available ? "A la mochila" : "Agotado"}
         </button>
+
+        {/* El equivalente en móvil: una sola acción, ir a la ficha. */}
+        <Link
+          href={href}
+          className="font-mono mt-3 flex min-h-11 w-full items-center justify-center rounded-md border border-ink/20 px-2 text-center text-[0.62rem] leading-tight font-bold tracking-[0.08em] text-ink uppercase transition active:scale-[0.98] sm:hidden"
+        >
+          {available ? "Elegir talla" : "Agotado"}
+        </Link>
       </div>
     </article>
   );

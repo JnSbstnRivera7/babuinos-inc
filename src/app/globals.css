@@ -97,9 +97,16 @@ article :focus-visible {
   outline-color: var(--color-ink);
 }
 
-img {
-  display: block;
-  max-width: 100%;
+/* EN @layer base, NO suelto. Tailwind v4 mete sus utilidades en
+   `@layer utilities`, y el CSS sin capa le gana a cualquier capa pase lo que
+   pase con la especificidad: con esta regla suelta, `hidden` y `sm:hidden`
+   NUNCA pudieron ocultar una imagen en todo el proyecto, y fallaban en
+   silencio — la clase estaba en el HTML y no hacía nada. */
+@layer base {
+  img {
+    display: block;
+    max-width: 100%;
+  }
 }
 
 ::selection {
@@ -332,3 +339,44 @@ html.lenis, html.lenis body { height: auto; }
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ─── Rebobinado VHS ──────────────────────────────────────────────
+   Para volver a una colección vieja. La idea no es decorar: el gesto tiene que
+   DECIR "estás retrocediendo en el tiempo", y una cinta rebobinando es el único
+   lenguaje que todo el mundo lee sin explicación.
+   El bloque global de prefers-reduced-motion de más arriba deja estas
+   animaciones en 0.001ms; el componente además se salta la espera en JS, para
+   que el contenido no tarde en aparecer. */
+@keyframes vhs-barra {
+  0%   { transform: translateY(110%); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(-110%); opacity: 0; }
+}
+@keyframes vhs-tiembla {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-3px); }
+  40%      { transform: translateX(2px); }
+  60%      { transform: translateX(-2px); }
+  80%      { transform: translateX(3px); }
+}
+@keyframes vhs-entra {
+  0%   { opacity: 0; filter: blur(6px) saturate(2); transform: translateY(10px); }
+  60%  { opacity: 1; filter: blur(0) saturate(1.25); }
+  100% { opacity: 1; filter: none; transform: none; }
+}
+
+/* Las líneas de barrido. Van en una capa aparte con pointer-events:none para
+   no robarle el clic a nada de abajo. */
+.vhs-lineas {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0px,
+    rgba(0, 0, 0, 0.22) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+.vhs-barra { animation: vhs-barra 700ms linear; }
+.vhs-tiembla { animation: vhs-tiembla 180ms steps(2) 3; }
+.vhs-entra { animation: vhs-entra 520ms cubic-bezier(0.16, 1, 0.3, 1) both; }

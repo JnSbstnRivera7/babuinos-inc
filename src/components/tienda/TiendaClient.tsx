@@ -4,17 +4,21 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePresence } from "@/lib/presence";
 import { ProductCard } from "@/components/producto/ProductCard";
+import { ArchivoRetro } from "@/components/tienda/ArchivoRetro";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 import { IconFilter, IconClose } from "@/components/ui/Icons";
 import {
   PRODUCTS,
   CATEGORIES,
+  COLECCIONES,
   coloresEnUso,
   getColor,
   matchesGenero,
   withStockAll,
   type Category,
+  type Coleccion,
   type Genero,
+  type Product,
   type StockMap,
 } from "@/lib/products";
 import { cn } from "@/lib/utils";
@@ -92,7 +96,7 @@ export function TiendaClient({
 
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-10 md:px-8 md:pt-16">
-      <p className="eyebrow mb-2 text-[var(--accent)]">Tienda · Fundadores 2026</p>
+      <p className="eyebrow mb-2 text-[var(--accent)]">Tienda · Expedición 2026</p>
       <h1 className="font-condensed text-[clamp(2.2rem,6vw,4rem)] text-cream">
         La <span className="shine-gold">manada</span>
       </h1>
@@ -265,24 +269,35 @@ export function TiendaClient({
         </div>
       )}
 
-      {/* grid — la ropa aparece de inmediato.
-          El h2 cierra el salto h1→h3: los nombres de las piezas son h3 y antes
-          no había ningún h2 en medio. */}
+      {/* La tienda va POR COLECCIONES, no en una grilla corrida.
+          Antes eran 17 piezas seguidas y una básica quedaba pegada a una
+          estampada sin nada que las separara. Ahora cada tanda tiene su
+          cabecera y su aire, y la anterior vive detrás del botón de archivo:
+          sacar algo nuevo deja de enterrar lo viejo. */}
       {list.length > 0 ? (
         <div className="mt-8">
-          <h2 className="sr-only">
-            {category === "basica"
-              ? "Básicas"
-              : category === "estampada"
-                ? "Estampadas"
-                : "Todas las piezas"}
-            {genero !== "all" && genero !== "unisex" ? ` — línea ${genero}` : ""}
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {list.map((p) => (
-              <ProductCard key={p.id} product={p} viewGenero={genero} />
-            ))}
-          </div>
+          {VIGENTES.map((key) => (
+            <SeccionColeccion
+              key={key}
+              coleccion={key}
+              items={list.filter((p) => p.coleccion === key)}
+              genero={genero}
+            />
+          ))}
+
+          {list.some((p) => p.coleccion === "fundadores") && (
+            <ArchivoRetro
+              etiqueta="Rebobinar al archivo"
+              etiquetaAbierto="Cerrar el archivo"
+              anio={2026}
+            >
+              <SeccionColeccion
+                coleccion="fundadores"
+                items={list.filter((p) => p.coleccion === "fundadores")}
+                genero={genero}
+              />
+            </ArchivoRetro>
+          )}
         </div>
       ) : (
         <div className="mt-16 text-center">
@@ -318,6 +333,55 @@ export function TiendaClient({
         </div>
       )}
     </div>
+  );
+}
+
+/** Las que se muestran siempre, en este orden. El resto va al archivo. */
+const VIGENTES: Coleccion[] = ["expedicion", "basicas"];
+
+/**
+ * Una tanda del catálogo, con cabecera propia.
+ *
+ * La grilla va a DOS COLUMNAS desde el móvil: a una sola, cada card ocupaba
+ * una pantalla entera y ver seis piezas eran seis scrollazos. A dos se ve el
+ * conjunto, que es como se compra ropa. Por eso la card de móvil enseña la
+ * prenda sola y no el modelo — a 157 px el modelo no deja ver el estampado.
+ */
+function SeccionColeccion({
+  coleccion,
+  items,
+  genero,
+}: {
+  coleccion: Coleccion;
+  items: Product[];
+  genero: Genero | "all";
+}) {
+  if (!items.length) return null;
+  const def = COLECCIONES.find((c) => c.key === coleccion);
+  if (!def) return null;
+
+  return (
+    <section className="mt-14 first:mt-0">
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-cream/10 pb-4">
+        <h2 className="font-condensed text-[clamp(1.5rem,4vw,2.4rem)] leading-none text-cream">
+          {def.label}
+        </h2>
+        <span
+          className="font-mono text-[0.6rem] font-bold tracking-[0.14em] uppercase"
+          style={{ color: def.accent }}
+        >
+          {items.length} {items.length === 1 ? "pieza" : "piezas"}
+        </span>
+        <p className="w-full text-[0.85rem] leading-relaxed text-cream/60 sm:w-auto sm:flex-1">
+          {def.tagline}
+        </p>
+      </div>
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
+        {items.map((p) => (
+          <ProductCard key={p.id} product={p} viewGenero={genero} />
+        ))}
+      </div>
+    </section>
   );
 }
 

@@ -85,6 +85,15 @@ export const IconMinus = (p: P) => (
   </svg>
 );
 
+/* Girar la prenda para ver la espalda. Flecha circular, no "ojo": lo que hace
+   es DAR LA VUELTA a la camisa, no abrir una vista previa. */
+export const IconGirar = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1" />
+    <path d="M20.5 4.2V9h-4.8" />
+  </svg>
+);
+
 export const IconLeaf = (p: P) => (
   <svg {...base(p)}>
     <path d="M11 20A7 7 0 0 1 4 13C4 7 9 4 20 4c0 11-3 16-9 16Z" />

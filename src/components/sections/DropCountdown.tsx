@@ -8,8 +8,11 @@ import { useToast } from "@/lib/toast";
 
 /* ── Config del próximo drop (EDITAR aquí la fecha y el nombre) ── */
 const DROP = {
-  name: "Drop 02 — Expedición",
-  date: "2026-09-04T20:00:00-05:00", // hora Colombia
+  name: "Drop 03 — Más Expedición",
+  // Hora Colombia. OJO: cuando la fecha pasa, el bloque cambia solo a "el drop
+  // ya salió" con un botón a la tienda y DESAPARECE la lista de espera — que
+  // es lo que estuvo pasando mes y medio con la fecha del 4-sep vencida.
+  date: "2026-11-15T20:00:00-05:00",
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

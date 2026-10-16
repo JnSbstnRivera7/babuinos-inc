@@ -38,6 +38,14 @@ const TRACKS: Track[] = [
   { src: "/music/mad-fellaz-crimentales.mp3", title: "Crimentales" },
   { src: "/music/mad-fellaz-no-diggedy.mp3", title: "No Diggedy" },
   { src: "/music/achepe-mad-fellaz-23-celcius.mp3", title: "23 Celcius · con Achepe" },
+  // Las tres del 15-oct-2026, que entran con la Colección Expedición.
+  { src: "/music/mad-fellaz-rap-fenomeno.mp3", title: "Rap Fenómeno" },
+  { src: "/music/mad-fellaz-spiritual-gz.mp3", title: "Spiritual GZ" },
+  {
+    src: "/music/mad-fellaz-super-sport.mp3",
+    title: "Super Sport",
+    credito: "M.A.D. Fellaz · Jam Block Jr · Keko Beats",
+  },
 ];
 
 /** El crédito que se muestra mientras suena `i`. */

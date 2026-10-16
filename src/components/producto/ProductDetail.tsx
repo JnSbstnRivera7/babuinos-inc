@@ -12,6 +12,7 @@ import {
   withStockAll,
   type Product,
   type StockMap,
+  relacionados,
 } from "@/lib/products";
 import { ProductCard } from "@/components/producto/ProductCard";
 import { BaboonMark } from "@/components/ui/BaboonMark";
@@ -117,10 +118,7 @@ export function ProductDetail({
 
   const safeActive = Math.min(active, gallery.length - 1);
   const activeShot = gallery[safeActive];
-  const related = withStockAll(
-    PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3),
-    stockMap,
-  );
+  const related = withStockAll(relacionados(product, 3), stockMap);
 
   const goPrev = useCallback(
     () => setActive((i) => (i - 1 + gallery.length) % gallery.length),

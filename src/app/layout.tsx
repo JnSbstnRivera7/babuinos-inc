@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://babuinos-inc.vercel.app"),
   title: "Babuinos Inc — Streetwear Cult",
   description:
-    "Del asfalto de Tábogo para el mundo. Streetwear oversize para los que no siguen la manada. Diseñado a 2.600 m. Colección Fundadores 2026.",
+    "Del asfalto de Tábogo para el mundo. Streetwear oversize para los que no siguen la manada. Diseñado a 2.600 m. Colección Expedición 2026.",
   applicationName: "Babuinos",
   appleWebApp: {
     capable: true,
