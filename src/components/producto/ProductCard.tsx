@@ -105,9 +105,8 @@ export function ProductCard({
         onClick={() => setVuelta((v) => !v)}
         aria-label={vuelta ? `Ver el frente de ${product.name}` : `Ver la espalda de ${product.name}`}
         aria-pressed={vuelta}
-        // Abajo a la izquierda: arriba choca con el sello de "Nuevo" y abajo a la
-        // derecha está la marca de género. Es la única esquina libre.
-        className="absolute bottom-2 left-2 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-[0_2px_10px_rgba(30,32,33,.18)] transition hover:scale-110 active:scale-95"
+        // Arriba a la izquierda, en el hueco que deja el sello al bajarse.
+        className="absolute left-2 top-2 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/90 shadow-[0_2px_10px_rgba(30,32,33,.18)] transition hover:scale-110 active:scale-95"
       >
         <IconGirar className={cn("h-[18px] w-[18px] text-ink transition-transform duration-500", vuelta && "rotate-180")} />
       </button>
@@ -127,8 +126,14 @@ export function ProductCard({
         <div
           className={cn(
             "absolute inset-0 transition-[opacity,filter,transform] duration-[450ms] ease-out",
-            "group-hover:scale-[1.03] group-hover:opacity-0 group-hover:blur-md",
-            "group-data-[vuelta=si]:scale-[1.03] group-data-[vuelta=si]:opacity-0 group-data-[vuelta=si]:blur-md",
+            // `filter` LITERAL y no las clases blur-*. Las de Tailwind v4 no
+            // ponen el filtro: ponen la variable --tw-blur y componen `filter`
+            // a partir de ella, y esa cadena no se dejaba pisar por la
+            // variante — la cara de atrás se quedaba borrosa con la regla
+            // correcta aplicada y todo. Con el valor directo no hay cadena que
+            // valga.
+            "group-hover:scale-[1.03] group-hover:opacity-0 group-hover:[filter:blur(12px)]",
+            "group-data-[vuelta=si]:scale-[1.03] group-data-[vuelta=si]:opacity-0 group-data-[vuelta=si]:[filter:blur(12px)]",
           )}
         >
           {/* En móvil manda la prenda; con línea elegida, el modelo. El `sizes`
@@ -158,8 +163,11 @@ export function ProductCard({
         </div>
         {badge && (
           <span
+            // ABAJO, no arriba: en la foto de modelo la cabeza está en el
+            // tercio superior y el sello le tapaba la cara. Abajo a la
+            // izquierda no hay nada — la marca de género va a la derecha.
             className={cn(
-              "font-mono absolute left-4 top-4 rounded-full px-3 py-1 text-[0.58rem] font-bold tracking-[0.12em] uppercase",
+              "font-mono absolute bottom-3 left-3 rounded-full px-3 py-1 text-[0.58rem] font-bold tracking-[0.12em] uppercase",
               badge.cls,
             )}
           >
@@ -186,9 +194,13 @@ export function ProductCard({
             // pointer-events-none: esta capa tapa el enlace, y sin esto, con la
             // card difuminada el dedo golpea el div y tocar la camisa no lleva
             // a ninguna parte.
-            "pointer-events-none absolute inset-0 scale-[1.03] opacity-0 blur-md transition-[opacity,filter,transform] duration-[450ms] ease-out",
-            "group-hover:scale-100 group-hover:opacity-100 group-hover:blur-0",
-            "group-data-[vuelta=si]:scale-100 group-data-[vuelta=si]:opacity-100 group-data-[vuelta=si]:blur-0",
+            // OJO con el nombre: en Tailwind v4 la clase que QUITA el
+            // desenfoque es `blur-none`. `blur-0` es de la v3 y no genera
+            // nada, así que la cara de atrás se quedaba borrosa para siempre
+            // — y no da error: la clase está en el HTML y no existe en el CSS.
+            "pointer-events-none absolute inset-0 scale-[1.03] opacity-0 [filter:blur(12px)] transition-[opacity,filter,transform] duration-[450ms] ease-out",
+            "group-hover:scale-100 group-hover:opacity-100 group-hover:[filter:none]",
+            "group-data-[vuelta=si]:scale-100 group-data-[vuelta=si]:opacity-100 group-data-[vuelta=si]:[filter:none]",
           )}
         >
           <Image
