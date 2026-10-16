@@ -48,6 +48,13 @@ const TRACKS: Track[] = [
   },
 ];
 
+/**
+ * Con qué tema arranca SOLO. El automático usa el más liviano (2.012 KB
+ * contra los 4.658 del más pesado): es la primera descarga que compite con
+ * las fotos, y antes salía de un `Math.random()` sobre los ocho.
+ */
+const ARRANQUE = Math.max(0, TRACKS.findIndex((t) => t.src.includes("rap-fenomeno")));
+
 /** El crédito que se muestra mientras suena `i`. */
 const creditoDe = (i: number) => TRACKS[i].credito ?? CREDITO;
 
@@ -93,24 +100,49 @@ export function MusicPlayer() {
 
   // Autostart en el primer gesto, en cualquier dispositivo (re-arma si el
   // navegador lo bloquea).
+  //
+  // PERO NO ANTES DE QUE LA PÁGINA TERMINE DE CARGAR. El audio no se puede
+  // retrasar por las buenas —los navegadores solo dejan llamar a play() dentro
+  // del gesto del usuario—, así que lo que se retrasa es ARMAR la escucha:
+  // mientras bajan las fotos no hay nada que pueda arrancar, y es el primer
+  // gesto DESPUÉS de la carga el que enciende la música. Quien la quiera antes
+  // tiene el botón, que no depende de esto.
+  // Medido en la tienda antes de este cambio: el audio era el 73% del peso de
+  // la página (2.793 KB de 3.849), peleándole el ancho de banda a las fotos.
   useEffect(() => {
     if (started) return;
-    const events = ["touchend", "pointerup", "click", "keydown", "pointerdown", "touchstart", "wheel", "scroll"];
-    let done = false;
-    const cleanup = () => events.forEach((e) => window.removeEventListener(e, onFirst));
-    function onFirst() {
-      if (done) return;
-      playTrack(Math.floor(Math.random() * TRACKS.length))
-        .then(() => {
-          done = true;
-          setStarted(true);
-          cleanup();
-        })
-        .catch(() => {});
+
+    let soltar = () => {};
+
+    const armar = () => {
+      const events = ["touchend", "pointerup", "click", "keydown", "pointerdown", "touchstart", "wheel", "scroll"];
+      let done = false;
+      const cleanup = () => events.forEach((e) => window.removeEventListener(e, onFirst));
+      function onFirst() {
+        if (done) return;
+        // Siempre el tema más liviano: antes era uno al azar de los ocho, y de
+        // esa moneda al aire dependía que la primera descarga pesara 2 MB o
+        // 4,7. La variedad sigue viva en el botón de siguiente.
+        playTrack(ARRANQUE)
+          .then(() => {
+            done = true;
+            setStarted(true);
+            cleanup();
+          })
+          .catch(() => {});
+      }
+      const opts = { passive: true } as AddEventListenerOptions;
+      events.forEach((e) => window.addEventListener(e, onFirst, opts));
+      soltar = cleanup;
+    };
+
+    if (document.readyState === "complete") {
+      armar();
+    } else {
+      window.addEventListener("load", armar, { once: true });
+      soltar = () => window.removeEventListener("load", armar);
     }
-    const opts = { passive: true } as AddEventListenerOptions;
-    events.forEach((e) => window.addEventListener(e, onFirst, opts));
-    return cleanup;
+    return () => soltar();
   }, [started, playTrack]);
 
   const toggle = () => {
