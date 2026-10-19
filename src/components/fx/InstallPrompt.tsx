@@ -76,11 +76,27 @@ export function InstallPrompt() {
   if (!show) return null;
 
   return (
+    /**
+     * ABAJO, encima de la fila de botones flotantes, y no arriba sobre el menú.
+     * Arriba al centro tapaba justo los controles del menú: en un celular de
+     * 375 px, el corazón de favoritos y el BOTÓN DEL CARRITO quedaban debajo
+     * (tocando en su centro se tocaba la píldora), y en escritorio Nosotros y
+     * Club. Medido el 19-oct en producción; le salía a todo Android/Chrome y a
+     * todo iPhone que no la hubiera cerrado en los últimos 14 días.
+     *
+     * La altura (6rem) deja libres los tres vecinos de abajo: la música y
+     * WhatsApp (48 px a 1rem del borde), el aviso de "a la mochila" (bottom-6)
+     * y el "Desliza para entrar" del home, que sube hasta ~85 px.
+     *
+     * Centrada con inset-x-0 + flex, NO con left-1/2: un `fixed` con left:50%
+     * solo tiene media pantalla de ancho para encogerse, y por eso el texto
+     * se partía en dos líneas y la píldora medía 59 px de alto.
+     */
     <div
-      className="fixed left-1/2 top-2 z-[95] -translate-x-1/2 max-w-[calc(100vw-1rem)]"
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
+      className="pointer-events-none fixed inset-x-0 z-[95] flex justify-center px-2"
+      style={{ bottom: "calc(6rem + env(safe-area-inset-bottom))" }}
     >
-      <div className="flex items-center gap-2 rounded-full border border-[var(--accent)]/45 bg-ink/85 py-1.5 pl-2 pr-1.5 shadow-[0_8px_30px_rgba(0,0,0,.45)] backdrop-blur-md">
+      <div className="pointer-events-auto flex max-w-full items-center gap-2 rounded-full border border-[var(--accent)]/45 bg-ink/85 py-1.5 pl-2 pr-1.5 shadow-[0_8px_30px_rgba(0,0,0,.45)] backdrop-blur-md">
         <BaboonMark color="var(--accent)" className="h-4 w-5 shrink-0" />
 
         {isIOS ? (
