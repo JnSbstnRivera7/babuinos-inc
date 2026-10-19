@@ -93,18 +93,33 @@ verificado en producción (no en local: ver la trampa del final).
 
 ### Lo siguiente en UI/UX, ya medido en producción
 
-El peso de la tienda hoy: **1.448 KB en 69 peticiones**.
+El peso de la tienda el 16-oct: **1.448 KB en 69 peticiones**, con el JS en 870 KB.
 
-| | peticiones | peso |
-|---|---|---|
-| **JavaScript** | 14 | **870 KB** |
-| CSS | 1 | 81 KB |
-| Imágenes | 17 | 146 KB |
-| Audio | 0 | **0 KB** |
-
-- [ ] **El JS es ahora lo más pesado** (870 KB, el 60 % de la página). Es el siguiente
-      sitio donde hay algo que ganar: mirar qué entra en el bundle de la tienda y qué
-      puede cargarse en diferido.
+- [x] **El JS de la tienda: 870 → 572 KB en celular (−34 %) y 920 → 572 en escritorio
+      (−38 %)** _(19-oct, en vivo)_, en dos pasos. El primero, 870 → 651: de los 870,
+      **219 no eran de la tienda**, eran prefetch. Next precarga toda ruta enlazada que
+      aparece en pantalla, y el logo del menú enlaza al home,
+      así que cada visita se bajaba el intro entero (framer-motion + lenis, 188 KB) más
+      favoritos (31 KB); en escritorio, también Nosotros y Club. Ahora esos enlaces precargan
+      **por intención** (mouse encima, foco o dedo que empieza a tocar) con
+      `components/ui/LinkPorIntencion.tsx`. Las fichas de producto siguen precargándose
+      como siempre: es el camino de la compra. El segundo, 651 → 572: **Next 16.2.9 →
+      16.4.2**, sin tocar código; deja de colarse al navegador código de servidor del
+      router. La ficha de producto, en total: 851 → 553 KB.
+- [x] **La píldora de "Instalar app" tapaba el carrito** _(19-oct)_. Iba fija arriba al
+      centro, por encima del menú: en un celular de 375 px el corazón de favoritos y el botón
+      del carrito quedaban debajo, y en escritorio Nosotros y Club. Le salía a todo
+      Android/Chrome y a todo iPhone que no la hubiera cerrado en 14 días. Ahora va abajo,
+      encima de la música y WhatsApp, y en una sola línea (salía en tres por un `left: 50%`).
+- [x] **Next 16.4.2 también cierra un aviso CRÍTICO de seguridad** que `npm audit` marcaba
+      en la 16.2.9 y que solo se corrige desde la 16.3.
+- **Lo que queda del JS ya casi no es nuestro** (nada que hacer, para no volver a buscar):
+  es React y el router de Next, que van en cualquier página. Lo propio es una parte chica
+  (el catálogo pesa 20 KB).
+- [ ] `npm audit` deja **dos avisos en librerías de la compilación** (source-map-js alto,
+      baseline-browser-mapping moderado), los dos con `npm audit fix`. Son de las
+      herramientas que arman el sitio, no del código que llega al navegador; correrlo en una
+      ronda aparte y volver a compilar.
 - [ ] **Un punto de toque por debajo del mínimo**: el enlace del título de la card mide
       130×41 y el mínimo accesible son 44. Es el único de toda la página.
 - [ ] Lo que YA está bien y no hay que tocar: 0 imágenes sin `alt`, jerarquía de títulos

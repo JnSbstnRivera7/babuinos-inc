@@ -13,7 +13,8 @@ Casi cada párrafo de la sección de trampas es un error que ya se pagó con hor
 ## 0. Estado, en una frase
 
 Tienda en vivo con **24 piezas** repartidas en tres tandas, catálogo en código,
-checkout por WhatsApp y panel `/admin`. Lo último desplegado: `b9b527c`.
+checkout por WhatsApp y panel `/admin`. Lo último desplegado: el 19-oct, con
+Next 16.4.2 y el JS de la tienda en 572 KB (`git log` dice el commit).
 
 - 🌐 https://babuinos-inc.vercel.app
 - 💻 https://github.com/JnSbstnRivera7/babuinos-inc
@@ -35,6 +36,7 @@ checkout por WhatsApp y panel `/admin`. Lo último desplegado: `b9b527c`.
 npm run dev          # desarrollo
 npm run build        # OJO: deja un .next que luego el dev sirve como si fuera suyo
 py scripts/ingest_camisas.py --dry-run    # ingesta de fotos, simulación
+node scripts/medir-pagina.mjs https://babuinos-inc.vercel.app/tienda   # cuánto se baja, prefetch incluido
 ```
 
 ---
@@ -108,6 +110,25 @@ Las dos veces la clase estaba en el HTML y no hacía nada.
   es de la v3 y **no existe**. Para filtros, valor literal:
   `[filter:blur(12px)]` / `[filter:none]`.
 
+### El prefetch de Next se baja rutas enteras que nadie abre
+
+Next precarga todo `<Link>` que aparece en pantalla, y no sólo los datos:
+también el JS de la ruta. El logo del menú enlaza a `/`, así que cada visita a
+la tienda se bajaba el intro con framer-motion (188 KB). De los 870 KB de JS
+que se midieron el 16-oct, 219 eran eso.
+
+**Regla:** en la navegación general (menú, footer, migas), los enlaces a rutas
+FUERA de la tienda van con `LinkPorIntencion`, que precarga solo con el mouse
+encima, el foco o el dedo. Los de `/tienda` y las fichas van con `Link` normal:
+es el camino de la compra. Un `Link` nuevo al home en el menú devuelve los
+188 KB sin que nada avise.
+
+**Y para medirlo, el panel del navegador de Claude no sirve.** Está oculto y no
+corre frames: `IntersectionObserver` nunca dispara, no hay prefetch y la
+tienda parece pesar 605 KB. Se mide con `scripts/medir-pagina.mjs`, que abre un
+Chrome sin ventana, y contra producción o `next start`: en `next dev` no hay
+prefetch.
+
 ### Dos sustos que no lo eran
 
 - **El género no filtra nada.** Las 24 piezas son `unisex`, así que Hombre/Mujer
@@ -144,7 +165,8 @@ En corto:
 1. **Cuatro decisiones de Juan**: Vinland Saga (la única que sigue nombrando la
    obra), la fecha del próximo drop, si refrescamos las fotos de Fundadores, y
    la colaboración con M.A.D. Fellaz.
-2. **El JS es ahora el 60 % del peso** de la tienda (870 KB de 1.448). Es el
-   siguiente sitio donde hay algo que ganar.
+2. **El JS bajó de 870 a 572 KB** (19-oct): la precarga por intención (ver la
+   trampa del prefetch) y Next 16.2.9 → 16.4.2. Lo que queda es casi todo de
+   React y Next; lo nuestro es una parte chica.
 3. Lo de siempre: dominio propio, analítica, imagen de compartir por pieza,
    páginas de envíos y cambios.
