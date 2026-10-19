@@ -228,7 +228,9 @@ export function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col p-3 sm:p-5">
-        <Link href={href} className="block">
+        {/* min-h-11: con el nombre en una línea el enlace medía 41 px, el único
+            punto de toque de la tienda bajo los 44. */}
+        <Link href={href} className="block min-h-11">
           <div className="font-mono text-[0.55rem] font-bold tracking-[0.14em] text-teal uppercase sm:text-[0.6rem] sm:tracking-[0.16em]">
             {product.tag}
           </div>
