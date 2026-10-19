@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
+import { LinkPorIntencion } from "@/components/ui/LinkPorIntencion";
 import { SocialButtons } from "@/components/ui/SocialButtons";
 import { IconTruck, IconRefresh, IconCheck } from "@/components/ui/Icons";
 import { BRAND } from "@/lib/brand";
@@ -67,16 +68,21 @@ export function Footer() {
               {c.title}
             </h4>
             <ul className="space-y-1">
-              {c.links.map((l) => (
-                <li key={l.label}>
-                  <Link
-                    href={l.href}
-                    className="-mx-2 flex min-h-11 items-center rounded px-2 text-[0.85rem] text-cream/75 transition hover:text-cream"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
+              {c.links.map((l) => {
+                // La tienda se precarga como siempre: es el camino de la compra.
+                // El resto solo cuando hay intención (ver LinkPorIntencion).
+                const Enlace = l.href.startsWith("/tienda") ? Link : LinkPorIntencion;
+                return (
+                  <li key={l.label}>
+                    <Enlace
+                      href={l.href}
+                      className="-mx-2 flex min-h-11 items-center rounded px-2 text-[0.85rem] text-cream/75 transition hover:text-cream"
+                    >
+                      {l.label}
+                    </Enlace>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
@@ -86,12 +92,12 @@ export function Footer() {
           © {BRAND.est} {BRAND.nombre}. — {BRAND.ciudadReal}, {BRAND.pais}. Todos los derechos
           reservados.
         </p>
-        <Link
+        <LinkPorIntencion
           href="/privacidad"
           className="font-mono inline-flex min-h-11 items-center text-[0.68rem] tracking-[0.06em] text-cream/55 underline-offset-2 transition hover:text-cream hover:underline"
         >
           Tratamiento de datos
-        </Link>
+        </LinkPorIntencion>
       </div>
     </footer>
   );

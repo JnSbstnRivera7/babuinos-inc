@@ -24,6 +24,7 @@ import { buildSizeMessage, buildWaLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { IconWhatsApp, IconPlus, IconLeaf, IconHeart } from "@/components/ui/Icons";
 import { GeneroMark } from "@/components/ui/GeneroMark";
+import { LinkPorIntencion } from "@/components/ui/LinkPorIntencion";
 
 /**
  * Medidas de REFERENCIA para tee oversize de mercado (algodón pesado, hombro
@@ -180,7 +181,7 @@ export function ProductDetail({
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-8 md:px-8 md:pt-12">
       {/* breadcrumb */}
       <nav className="font-mono mb-8 flex items-center gap-2 text-[0.68rem] tracking-[0.1em] text-cream/70 uppercase">
-        <Link href="/" className="inline-flex min-h-11 items-center hover:text-cream">Inicio</Link>
+        <LinkPorIntencion href="/" className="inline-flex min-h-11 items-center hover:text-cream">Inicio</LinkPorIntencion>
         <span>/</span>
         <Link href="/tienda" className="inline-flex min-h-11 items-center hover:text-cream">Tienda</Link>
         <span>/</span>

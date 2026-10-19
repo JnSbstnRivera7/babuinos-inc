@@ -9,6 +9,7 @@ import { SocialButtons } from "@/components/ui/SocialButtons";
 import { BaboonMark } from "@/components/ui/BaboonMark";
 import { IconBag, IconMenu, IconClose, IconChevronDown, IconHeart } from "@/components/ui/Icons";
 import { GeneroMark } from "@/components/ui/GeneroMark";
+import { LinkPorIntencion } from "@/components/ui/LinkPorIntencion";
 import { useCart } from "@/lib/store";
 import { useWishlist } from "@/lib/wishlist";
 import { useTheme, COLORWAYS } from "@/lib/theme";
@@ -112,9 +113,11 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 md:px-8">
-        <Link href="/" aria-label="Babuinos Inc — inicio" className="flex min-h-11 items-center">
+        {/* Por intención y no al verse: el logo está en pantalla en todas las
+            páginas, y precargar el home es bajarse el intro entero (188 KB). */}
+        <LinkPorIntencion href="/" aria-label="Babuinos Inc — inicio" className="flex min-h-11 items-center">
           <Logo tone="cream" priority className="h-9 w-auto md:h-10" />
-        </Link>
+        </LinkPorIntencion>
 
         {/* desktop nav */}
         <ul className="hidden items-center gap-7 md:flex">
@@ -174,12 +177,12 @@ export function Navbar() {
           </li>
           {LINKS.map((l) => (
             <li key={l.href}>
-              <Link
+              <LinkPorIntencion
                 href={l.href}
                 className="font-mono text-[0.72rem] font-bold tracking-[0.12em] text-cream/80 uppercase transition hover:text-[var(--accent)]"
               >
                 {l.label}
-              </Link>
+              </LinkPorIntencion>
             </li>
           ))}
         </ul>
@@ -223,7 +226,7 @@ export function Navbar() {
             />
           </a>
 
-          <Link
+          <LinkPorIntencion
             href="/favoritos"
             aria-label="Favoritos"
             className="relative grid h-11 w-11 place-items-center rounded-md text-cream/80 transition hover:text-cream"
@@ -234,7 +237,7 @@ export function Navbar() {
                 {wishCount}
               </span>
             )}
-          </Link>
+          </LinkPorIntencion>
 
           <button
             onClick={open}
