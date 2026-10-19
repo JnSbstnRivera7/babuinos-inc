@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/layout/Shell";
 import { ProductDetail } from "@/components/producto/ProductDetail";
-import { PRODUCTS, getProduct, inStock, withStock } from "@/lib/products";
+import { PRODUCTS, formatCOP, getProduct, inStock, withStock } from "@/lib/products";
 import { getStockMap } from "@/lib/stock";
 
 export function generateStaticParams() {
@@ -24,9 +24,34 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) return { title: "Pieza no encontrada — Babuinos Inc" };
+  const titulo = `${product.name} — Babuinos Inc`;
+  /**
+   * Lo que se lee bajo la foto al compartir la ficha. Sin esto la ficha heredaba
+   * el openGraph del layout: título de la marca, descripción de la marca y
+   * enlace al HOME, así que en WhatsApp ninguna camisa se veía distinta de
+   * otra. Va la corta (`desc`) con el precio adelante, que es lo primero que se
+   * pregunta. La imagen la pone `opengraph-image.tsx` de esta misma carpeta.
+   */
+  const bajada =
+    typeof product.price === "number" ? `${formatCOP(product.price)} · ${product.desc}` : product.desc;
   return {
-    title: `${product.name} — Babuinos Inc`,
+    title: titulo,
     description: product.descLong ?? product.desc,
+    openGraph: {
+      title: titulo,
+      description: bajada,
+      url: `/producto/${product.slug}`,
+      siteName: "Babuinos Inc",
+      locale: "es_CO",
+      type: "website",
+    },
+    // Sin `images`: X usa og:image cuando no hay twitter:image, y así no
+    // hereda la og.png genérica del layout.
+    twitter: {
+      card: "summary_large_image",
+      title: titulo,
+      description: bajada,
+    },
   };
 }
 
