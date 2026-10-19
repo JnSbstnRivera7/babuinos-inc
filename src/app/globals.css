@@ -64,9 +64,16 @@ body {
   overflow-x: hidden;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* EN @layer base, igual que `img` más abajo. Suelta, le ganaba a TODAS las
+   utilidades de color: ningún enlace del sitio pudo tener color propio ni
+   hover de color. El caso caro fue "Elegir talla", el botón de la card en
+   celular: decía `text-ink`, heredaba el crema del body y salía crema sobre
+   blanco, invisible, en las 24 piezas (visto el 19-oct). */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 button {
   font-family: inherit;
