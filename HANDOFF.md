@@ -133,6 +133,23 @@ tienda parece pesar 605 KB. Se mide con `scripts/medir-pagina.mjs`, que abre un
 Chrome sin ventana, y contra producción o `next start`: en `next dev` no hay
 prefetch.
 
+### La imagen de compartir de cada ficha (`opengraph-image.tsx`)
+
+Se arma sola desde `products.ts` y la foto de prenda de `/brand/products`; una
+pieza nueva no pide nada. Fuentes en `assets/fonts` (TTF, ver su README). Dos
+trampas de `next/og`, las dos SIN error:
+
+- **Reconoce los WebP pero no los dibuja**: sale el hueco vacío. Todo pasa por
+  `sharp` a JPEG antes de dibujar, y el resultado final también sale en JPEG
+  (el PNG pesaba ~850 KB y WhatsApp se salta las vistas previas pesadas).
+- **Una ruta de archivo armada con variables mete TODO `public` en la función**
+  (música y videos incluidos). La carpeta va escrita literal y solo el nombre
+  del archivo es variable: `join(raiz, "public/brand/products", basename(...))`.
+
+Para mirarla: `/producto/<slug>/opengraph-image/ficha`. WhatsApp guarda la vista
+previa de cada enlace mucho tiempo: un enlace que ya se pasó por un chat puede
+seguir mostrando la imagen vieja.
+
 ### Dos sustos que no lo eran
 
 - **El género no filtra nada.** Las 24 piezas son `unisex`, así que Hombre/Mujer

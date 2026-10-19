@@ -179,9 +179,12 @@ utilidades `blur-*` componen `filter` por variable y no se dejan pisar por varia
 - [ ] **Saber cuánta gente entra.** No hay analítica: no sabemos visitas, ni qué pieza se mira más,
       ni de dónde llega la gente. Vercel Analytics es un interruptor; Plausible o Umami si prefieres
       algo independiente.
-- [ ] **Imagen de compartir POR PIEZA** (`opengraph-image` en la ruta de producto). Hoy compartir
-      cualquier ficha por WhatsApp muestra la misma imagen genérica de la marca; con esto se vería la
-      camisa. Es de las cosas más baratas que suben la conversión.
+- [x] **Imagen de compartir POR PIEZA** _(19-oct)_: cada ficha compartida por WhatsApp, Instagram
+      o X muestra su camisa (la espalda en las estampadas, el frente en las básicas), con el nombre,
+      la colección y el precio sobre la selva de cemento. También cambian el título, la descripción
+      (con el precio adelante) y el enlace, que antes eran los de la marca y apuntaban al home.
+      `src/app/producto/[slug]/opengraph-image.tsx`; JPEG de ~75 KB. Una pieza nueva no pide nada:
+      la imagen sale sola de `products.ts` y sus fotos.
 - [ ] **Páginas de Envíos / Cambios / FAQ.** Se sacaron del footer para no prometer en falso; cuando
       me des tiempos y condiciones reales las escribo y vuelven a enlazarse.
 - [ ] **Sacos / Medias / Accesorios**: lanzarlas o sacarlas del menú (3 de 4 categorías del nav están
