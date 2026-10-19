@@ -9,7 +9,12 @@
 - 🎮 **Easter egg:** https://babuinos-the-video-game.vercel.app — _Babuinos The Video Game_, repo aparte
   ([BABUINOS-THE-VIDEO-GAME](https://github.com/JnSbstnRivera7/BABUINOS-THE-VIDEO-GAME), privado)
 
-**Estado:** 17 piezas en producción. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
+> **Para retomar en un chat nuevo: entra por [HANDOFF.md](HANDOFF.md).**
+> Estado, cómo se corre, el modelo del catálogo, las trampas ya pagadas y lo que falta.
+> Y antes de pushear, [AGENTS.md](AGENTS.md): **esto es personal, no de la empresa.**
+
+**Estado:** 24 piezas en producción, en tres colecciones —Expedición (8), Básicas (6)
+y Fundadores (10, en el archivo)—. Qué falta → **[PENDIENTES.md](PENDIENTES.md)** ·
 plan por fases → **[ROADMAP.md](ROADMAP.md)** · hallazgos de UI/UX medidos →
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
