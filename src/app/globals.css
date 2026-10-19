@@ -74,10 +74,13 @@ body {
     color: inherit;
     text-decoration: none;
   }
-}
-button {
-  font-family: inherit;
-  cursor: pointer;
+  /* También en la capa: suelta, la manito le ganaba a `cursor-not-allowed`
+     (tallas agotadas, botones deshabilitados) y a `cursor-zoom-in` (la
+     galería de la ficha). */
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
 }
 /* Taps fiables y sin retardo en móvil (quita el delay de 300ms y el doble-tap-zoom) */
 a,
@@ -91,11 +94,14 @@ label {
 
 /* Foco visible en TODA la app. No había ninguna regla, así que navegar con
    teclado era a ciegas. :focus-visible solo se dispara con teclado, nunca al
-   hacer clic con el mouse, así que no ensucia el diseño. */
+   hacer clic con el mouse, así que no ensucia el diseño.
+   Esta SÍ va suelta, a propósito: es la red de seguridad del foco, y ninguna
+   utilidad (`focus:outline-none`) debe poder apagarla. Lo que no lleva es
+   `border-radius`: suelto, le ganaba a los `rounded-*` y cada píldora se
+   cuadraba al enfocarla con teclado. El contorno ya sigue la curva sola. */
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
-  border-radius: 4px;
 }
 /* Sobre superficies claras (tarjetas, carrito, modales) el dorado se pierde. */
 .bg-cream :focus-visible,
