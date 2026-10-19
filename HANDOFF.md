@@ -53,7 +53,7 @@ QUÉ es la prenda (`basica` / `estampada`) y la colección dice CUÁNDO salió.
 | --- | --- | --- |
 | **Expedición** (16-oct-2026) | 8 | fija en la tienda |
 | **Básicas** | 6 | fija en la tienda |
-| **Fundadores** | 10 | detrás del botón de archivo, con rebobinado VHS |
+| **Fundadores** | 10 | al final, detrás de la cinta del archivo (tarjeta con fotos y rebobinado VHS); arriba hay un atajo, y `/tienda#archivo` llega con ella abierta |
 
 **La colección NO se escribe pieza por pieza.** La pone `PRODUCTS` según el
 arreglo del que venga (`conColeccion`), para que no haya forma de que una
@@ -104,6 +104,10 @@ Las dos veces la clase estaba en el HTML y no hacía nada.
   `sm:hidden` **nunca pudieron ocultar una imagen** en todo el sitio. Ahora está
   en `@layer base`. Si añades reglas de elemento al CSS global, mételas en una
   capa o romperás utilidades sin enterarte.
+  **Pasó dos veces.** El 19-oct apareció la gemela: un `a { color: inherit }`
+  suelto que anulaba todo color de enlace, y el "Elegir talla" de las cards
+  salía crema sobre blanco, invisible, en celular. También está ya en
+  `@layer base`.
 - **Las utilidades `blur-*` no ponen `filter`**: ponen la variable `--tw-blur` y
   componen `filter` a partir de ella, y esa cadena no se deja pisar por una
   variante aunque la regla esté después y el selector coincida. Además `blur-0`

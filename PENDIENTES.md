@@ -113,6 +113,17 @@ El peso de la tienda el 16-oct: **1.448 KB en 69 peticiones**, con el JS en 870 
       encima de la música y WhatsApp, y en una sola línea (salía en tres por un `left: 50%`).
 - [x] **Next 16.4.2 también cierra un aviso CRÍTICO de seguridad** que `npm audit` marcaba
       en la 16.2.9 y que solo se corrige desde la 16.3.
+- [x] **El archivo (Fundadores) estaba escondido** _(19-oct, lo notó un amigo de Juan)_: era
+      una píldora delgada al final de la página, después de 14 camisas, y en escritorio casi
+      no se veía. Ahora es una **cinta**: una tarjeta del ancho de la rejilla con el nombre,
+      las piezas y las espaldas de cinco de ellas, apagadas como cinta vieja; toda la
+      tarjeta abre el archivo con el rebobinado de siempre. Arriba, junto a "La manada", un
+      atajo **"◀◀ Archivo 10"** baja hasta ella y la abre, y `/tienda#archivo` llega con
+      ella abierta (sirve para pasarla por WhatsApp).
+- [x] **"Elegir talla" era invisible en celular** _(19-oct)_: crema sobre blanco en las 24
+      cards, por un `a { color: inherit }` suelto en `globals.css` que anulaba todo color de
+      enlace (ver la trampa de Tailwind en HANDOFF). De paso, los enlaces del menú y del
+      footer recuperan el tono y el hover que tenían escritos.
 - **Lo que queda del JS ya casi no es nuestro** (nada que hacer, para no volver a buscar):
   es React y el router de Next, que van en cualquier página. Lo propio es una parte chica
   (el catálogo pesa 20 KB).
