@@ -108,7 +108,7 @@ export const COLECCIONES: ColeccionDef[] = [
   {
     key: "expedicion",
     label: "Expedición",
-    tagline: "La tanda nueva. Siete piezas, estampado a toda la espalda.",
+    tagline: "La tanda nueva. Ocho piezas, estampado a toda la espalda.",
     anio: 2026,
     vigente: true,
     accent: "#cda214",
