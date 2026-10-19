@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePresence } from "@/lib/presence";
 import { ProductCard } from "@/components/producto/ProductCard";
-import { ArchivoRetro } from "@/components/tienda/ArchivoRetro";
+import { ArchivoRetro, menosMovimiento, type ArchivoMando } from "@/components/tienda/ArchivoRetro";
 import { GeneroMark } from "@/components/ui/GeneroMark";
 import { IconFilter, IconClose } from "@/components/ui/Icons";
 import {
@@ -60,6 +60,28 @@ export function TiendaClient({
     [catalogo, genero, category, color],
   );
 
+  // El archivo (Fundadores) con los filtros de ahora: alimenta la tarjeta de
+  // abajo y el atajo de arriba, que solo aparecen si queda alguna pieza.
+  const fundadores = useMemo(() => list.filter((p) => p.coleccion === "fundadores"), [list]);
+  const archivo = useRef<ArchivoMando>(null);
+  const defArchivo = COLECCIONES.find((c) => c.key === "fundadores");
+
+  /**
+   * El atajo al archivo. La colección vieja vive al final, detrás de la cinta,
+   * a propósito (lo nuevo no entierra lo viejo, pero tampoco al revés); el
+   * problema era que desde arriba nadie sabía que existía. Este enlace lo dice
+   * y lleva hasta allá, con la cinta ya rebobinando.
+   * El #archivo queda en la URL para poder compartirla abierta.
+   */
+  const irAlArchivo = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.history.replaceState(null, "", "#archivo");
+    document
+      .getElementById("archivo")
+      ?.scrollIntoView({ behavior: menosMovimiento() ? "auto" : "smooth", block: "start" });
+    archivo.current?.abrir();
+  };
+
   // El tipo ya se ve en la barra, así que el contador del panel solo cuenta
   // lo que sigue adentro (color).
   const activeCount = color !== "all" ? 1 : 0;
@@ -76,7 +98,9 @@ export function TiendaClient({
   }, [open]);
 
   // Al entrar a la tienda (o cambiar de género vía URL → remonta por key) arranca desde arriba.
+  // Menos cuando se llega a /tienda#archivo: ahí el navegador ya bajó hasta la cinta.
   useEffect(() => {
+    if (window.location.hash === "#archivo") return;
     scrollToTop(false);
   }, []);
 
@@ -100,9 +124,25 @@ export function TiendaClient({
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-10 md:px-8 md:pt-16">
       <p className="eyebrow mb-2 text-[var(--accent)]">Tienda · Expedición 2026</p>
-      <h1 className="font-condensed text-[clamp(2.2rem,6vw,4rem)] text-cream">
-        La <span className="shine-gold">manada</span>
-      </h1>
+      <div className="flex items-end justify-between gap-3">
+        <h1 className="font-condensed text-[clamp(2.2rem,6vw,4rem)] text-cream">
+          La <span className="shine-gold">manada</span>
+        </h1>
+        {fundadores.length > 0 && (
+          <a
+            href="#archivo"
+            onClick={irAlArchivo}
+            aria-label={`Ir al archivo: colección Fundadores, ${fundadores.length} ${fundadores.length === 1 ? "pieza" : "piezas"}`}
+            className="font-mono mb-2 inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-cream/25 bg-ink/50 px-4 text-[0.64rem] font-bold tracking-[0.1em] text-cream/85 uppercase transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            <span aria-hidden className="text-[0.8rem] leading-none">
+              ◀◀
+            </span>
+            Archivo
+            <span className="tabular-nums text-cream/50">{fundadores.length}</span>
+          </a>
+        )}
+      </div>
 
       {/**
        * Básicas vs Estampadas: la decisión principal del cliente, así que va a
@@ -288,16 +328,24 @@ export function TiendaClient({
             />
           ))}
 
-          {list.some((p) => p.coleccion === "fundadores") && (
+          {fundadores.length > 0 && defArchivo && (
             <ArchivoRetro
+              ref={archivo}
+              id="archivo"
+              titulo={defArchivo.label}
+              bajada={defArchivo.tagline}
+              cuantas={fundadores.length}
+              portadas={fundadores.map((p) => ({ src: p.images[0] ?? p.image, alt: p.name }))}
               etiqueta="Rebobinar al archivo"
               etiquetaAbierto="Cerrar el archivo"
-              anio={2026}
+              anio={defArchivo.anio}
             >
+              {/* Sin cabecera: la tarjeta del archivo ya dice nombre, piezas y bajada. */}
               <SeccionColeccion
                 coleccion="fundadores"
-                items={list.filter((p) => p.coleccion === "fundadores")}
+                items={fundadores}
                 genero={genero}
+                conCabecera={false}
               />
             </ArchivoRetro>
           )}
@@ -354,10 +402,13 @@ function SeccionColeccion({
   coleccion,
   items,
   genero,
+  conCabecera = true,
 }: {
   coleccion: Coleccion;
   items: Product[];
   genero: Genero | "all";
+  /** Sin cabecera cuando otra pieza ya la dice (la tarjeta del archivo). */
+  conCabecera?: boolean;
 }) {
   if (!items.length) return null;
   const def = COLECCIONES.find((c) => c.key === coleccion);
@@ -365,21 +416,23 @@ function SeccionColeccion({
 
   return (
     <section className="mt-14 first:mt-0">
-      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-cream/10 pb-4">
-        <h2 className="font-condensed text-[clamp(1.5rem,4vw,2.4rem)] leading-none text-cream">
-          {def.label}
-        </h2>
-        <span
-          className="font-mono text-[0.6rem] font-bold tracking-[0.14em] uppercase"
-          style={{ color: def.accent }}
-        >
-          {items.length} {items.length === 1 ? "pieza" : "piezas"}
-        </span>
-        <p className="w-full text-[0.85rem] leading-relaxed text-cream/60 sm:w-auto sm:flex-1">
-          {def.tagline}
-        </p>
-      </div>
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
+      {conCabecera && (
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-cream/10 pb-4">
+          <h2 className="font-condensed text-[clamp(1.5rem,4vw,2.4rem)] leading-none text-cream">
+            {def.label}
+          </h2>
+          <span
+            className="font-mono text-[0.6rem] font-bold tracking-[0.14em] uppercase"
+            style={{ color: def.accent }}
+          >
+            {items.length} {items.length === 1 ? "pieza" : "piezas"}
+          </span>
+          <p className="w-full text-[0.85rem] leading-relaxed text-cream/60 sm:w-auto sm:flex-1">
+            {def.tagline}
+          </p>
+        </div>
+      )}
+      <div className={cn("grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3", conCabecera && "mt-6")}>
         {items.map((p) => (
           <ProductCard key={p.id} product={p} viewGenero={genero} />
         ))}
