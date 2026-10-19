@@ -3,7 +3,8 @@
 Checklist accionable. Visión por fases en **[ROADMAP.md](ROADMAP.md)** · hallazgos medidos en
 **[AUDITORIA-UX.md](AUDITORIA-UX.md)**.
 
-Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del catálogo.
+Estado: **en vivo** en https://babuinos-inc.vercel.app con las 24 piezas del catálogo (6 básicas,
+8 de Expedición y 10 de Fundadores).
 
 > **Continuar en otro chat:** credenciales (GitHub PAT, Vercel token, Supabase key, admin, WhatsApp)
 > en **`CREDENCIALES.local.md`** (local, no se sube) y en `.env.local`. Para pushear ojo con la cuenta:
@@ -14,7 +15,7 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
-- [ ] **STOCK REAL de las 17 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
+- [ ] **STOCK REAL de las 24 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
       camisa y el diseño elegido, así que **no hay stock real que cargar** — el tallaje provisional se
       queda tal cual. Retomar cuando haya inventario físico.)_ Cuando llegue ese momento, el único paso
       es **escribir los números** en `/admin` → Inventario (sin código ni SQL: la tabla
@@ -64,15 +65,20 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 17 piezas del cat
       ver en un teléfono el diálogo de instalar de Android y el "Añadir a inicio" de iOS, y que
       abra en modo avión.)_
 
-- [ ] **La Hueso Neblina no está en el juego** — el juego reparte 4 barrios × 4 camisas = 16, y
-      el catálogo ya tiene 17. Por ahora queda fuera (no se pierde nada: las otras 16 siguen
-      completables al 100%). Para meterla hay que decidir: o un quinto punto de recogida en
-      Cerros Orientales —hay que ubicarlo y validarlo con `npm run revisar`— o sacar otra pieza.
+- [ ] **El juego quedó con la colección vieja** _(visto el 19-oct)_: sigue con las 16 camisas del
+      22-sep. No tiene ninguna de las 8 de **Expedición** ni la Hueso Neblina, y todavía incluye
+      **Green Afro Tiki, que ya no está en la tienda**. El juego reparte 4 barrios × 4 = 16 y la
+      tienda ya tiene 24, así que hay que **decidir cuáles 16 van** (o sumar puntos de recogida,
+      validándolos con `npm run revisar`). Ojo: `npm run camisas` en el repo del juego mete
+      TODAS las piezas menos las de `EXCLUIR` (en `tools/extraer_camisas.py`): hoy serían 23
+      en un juego con lugar para 16, y la colección quedaría imposible de completar. No
+      correrlo sin decidir antes cuáles 8 salen.
 
-## 🟡 Para retomar — 16-oct, fin del día
+## 🟡 Para retomar — 19-oct
 
-**Todo lo hecho está EN VIVO** en https://babuinos-inc.vercel.app · commit `105b4c0`,
-verificado en producción (no en local: ver la trampa del final).
+**Todo lo hecho está EN VIVO** en https://babuinos-inc.vercel.app (el último commit
+desplegado lo dice `git log`), verificado en producción (no en local: ver la trampa del
+final).
 
 ### Decisiones tuyas, nada que programar hasta que respondas
 
@@ -127,12 +133,17 @@ El peso de la tienda el 16-oct: **1.448 KB en 69 peticiones**, con el JS en 870 
 - **Lo que queda del JS ya casi no es nuestro** (nada que hacer, para no volver a buscar):
   es React y el router de Next, que van en cualquier página. Lo propio es una parte chica
   (el catálogo pesa 20 KB).
-- [ ] `npm audit` deja **dos avisos en librerías de la compilación** (source-map-js alto,
-      baseline-browser-mapping moderado), los dos con `npm audit fix`. Son de las
-      herramientas que arman el sitio, no del código que llega al navegador; correrlo en una
-      ronda aparte y volver a compilar.
-- [ ] **Un punto de toque por debajo del mínimo**: el enlace del título de la card mide
-      130×41 y el mínimo accesible son 44. Es el único de toda la página.
+- [x] **`npm audit`: 0 avisos en las dependencias de producción** _(19-oct)_, con
+      `npm audit fix` (source-map-js y baseline-browser-mapping, más subidas menores de
+      Tailwind 4.3.3 y postcss). Quedan 5 en la cadena de ESLint, que es solo de desarrollo y
+      pide `--force` rompiendo versiones: no llegan al sitio.
+- [x] **El último punto de toque bajo el mínimo** _(19-oct)_: el enlace del nombre de la card
+      medía 41 px de alto; ahora tiene `min-h-11` (44).
+- [x] **Dos reglas sueltas más del CSS global** _(19-oct)_: `button { cursor: pointer }` le
+      ganaba a `cursor-not-allowed` y `cursor-zoom-in` (ahora en `@layer base`), y
+      `:focus-visible` traía un `border-radius: 4px` que cuadraba las píldoras al enfocarlas
+      con teclado (quitado). `:focus-visible` sigue suelta a propósito: es la red de
+      seguridad del foco y ningún `focus:outline-none` debe poder apagarla.
 - [ ] Lo que YA está bien y no hay que tocar: 0 imágenes sin `alt`, jerarquía de títulos
       sin saltos (H1→H2→H3), sin desbordes horizontales, y las 56 imágenes de las cards
       cargan en diferido.
@@ -156,7 +167,7 @@ utilidades `blur-*` componen `filter` por variable y no se dejan pisar por varia
 
 ## 🟡 De la Colección Expedición (16-oct)
 
-- [ ] **Licencias.** Cuatro de las siete citan obra ajena. Tres ya NO la nombran en ningún sitio
+- [ ] **Licencias.** Cuatro de las ocho citan obra ajena. Tres ya NO la nombran en ningún sitio
       —ni título, ni URL, ni nombre de archivo— para descartar el problema mientras tanto:
       **Our Lady Doom**, **Survival of the Fittest** (frase de uso común, no marca) y **Vuelo
       Nocturno**. Queda **Vinland Saga**, que sí se llama como la obra porque la prenda lo lleva
@@ -299,7 +310,7 @@ utilidades `blur-*` componen `filter` por variable y no se dejan pisar por varia
   Después, verificar que el deploy corresponda al commit (no basta con que diga READY):
   `GET https://api.vercel.com/v6/deployments?projectId=babuinos-inc&teamId=…&limit=1` → comparar
   `meta.githubCommitSha`.
-- **PWA/caché:** service worker `babuinos-v12` (`public/sw.js`, network-first). Al desplegar, en el celular **cerrar y
+- **PWA/caché:** service worker `babuinos-v16` (`public/sw.js`, network-first). Al desplegar, en el celular **cerrar y
   reabrir** la app para bajar la versión nueva.
 - **Preview headless:** el home cuelga el navegador de pruebas por las animaciones perpetuas;
   verificar por navegación/DOM, no por screenshot.
@@ -307,4 +318,4 @@ utilidades `blur-*` componen `filter` por variable y no se dejan pisar por varia
   por nombre** (~1.25 = grilla de modelos 3×2, ~1.78 = prenda sola) y el lado frente/espalda va en la
   tabla `ESPALDA_IZQ` de `scripts/ingest_camisas.py` porque no se puede deducir.
 
-_Última actualización: 2026-08-10._
+_Última actualización: 2026-10-19._
