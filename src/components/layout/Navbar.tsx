@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePresence } from "@/lib/presence";
@@ -103,6 +103,30 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /**
+   * El desplegable de Tienda abre y cierra con CLIC (pedido de Juan, 29-oct).
+   * Antes abría al pasar el mouse y cerraba al salir del <li>, pero entre la
+   * palabra "Tienda" y la caja quedaba un hueco que no era de nadie: al bajar
+   * el mouse hacia la caja, el menú se escondía. Ahora se cierra al tocar
+   * fuera, con Esc o al elegir algo.
+   */
+  const tiendaRef = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    if (!shop) return;
+    const alTocarFuera = (e: PointerEvent) => {
+      if (!tiendaRef.current?.contains(e.target as Node)) setShop(false);
+    };
+    const alEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShop(false);
+    };
+    document.addEventListener("pointerdown", alTocarFuera);
+    document.addEventListener("keydown", alEsc);
+    return () => {
+      document.removeEventListener("pointerdown", alTocarFuera);
+      document.removeEventListener("keydown", alEsc);
+    };
+  }, [shop]);
+
   return (
     <nav
       className={cn(
@@ -121,21 +145,36 @@ export function Navbar() {
 
         {/* desktop nav */}
         <ul className="hidden items-center gap-7 md:flex">
-          <li className="relative" onMouseLeave={() => setShop(false)}>
-            <Link
-              href="/tienda"
-              onClick={() => setShop(false)}
-              onMouseEnter={() => setShop(true)}
-              className="font-mono flex items-center gap-1 text-[0.72rem] font-bold tracking-[0.12em] text-cream/80 uppercase transition hover:text-[var(--accent)]"
+          <li ref={tiendaRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setShop((s) => !s)}
+              aria-expanded={shop}
+              aria-controls="menu-tienda"
+              className={cn(
+                "font-mono flex min-h-11 items-center gap-1 text-[0.72rem] font-bold tracking-[0.12em] uppercase transition hover:text-[var(--accent)]",
+                shop ? "text-[var(--accent)]" : "text-cream/80",
+              )}
             >
               Tienda <IconChevronDown className={cn("h-3.5 w-3.5 transition", shop && "rotate-180")} />
-            </Link>
+            </button>
             {shopPresencia.render && (
               <div
+                id="menu-tienda"
                 data-abierto={shopPresencia.abierto}
-                className={cn(POPOVER, "absolute left-0 top-9 w-60 p-1.5")}
+                className={cn(POPOVER, "absolute left-0 top-12 w-60 p-1.5")}
               >
-                  <p className="font-mono px-3 pb-1 pt-2 text-[0.5rem] tracking-[0.18em] text-cream/40 uppercase">
+                  {/* "Tienda" ya no lleva a la tienda (abre esto), así que el
+                      primer renglón la deja a un clic. */}
+                  <Link
+                    href="/tienda"
+                    onClick={() => setShop(false)}
+                    className="flex items-center justify-between rounded-lg px-3 py-2.5 text-[0.82rem] font-bold text-[var(--accent)] transition hover:bg-cream/10"
+                  >
+                    Ver toda la tienda <span aria-hidden>→</span>
+                  </Link>
+                  <div className="my-1.5 border-t border-cream/10" />
+                  <p className="font-mono px-3 pb-1 pt-1 text-[0.5rem] tracking-[0.18em] text-cream/40 uppercase">
                     Líneas
                   </p>
                   {GENEROS.map((g) => (
