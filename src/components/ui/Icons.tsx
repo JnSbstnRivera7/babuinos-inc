@@ -204,3 +204,22 @@ export const IconMusic = (p: P) => (
     <circle cx="17" cy="16" r="3" />
   </svg>
 );
+
+/** Pocillo con tapa: el normal. */
+export const IconPocillo = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M3.5 6h13" />
+    <path d="M4.5 6v11a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V6" />
+    <path d="M16.5 9h1.25a2.75 2.75 0 0 1 0 5.5H16.5" />
+  </svg>
+);
+
+/** Pocillo humeando: el mágico, que cambia con lo caliente. */
+export const IconPocilloVapor = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4.5 9v8a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9z" />
+    <path d="M16.5 11h1.25a2.75 2.75 0 0 1 0 5.5H16.5" />
+    <path d="M8 2.8c-.8 1 .8 2 0 3.2" />
+    <path d="M12 2.8c-.8 1 .8 2 0 3.2" />
+  </svg>
+);

@@ -26,6 +26,7 @@ const COLS: { title: string; links: { label: string; href: string; externo?: boo
       { label: "Todas las camisas", href: "/tienda" },
       { label: "Básicas", href: "/tienda?tipo=basica" },
       { label: "Estampadas", href: "/tienda?tipo=estampada" },
+      { label: "Pocillos personalizados", href: "/pocillos" },
       { label: "Favoritos", href: "/favoritos" },
     ],
   },

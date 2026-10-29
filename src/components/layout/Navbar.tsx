@@ -170,6 +170,11 @@ export function Navbar() {
                           Pronto
                         </span>
                       )}
+                      {t.nuevo && (
+                        <span className="font-mono rounded-full bg-[var(--accent)] px-2 py-0.5 text-[0.5rem] font-bold tracking-[0.1em] text-[var(--accent-ink)] uppercase">
+                          Nuevo
+                        </span>
+                      )}
                     </Link>
                 ))}
               </div>
@@ -303,6 +308,11 @@ export function Navbar() {
                       {t.soon && (
                         <span className="font-mono text-[0.5rem] tracking-[0.1em] uppercase" style={{ color: t.color }}>
                           Pronto
+                        </span>
+                      )}
+                      {t.nuevo && (
+                        <span className="font-mono rounded-full bg-[var(--accent)] px-2 py-0.5 text-[0.5rem] font-bold tracking-[0.1em] text-[var(--accent-ink)] uppercase">
+                          Nuevo
                         </span>
                       )}
                     </Link>

@@ -15,6 +15,15 @@ Estado: **en vivo** en https://babuinos-inc.vercel.app con las 24 piezas del cat
 
 ## 🔴 Tú tienes la pelota (nadie más puede hacerlo)
 
+- [ ] **Pocillos (`/pocillos`, 29-oct): cuatro cosas por confirmar.** La página está hecha con lo
+      que había en `MATERIAL/Pocillos`. (1) Los **seis colores y sus nombres** salen de las fotos
+      (azul marino, azul cielo, amarillo, verde menta, verde bosque y negro); el spot muestra además
+      rojo, vinotinto y azul rey: ¿también se consiguen? (2) El texto del **mágico** dice que "con
+      agua caliente cambia de color y deja ver tu diseño": confirmar que es así. (3) Los **diseños de
+      clientes** van sin nombres y por la idea; ¿los tres clientes están de acuerdo en que se
+      muestren? (4) El del álbum dice "Hogwarts" y "Slytherin" en la imagen, marcas de terceros: la
+      misma regla que sacó a Guns & Roses aplicaría si se quiere ir a la segura. **Precios:** no se
+      muestran; si se quieren, van en `src/lib/pocillos.ts`.
 - [ ] **STOCK REAL de las 24 piezas** — _(9-ago, Juan: por ahora **se estampa por pedido** sobre la
       camisa y el diseño elegido, así que **no hay stock real que cargar** — el tallaje provisional se
       queda tal cual. Retomar cuando haya inventario físico.)_ Cuando llegue ese momento, el único paso

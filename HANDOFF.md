@@ -62,6 +62,26 @@ quede con la etiqueta de otra al copiar y pegar.
 **El tallaje no vive en el código**: se edita en `/admin` y llega de Supabase
 (`product_stock`). `TALLAS_STD` es sólo el respaldo de las que nadie cargó.
 
+### Pocillos (`/pocillos`)
+
+No son piezas del catálogo: se estampan con el diseño de cada cliente, así que
+no pasan por el carrito y la página entera manda a WhatsApp, con el color
+elegido ya escrito en el mensaje. Todo lo editable está en
+`src/lib/pocillos.ts` (colores, diseños de clientes y el mensaje). Aparece en
+el menú (categoría con etiqueta "Nuevo"), en el footer y al final de `/tienda`;
+el home no se toca (ver decisiones).
+
+- **Material** en `MATERIAL/Pocillos` (fuera del repo). Las fotos van a WebP en
+  `public/brand/pocillos/` y el spot a `public/video/pocillos*.{webm,mp4}`:
+  720p para computador y 480p para celular, **sin pista de audio** (`-an`).
+- **El video no está en el HTML del servidor**: lo monta el cliente después de
+  mirar "reducir movimiento" y ahorro de datos, y se pausa fuera de pantalla.
+- Los diseños de clientes se ven los tres en **una sola imagen** (pedido de
+  Juan: sueltos ocupaban casi tres pantallas en el celular). La arma
+  `py -I scripts/collage_pocillos.py`; si cambia un diseño, se corre de nuevo
+  y se copian a `COLLAGE_DISENOS` las zonas que imprime.
+- La imagen de compartir es un archivo fijo, `src/app/pocillos/opengraph-image.jpg`.
+
 ### Añadir piezas
 
 Las fotos entran con `scripts/ingest_camisas.py`, que parte las láminas de

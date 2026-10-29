@@ -59,11 +59,15 @@ export interface TopCategory {
   label: string;
   href: string;
   soon: boolean;
+  /** Lleva la etiqueta "Nuevo" en el menú. */
+  nuevo?: boolean;
   color: string;
 }
 
 export const TOP_CATEGORIES: TopCategory[] = [
   { key: "camisas", label: "Camisas", href: "/tienda", soon: false, color: "#00897f" },
+  // Se estampan por pedido: su página manda a WhatsApp, no al carrito.
+  { key: "pocillos", label: "Pocillos", href: "/pocillos", soon: false, nuevo: true, color: "#86b2e0" },
   { key: "sacos", label: "Sacos", href: "/sacos", soon: true, color: "#cda214" },
   { key: "medias", label: "Medias", href: "/medias", soon: true, color: "#6b8035" },
   { key: "accesorios", label: "Accesorios", href: "/accesorios", soon: true, color: "#8a6a3a" },

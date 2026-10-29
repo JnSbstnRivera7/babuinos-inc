@@ -2,11 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePresence } from "@/lib/presence";
 import { ProductCard } from "@/components/producto/ProductCard";
 import { ArchivoRetro, menosMovimiento, type ArchivoMando } from "@/components/tienda/ArchivoRetro";
 import { GeneroMark } from "@/components/ui/GeneroMark";
-import { IconFilter, IconClose } from "@/components/ui/Icons";
+import { IconFilter, IconClose, IconArrowRight } from "@/components/ui/Icons";
+import { LinkPorIntencion } from "@/components/ui/LinkPorIntencion";
 import {
   PRODUCTS,
   CATEGORIES,
@@ -383,6 +385,34 @@ export function TiendaClient({
           </div>
         </div>
       )}
+
+      {/* Los pocillos no son una pieza de la grilla (se estampan con el diseño
+          de cada cliente y se piden por WhatsApp): van al final, como invitación
+          a su propia página. Por intención y no al verse, porque es una ruta
+          fuera de la tienda (ver la trampa del prefetch en HANDOFF). */}
+      <LinkPorIntencion
+        href="/pocillos"
+        className="group mt-16 flex items-center gap-4 rounded-2xl border border-cream/15 bg-ink/60 p-3 pr-5 transition hover:border-[var(--accent)] sm:gap-6"
+      >
+        <Image
+          src="/brand/pocillos/azul-cielo.webp"
+          alt=""
+          width={900}
+          height={1125}
+          sizes="96px"
+          className="h-28 w-[5.6rem] shrink-0 rounded-xl object-cover sm:h-32 sm:w-24"
+        />
+        <span className="min-w-0 flex-1">
+          <span className="eyebrow block text-[var(--accent)]">Nuevo</span>
+          <span className="font-condensed mt-1 block text-[clamp(1.5rem,4vw,2.2rem)] text-cream">
+            Pocillos personalizados
+          </span>
+          <span className="mt-1 block text-[0.86rem] text-cream/65">
+            Tu diseño, con la tapa del color que quieras.
+          </span>
+        </span>
+        <IconArrowRight className="h-5 w-5 shrink-0 text-cream/60 transition group-hover:translate-x-1 group-hover:text-[var(--accent)]" />
+      </LinkPorIntencion>
     </div>
   );
 }
